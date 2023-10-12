@@ -13,7 +13,7 @@ class Navigation extends StatefulWidget {
 }
 
 int selectedIndex = 0;
-List<Widget> routes = <Widget>[AdminHome(), const Orders(), const Accounts()];
+List<Widget> routes = <Widget>[const AdminHome(), const Orders(), const AdminAccount()];
 
 class _NavigationState extends State<Navigation> {
   @override

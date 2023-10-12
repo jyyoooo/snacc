@@ -6,6 +6,7 @@ import 'package:snacc/Admin/products.dart';
 import 'package:snacc/DataModels/category_model.dart';
 import 'package:snacc/Login/Widgets/button.dart';
 
+
 class AdminHome extends StatefulWidget {
   const AdminHome({super.key});
 
@@ -84,8 +85,8 @@ class _AdminHomeState extends State<AdminHome> {
                                           pickImage();
                                         }),
                                     SizedBox(
-                                        height: 40,
-                                        width: 40,
+                                        height: 80,
+                                        width: 80,
                                         child: selectedImgUrl != null
                                             ? Image.file(
                                                 File(selectedImgUrl!),
@@ -197,22 +198,22 @@ class _AdminHomeState extends State<AdminHome> {
           const SizedBox(
             height: 8,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text('Offers Section',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
-              IconButton(
-                  onPressed: () {},
-                  icon: const Icon(size: 30, color: Colors.blue, Icons.edit))
-            ],
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          Card(
-            child: Image.asset('assets/images/Admin_page/ad_items.png'),
-          ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     const Text('Offers Section',
+          //         style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+          //     IconButton(
+          //         onPressed: () {},
+          //         icon: const Icon(size: 30, color: Colors.blue, Icons.edit))
+          //   ],
+          // ),
+          // const SizedBox(
+          //   height: 8,
+          // ),
+          // Card(
+          //   child: Image.asset('assets/images/Admin_page/ad_items.png'),
+          // ),
           const SizedBox(
             height: 8,
           ),
@@ -290,6 +291,7 @@ class _AdminHomeState extends State<AdminHome> {
 
     categorieslist = Hive.box<Category>('category').values.toList();
     categoryListNotifier.value = categorieslist;
-    print(categorieslist);
+
+    displayalldata();
   }
 }

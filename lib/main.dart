@@ -1,18 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:snacc/Admin/adminhome.dart';
+import 'package:snacc/DataModels/user_model.dart';
 import 'package:snacc/DataModels/category_model.dart';
+import 'package:snacc/DataModels/product_model.dart';
 import 'package:snacc/DataModels/signup_model.dart';
 import 'package:snacc/Login/select_login.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:snacc/UserPages/userhome.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  
-  if(!Hive.isAdapterRegistered(CategoryAdapter().typeId)){
+
+  if (!Hive.isAdapterRegistered(CategoryAdapter().typeId) &&
+      !Hive.isAdapterRegistered(ProductAdapter().typeId) &&
+      !Hive.isAdapterRegistered(UserModelAdapter().typeId)) {
     Hive.registerAdapter(CategoryAdapter());
+    Hive.registerAdapter(ProductAdapter());
+    Hive.registerAdapter(UserModelAdapter());
   }
   await Hive.openBox<Category>('category');
+  await Hive.openBox<UserModel>('userinfo');
   runApp(const MyApp());
 }
 
@@ -23,9 +31,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(primarySwatch: Colors.amber),
-      home:const SelectLogin(),
+      home: const SelectLogin(),
       debugShowCheckedModeBanner: false,
     );
   }
 }
-

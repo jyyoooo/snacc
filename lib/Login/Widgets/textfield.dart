@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class SnaccTextField extends StatelessWidget {
-  const SnaccTextField({super.key});
+  TextEditingController? controller;
+   SnaccTextField({super.key,this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -11,9 +12,10 @@ class SnaccTextField extends StatelessWidget {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
               border: Border.all(color: Color.fromARGB(255, 226, 226, 226))),
-          child: const TextField(
-            style: TextStyle(fontSize: 16),
-            decoration: InputDecoration(border: InputBorder.none),
+          child:  TextFormField(
+            controller: controller,
+            style:const TextStyle(fontSize: 16),
+            decoration: const InputDecoration(border: InputBorder.none),
           )),
     );
   }

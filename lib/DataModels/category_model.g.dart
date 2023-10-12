@@ -20,6 +20,7 @@ class CategoryAdapter extends TypeAdapter<Category> {
       id: fields[0] as int?,
       categoryName: fields[1] as String?,
       imageUrl: fields[2] as String?,
+      products: (fields[3] as List?)?.cast<Product>(),
     );
   }
 

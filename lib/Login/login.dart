@@ -1,14 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:snacc/Admin/adminhome.dart';
 import 'package:snacc/Admin/navigation.dart';
+import 'package:snacc/DataModels/user_model.dart';
 import 'package:snacc/Login/Widgets/button.dart';
 import 'package:snacc/Login/Widgets/textfield.dart';
+import 'package:snacc/UserPages/useraccount.dart';
+import 'package:snacc/UserPages/usernavigation.dart';
 
 class Login extends StatelessWidget {
   const Login({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<ScaffoldState> _scaffoldkey = GlobalKey<ScaffoldState>();
+
+    TextEditingController mailCtrl = TextEditingController();
+    TextEditingController passCtrl = TextEditingController();
+
+    Future<bool> userLogin() async {
+      final usermail = mailCtrl.text.trim();
+      final userpass = passCtrl.text.trim();
+
+      final userbox = await Hive.box<UserModel>('userinfo');
+
+      final userExists = userbox.values.any((storeduser) =>
+          storeduser.userMail == usermail && storeduser.userPass == userpass);
+
+      return userExists;
+    }
+
+    
+
+    Future<bool> adminLogin() async {
+      final adminmail = mailCtrl.text.trim();
+      final adminpass = passCtrl.text.trim();
+
+      if (adminmail == 'admin' && adminpass == 'admin') {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
     return Material(
       child: SafeArea(
         child: Scaffold(
@@ -40,7 +74,9 @@ class Login extends StatelessWidget {
                       style: TextStyle(color: Colors.grey)),
                 ),
                 const SizedBox(height: 5),
-                const SnaccTextField(),
+                SnaccTextField(
+                  controller: mailCtrl,
+                ),
                 const SizedBox(
                   height: 15,
                 ),
@@ -50,15 +86,27 @@ class Login extends StatelessWidget {
                       style: TextStyle(color: Colors.grey)),
                 ),
                 const SizedBox(height: 5),
-                const SnaccTextField(),
+                SnaccTextField(
+                  controller: passCtrl,
+                ),
                 const SizedBox(
                   height: 15,
                 ),
                 Center(
                     child: SnaccButton(
-                  callBack: () {
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: ((context) =>  Navigation())));
+                  callBack: () async {
+                    if (await adminLogin()) {
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: ((context) => Navigation())));
+                    } else if (await userLogin()) {
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => const UserNavigation()));
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('Invalid login credentials!'),
+                        elevation: 2,
+                      ));
+                    }
                   },
                   inputText: 'LOGIN',
                 ))

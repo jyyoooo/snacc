@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-class AdminAccount extends StatelessWidget {
+class UserAccount extends StatelessWidget {
 
   // final String username;
-  const AdminAccount({super.key,});
+  const UserAccount({super.key,});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class AdminAccount extends StatelessWidget {
                     backgroundColor: Colors.amber[100],
                     // backgroundImage: Image.file(File(user)),
                   ),
-                  const Text('Admin')
+                  Text('hgfs')
                 ],
               ),
             ),
