@@ -4,8 +4,7 @@ import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:snacc/Admin/products.dart';
 import 'package:snacc/DataModels/category_model.dart';
-import 'package:snacc/Login/Widgets/button.dart';
-
+import 'package:snacc/Widgets/button.dart';
 
 class AdminHome extends StatefulWidget {
   const AdminHome({super.key});
@@ -29,7 +28,7 @@ class _AdminHomeState extends State<AdminHome> {
   final catgoryNameCtrl = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
-  File? image;
+  // File? image;
 
   Future pickImage() async {
     final imagePicker = ImagePicker();
@@ -40,6 +39,10 @@ class _AdminHomeState extends State<AdminHome> {
       setState(() {
         selectedImgUrl = pickedImage.path;
       });
+    } else {
+      setState(() {
+        selectedImgUrl ?? 'assets/images/no-image-available.png';
+      });
     }
   }
 
@@ -48,14 +51,17 @@ class _AdminHomeState extends State<AdminHome> {
     return Scaffold(
       // extendBody: true,
       appBar: AppBar(
-        leading: null,
+        leading: const Icon(
+          Icons.transcribe,
+          color: Colors.transparent,
+        ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
         // primary: true,
         title: const Text(
           'Welcome back, Admin',
-          style: TextStyle(fontSize: 20, color: Colors.black54),
+          style: TextStyle(fontSize: 20, color: Colors.amber),
         ),
       ),
       body: Padding(
@@ -79,23 +85,30 @@ class _AdminHomeState extends State<AdminHome> {
                                 padding: const EdgeInsets.all(10),
                                 child: Column(
                                   children: [
-                                    SnaccButton(
-                                        inputText: 'Pick Image',
-                                        callBack: () {
-                                          pickImage();
-                                        }),
-                                    SizedBox(
-                                        height: 80,
-                                        width: 80,
-                                        child: selectedImgUrl != null
-                                            ? Image.file(
-                                                File(selectedImgUrl!),
-                                                fit: BoxFit.cover,
-                                              )
-                                            : Container(
-                                                color: Colors.grey,
-                                                child: const Icon(Icons.image),
-                                              )),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        SizedBox(
+                                            height: 80,
+                                            width: 80,
+                                            child: selectedImgUrl != null
+                                                ? Image.file(
+                                                    File(selectedImgUrl!),
+                                                    fit: BoxFit.cover,
+                                                  )
+                                                : Container(
+                                                    color: Colors.grey,
+                                                    child:
+                                                        const Icon(Icons.image),
+                                                  )),
+                                        SnaccButton(
+                                            inputText: 'Pick Image',
+                                            callBack: () {
+                                              pickImage();
+                                            }),
+                                      ],
+                                    ),const SizedBox(height: 10),
                                     TextFormField(
                                       controller: catgoryNameCtrl,
                                       decoration: const InputDecoration(
@@ -103,7 +116,7 @@ class _AdminHomeState extends State<AdminHome> {
                                         hintText: 'Category name',
                                       ),
                                     ),
-                                    const SizedBox(height: 10),
+                                    
                                     const SizedBox(height: 10),
                                     SnaccButton(
                                       callBack: () {
@@ -157,11 +170,12 @@ class _AdminHomeState extends State<AdminHome> {
 
                                 return GestureDetector(
                                   onTap: () {
+                                    print('tap id is ${category.categoryID}');
                                     Navigator.of(context)
                                         .push((MaterialPageRoute(
                                       builder: (context) => ListProducts(
                                         categoryName: category.categoryName,
-                                        id: category.id,
+                                        id: category.categoryID,
                                       ),
                                     )));
                                   },
@@ -223,7 +237,9 @@ class _AdminHomeState extends State<AdminHome> {
               const Text('Popular Combos',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
               IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('/popularcombo');
+                  },
                   icon: const Icon(size: 30, color: Colors.blue, Icons.edit))
             ],
           ),
@@ -281,17 +297,16 @@ class _AdminHomeState extends State<AdminHome> {
     if (name.isEmpty) {
       return;
     }
-    print('category name: $name , imgpath: $selectedImgUrl');
-
-    final imagePath = selectedImgUrl;
+    
+    final imagePath = selectedImgUrl??'assets/images/no-image-available.png';
 
     final category = Category(categoryName: name, imageUrl: imagePath);
 
-    addCategory(category);
+     addCategory(category);
 
     categorieslist = Hive.box<Category>('category').values.toList();
     categoryListNotifier.value = categorieslist;
 
-    displayalldata();
+    await displayalldata();
   }
 }

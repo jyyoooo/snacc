@@ -1,13 +1,14 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:snacc/Admin/admin_home.dart';
 import 'package:snacc/DataModels/category_model.dart';
 import 'package:snacc/DataModels/product_model.dart';
-import 'package:snacc/Login/Widgets/button.dart';
-import 'package:snacc/Login/Widgets/textfield.dart';
+import 'package:snacc/Functions/category_functions.dart';
+import 'package:snacc/Functions/product_functions.dart';
+import 'package:snacc/Widgets/button.dart';
+import 'package:snacc/Widgets/textfield.dart';
 
 class ListProducts extends StatefulWidget {
   final int? id;
@@ -48,18 +49,95 @@ class _ListProductsState extends State<ListProducts> {
         elevation: 0,
         actions: [
           IconButton(
-              onPressed: () {
-                editCategory();
+              onPressed: () async {
+                final category = getCategoryById(widget.id);
+                if (category != null) {
+                  final TextEditingController newcategorynamectrl =
+                      TextEditingController();
+                  String? updatedImgUrl = category.imageUrl;
+
+                  final exisitingCategoryname = category.categoryName;
+
+                  await showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text('Edit ${category.categoryName} Category'),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              SnaccTextField(
+                                controller: newcategorynamectrl,
+                              ),
+                              SnaccButton(
+                                  inputText: 'new image',
+                                  callBack: () async {
+                                    final newImageURL = await pickprodImage();
+                                    if (newImageURL != null) {
+                                      updatedImgUrl = updatedImgUrl;
+                                    }
+                                  }),
+                              SizedBox(
+                                  height: 80,
+                                  width: 80,
+                                  child: updatedImgUrl != null
+                                      ? Image.file(
+                                          File(updatedImgUrl!),
+                                          fit: BoxFit.cover,
+                                        )
+                                      : Container(
+                                          color: Colors.grey,
+                                          child: const Icon(Icons.image),
+                                        ))
+                            ],
+                          ),
+                          actions: <Widget>[
+                            SnaccButton(
+                                inputText: 'Save',
+                                callBack: () {
+                                  category.categoryName =
+                                      newcategorynamectrl.text ??
+                                          exisitingCategoryname;
+                                  category.imageUrl = updatedImgUrl;
+                                  updatedCategory(category);
+                                  saveCategory(category);
+                                  productlistNotifier.notifyListeners();
+                                })
+                          ],
+                        );
+                      });
+                }
               },
               icon: const Icon(
                 Icons.edit,
                 color: Colors.blue,
               )),
           IconButton.filled(
-              onPressed: () {
-                if (widget.id != null) {
-                  deleteCategory(widget.id);
-                }
+              onPressed: () async {
+                await showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text('Delete Category?'),
+                        actions: <Widget>[
+                          SnaccButton(
+                            btncolor: Colors.red,
+                            inputText: 'Delete',
+                            callBack: () {
+                              if (widget.id != null) {
+                                deleteCategory(widget.id);
+                                Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const AdminHome()));
+                              } else {
+                                print('category id is null');
+                              }
+                            },
+                          )
+                        ],
+                      );
+                    });
               },
               icon: const Icon(
                 Icons.delete,
@@ -78,23 +156,30 @@ class _ListProductsState extends State<ListProducts> {
                             padding: const EdgeInsets.all(10),
                             child: Column(
                               children: [
-                                SnaccButton(
-                                    inputText: 'Pick Image',
-                                    callBack: () {
-                                      pickprodImage();
-                                    }),
-                                SizedBox(
-                                    height: 80,
-                                    width: 80,
-                                    child: productImgUrl != null
-                                        ? Image.file(
-                                            File(productImgUrl!),
-                                            fit: BoxFit.cover,
-                                          )
-                                        : Container(
-                                            color: Colors.grey,
-                                            child: const Icon(Icons.image),
-                                          )),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    SizedBox(
+                                        height: 80,
+                                        width: 80,
+                                        child: productImgUrl != null
+                                            ? Image.file(
+                                                File(productImgUrl!),
+                                                fit: BoxFit.cover,
+                                              )
+                                            : Container(
+                                                color: Colors.grey,
+                                                child: const Icon(Icons.image),
+                                              )),
+                                    SnaccButton(
+                                        inputText: 'Pick Image',
+                                        callBack: () {
+                                          pickprodImage();
+                                        }),
+                                  ],
+                                ),
+                                const SizedBox(height: 10),
                                 TextFormField(
                                   controller: productnamectrl,
                                   decoration: const InputDecoration(
@@ -110,12 +195,23 @@ class _ListProductsState extends State<ListProducts> {
                                     hintText: 'Price',
                                   ),
                                 ),
+
                                 const SizedBox(height: 10),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    addProduct();
+                                SnaccButton(
+                                  callBack: () {
+                                    final String productName = productnamectrl.text.trim();
+                                    final double productPrice = double.tryParse(productpricectrl.text) ??0.00;
+                                    final categoryID = widget.id;
+
+                                    // ADD PRODUCT
+                                    addProduct( productName, productPrice,productImgUrl,categoryID);
+                                    productnamectrl.clear();
+                                    productpricectrl.clear();
+                                    setState(() {
+                                      productImgUrl = null;
+                                    });
                                   },
-                                  child: const Text('Add New Product'),
+                                  inputText: 'ADD PRODUCT', 
                                 )
                               ],
                             ),
@@ -142,77 +238,100 @@ class _ListProductsState extends State<ListProducts> {
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
                 final product = productlist[index];
-
-                return Column(
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Column(
+                return Card(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            Column(
                               children: [
-                                SizedBox(
-                                  height: 70,
-                                  width: 70,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Image.file(
-                                      File(product.prodimgUrl!),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                      product.prodname!,
-                                      style: const TextStyle(fontSize: 18),
+                                    Row(
+                                      children: [
+                                        SizedBox(
+                                          height: 70,
+                                          width: 70,
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            child: product.prodimgUrl == null
+                                                ? Image.asset(
+                                                    'assets/images/no-image-available.png')
+                                                : Image.file(
+                                                    File(product.prodimgUrl!),
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                          ),
+                                        ),
+                                        const SizedBox.square(dimension: 20),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              product.prodname!,
+                                              style:
+                                                  const TextStyle(fontSize: 18),
+                                            ),
+                                            const SizedBox(
+                                              height: 15,
+                                            ),
+                                            Text('₹${product.prodprice!}',
+                                                style: const TextStyle(
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 18)),
+                                          ],
+                                        ),
+                                      ],
                                     ),
-                                    Text('${product.prodprice!}',
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 18)),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        IconButton(
+                                            onPressed: () {
+                                              editProduct(product);
+                                            },
+                                            icon: const Icon(
+                                              Icons.edit,
+                                              color: Colors.blue,
+                                            )),
+                                        IconButton(
+                                            onPressed: () {
+                                              deleteProduct(product);
+                                            },
+                                            icon: const Icon(
+                                              Icons.delete,
+                                              color: Colors.red,
+                                            ))
+                                      ],
+                                    )
                                   ],
                                 ),
-                                Row(
-                                  children: [
-                                    IconButton(
-                                        onPressed: () {editProduct(product );},
-                                        icon: const Icon(
-                                          Icons.edit,
-                                          color: Colors.blue,
-                                        )),
-                                    IconButton(
-                                        onPressed: () {
-                                          deleteProduct(product);
-                                        },
-                                        icon: const Icon(
-                                          Icons.delete,
-                                          color: Colors.red,
-                                        ))
-                                  ],
-                                )
                               ],
                             ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            )
                           ],
                         ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        )
-                      ],
-                    ),
-                  ],
+                      ),
+                    ],
+                  ),
                 );
               },
               itemCount: productlistNotifier.value.length,
@@ -221,15 +340,6 @@ class _ListProductsState extends State<ListProducts> {
         ),
       ),
     );
-  }
-
-  Future<List<Product>?> getCategoryProducts(int? categoryId) async {
-    if (categoryId == null) return null;
-
-    final categoryBox = await Hive.openBox<Category>('category');
-    final category = categoryBox.get(categoryId);
-
-    return category?.products ?? [];
   }
 
   bool isImagepickerActive = false;
@@ -245,72 +355,20 @@ class _ListProductsState extends State<ListProducts> {
         setState(() {
           productImgUrl = pickedImage.path;
         });
+      } else if (pickedImage == null) {
+        productImgUrl = 'assets/images/no-image-available.png';
       }
     } catch (e) {
       print('Error picking image: $e');
     }
-
-    // if (pickedImage != null) {
-    //   setState(() {
-    //     productImgUrl = pickedImage.path;
-    //   });
-    //   print(productImgUrl);
-    // }
-  }
-
-  Future<void> updatedCategory(Category updatedCategory) async {
-    final categoryBox = await Hive.openBox<Category>('category');
-
-    final existingCategory = categoryBox.get(updatedCategory.id);
-
-    if (existingCategory != null) {
-      existingCategory.categoryName = updatedCategory.categoryName;
-      existingCategory.imageUrl = updatedCategory.imageUrl;
-      await categoryBox.put(updatedCategory.id, existingCategory);
-    }
-  }
-
-  Future<void> saveCategory(Category category) async {
-    final categoryBox = Hive.box<Category>('category');
-    await categoryBox.put(category.id, category);
-  }
-
-  void addProduct() async {
-    final String productName = productnamectrl.text.trim();
-    final double productPrice = double.tryParse(productpricectrl.text) ?? 0.00;
-
-    Product currentProduct = Product(
-        prodimgUrl: productImgUrl ?? 'assets/images/Snacc.png',
-        prodname: productName,
-        prodprice: productPrice,
-        quantity: 0);
-
-    print('img - ${currentProduct.prodimgUrl}');
-    print('name - ${currentProduct.prodname}');
-    print('price - ${currentProduct.prodprice}');
-
-    Category? currentcategory = getCategoryById(widget.id);
-    if (currentcategory != null) {
-      currentcategory.products ??= [];
-      currentcategory.products!.add(currentProduct);
-      print(currentcategory.id);
-    }
-
-    await saveCategory(currentcategory!);
-    print('products list = ${currentcategory.products}');
-    print('category of = ${currentcategory.categoryName}');
-
-    productnamectrl.clear();
-    productpricectrl.clear();
-    setState(() {
-      productImgUrl = null;
-    });
   }
 
   void editProduct(Product product) async {
     final TextEditingController newprodnamectrl = TextEditingController();
     final TextEditingController newprodpricectrl = TextEditingController();
-    String? newprodImgUrl;
+    // String? newprodImgUrl;
+    final existingname = product.prodname;
+    final exisitingprice = product.prodprice;
 
     await showDialog(
         context: context,
@@ -320,7 +378,6 @@ class _ListProductsState extends State<ListProducts> {
               title: Text('Edit ${product.prodname}'),
               content: SingleChildScrollView(
                 child: Column(
-                  
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     const Text('New product name'),
@@ -331,139 +388,34 @@ class _ListProductsState extends State<ListProducts> {
                     SnaccTextField(
                       controller: newprodpricectrl,
                     ),
-                    // SnaccButton(
-                    //     inputText: 'Choose new Image',
-                    //     callBack: () async {
-                    //       pickprodImage().then((newimg) => setState(() {
-                    //             newprodImgUrl = newimg;
-                    //           }));
-                    //     }),
-                    // SizedBox(
-                    //   height: 80,
-                    //   width: 80,
-                    //   child: newprodImgUrl != null
-                    //       ? Image.file(
-                    //           File(newprodImgUrl!),
-                    //           fit: BoxFit.cover,
-                    //         )
-                    //       : Container(
-                    //           color: Colors.grey,
-                    //           child: const Icon(Icons.image),
-                    //         ),
-                    // )
                   ],
                 ),
               ),
               actions: <Widget>[
-                SnaccButton(inputText: 'SAVE', callBack: () {
-                  // Category? currentcategory = getCategoryById(widget.id);
-                  product.prodname = newprodnamectrl.text;
-                  product.prodprice = double.tryParse(newprodpricectrl.text)??0.00;
-                  // product.prodimgUrl = newprodImgUrl;
-
-                  productlistNotifier.notifyListeners();
-
-                })
-              ],
-            );
-          });
-        });
-  }
-
-  void editCategory() async {
-    final category = getCategoryById(widget.id);
-    if (category != null) {
-      final TextEditingController newcategorynamectrl = TextEditingController();
-      String? updatedImgUrl = category.imageUrl;
-
-      await showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text('Edit ${category.categoryName} Category'),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  SnaccTextField(
-                    controller: newcategorynamectrl,
-                  ),
-                  SnaccButton(
-                      inputText: 'new image',
-                      callBack: () async {
-                        final newImageURL = await pickprodImage();
-                        if (newImageURL != null) {
-                          updatedImgUrl = updatedImgUrl;
-                        }
-                      }),
-                  SizedBox(
-                      height: 80,
-                      width: 80,
-                      child: updatedImgUrl != null
-                          ? Image.file(
-                              File(updatedImgUrl!),
-                              fit: BoxFit.cover,
-                            )
-                          : Container(
-                              color: Colors.grey,
-                              child: const Icon(Icons.image),
-                            ))
-                ],
-              ),
-              actions: <Widget>[
                 SnaccButton(
-                    inputText: 'Save',
+                    inputText: 'SAVE',
                     callBack: () {
-                      category.categoryName = newcategorynamectrl.text;
-                      category.imageUrl = updatedImgUrl;
-                      updatedCategory(category);
-                      saveCategory(category);
+                      // Category? currentcategory = getCategoryById(widget.id);
+                      product.prodname = newprodnamectrl.text ?? existingname;
+                      product.prodprice =
+                          double.tryParse(newprodpricectrl.text) ??
+                              exisitingprice;
                       productlistNotifier.notifyListeners();
                     })
               ],
             );
           });
-    }
-  }
-
-  Future<void> deleteCategory(int? id) async {
-    await showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text('Delete Category?'),
-            actions: <Widget>[
-              SnaccButton(
-                  btncolor: Colors.white,
-                  inputText: 'Cancel',
-                  callBack: () {
-                    Navigator.of(context).pop;
-                  }),
-              SnaccButton(
-                  inputText: 'Yes, Delete',
-                  callBack: () async {
-                    final categoryBox =
-                        await Hive.openBox<Category>('category');
-                    await categoryBox.delete(id);
-                    categoryListNotifier.value
-                        .removeWhere((category) => category.id == id);
-                    Navigator.of(context).pop;
-
-                    // categoryListNotifier.value = categoryBox.values.toList();
-                    categoryListNotifier.notifyListeners();
-                    print(categoryBox);
-                    print('deleted id = $id');
-                  })
-            ],
-          );
         });
   }
+
+  // void editCategory() async {}
 
   void deleteProduct(Product product) async {
     await showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            icon:const Icon(Icons.delete_forever),
+            icon: const Icon(Icons.delete_forever),
             title: const Text('Delete Product?'),
             actions: [
               SnaccButton(
@@ -490,13 +442,4 @@ class _ListProductsState extends State<ListProducts> {
           );
         });
   }
-}
-
-Category? getCategoryById(int? categoryId) {
-  if (categoryId == null) return null;
-
-  final categoryBox = Hive.box<Category>('category');
-  final category = categoryBox.get(categoryId);
-
-  return category;
 }

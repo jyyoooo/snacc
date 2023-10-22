@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:snacc/Login/login.dart';
 import 'package:snacc/Login/signup.dart';
+import 'package:snacc/Widgets/button.dart';
 
 class SelectLogin extends StatelessWidget {
   const SelectLogin({super.key});
@@ -34,30 +35,19 @@ class SelectLogin extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        minimumSize: const Size(100, 40),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        backgroundColor: Colors.amber),
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
+                SnaccButton(
+                  btncolor: Colors.amber,
+                    inputText: 'SIGNUP',
+                    callBack: () {
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: (BuildContext context) => const SignUp()));
-                    },
-                    child: const Text('SIGN UP')),
-                ButtonTheme(
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          minimumSize: const Size(100, 40),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          backgroundColor: Colors.greenAccent),
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (BuildContext context) => const Login()));
-                      },
-                      child: const Text('LOG IN')),
-                )
+                    }),
+                SnaccButton(
+                    inputText: 'LOGIN',
+                    callBack: () {
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (BuildContext context) => const Login()));
+                    })
               ],
             )
           ],

@@ -1,47 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:snacc/Admin/adminhome.dart';
-import 'package:snacc/Admin/navigation.dart';
+import 'package:snacc/Admin/admin_home.dart';
+import 'package:snacc/Admin/admin_navigation.dart';
+// import 'package:snacc/DataModels/signup_model.dart';
 import 'package:snacc/DataModels/user_model.dart';
-import 'package:snacc/Login/Widgets/button.dart';
-import 'package:snacc/Login/Widgets/textfield.dart';
-import 'package:snacc/UserPages/useraccount.dart';
-import 'package:snacc/UserPages/usernavigation.dart';
+import 'package:snacc/Functions/login_functions.dart';
+import 'package:snacc/Login/signup.dart';
+import 'package:snacc/Widgets/button.dart';
+import 'package:snacc/Widgets/textfield.dart';
+import 'package:snacc/UserPages/user_account.dart';
+import 'package:snacc/UserPages/user_navigation.dart';
 
 class Login extends StatelessWidget {
   const Login({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<ScaffoldState> _scaffoldkey = GlobalKey<ScaffoldState>();
-
     TextEditingController mailCtrl = TextEditingController();
     TextEditingController passCtrl = TextEditingController();
-
-    Future<bool> userLogin() async {
-      final usermail = mailCtrl.text.trim();
-      final userpass = passCtrl.text.trim();
-
-      final userbox = await Hive.box<UserModel>('userinfo');
-
-      final userExists = userbox.values.any((storeduser) =>
-          storeduser.userMail == usermail && storeduser.userPass == userpass);
-
-      return userExists;
-    }
-
-    
-
-    Future<bool> adminLogin() async {
-      final adminmail = mailCtrl.text.trim();
-      final adminpass = passCtrl.text.trim();
-
-      if (adminmail == 'admin' && adminpass == 'admin') {
-        return true;
-      } else {
-        return false;
-      }
-    }
 
     return Material(
       child: SafeArea(
@@ -94,22 +70,28 @@ class Login extends StatelessWidget {
                 ),
                 Center(
                     child: SnaccButton(
-                  callBack: () async {
-                    if (await adminLogin()) {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: ((context) => Navigation())));
-                    } else if (await userLogin()) {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => const UserNavigation()));
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text('Invalid login credentials!'),
-                        elevation: 2,
-                      ));
-                    }
-                  },
+                  callBack: () => performLogin(context, mailCtrl, passCtrl),
                   inputText: 'LOGIN',
-                ))
+                )),
+                const SizedBox(
+                  height: 30,
+                ),
+                GestureDetector(
+                    onTap: () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SignUp()));
+                    },
+                    child: const Row(
+                      children: [
+                        Text('New user?'),
+                        Text(
+                          'Sign up',
+                          style: TextStyle(fontWeight: FontWeight.w500),
+                        ),
+                      ],
+                    ))
               ],
             ),
           ),
@@ -118,3 +100,36 @@ class Login extends StatelessWidget {
     );
   }
 }
+
+
+  // Future<bool> userExists() async {
+    //   final usermail = mailCtrl.text.trim();
+    //   final userpass = passCtrl.text.trim();
+
+    //   final userbox = await Hive.box<UserModel>('userinfo');
+
+    //   final userExists = userbox.values.any((storeduser) =>
+    //       storeduser.userMail == usermail && storeduser.userPass == userpass);
+
+    //   return userExists;
+    // }
+
+
+// LOGIN BTN CALL BACK
+
+    // if (await adminLogin()) {
+                    //   Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    //       builder: ((context) => Navigation())));
+                    // }
+                    //  else if (await
+
+                    //  userLogin();
+                    //  ) {
+                    //   Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    //       builder: (context) => const UserNavigation()));
+                    // } else {
+                    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    //     content: Text('Invalid login credentials!'),
+                    //     elevation: 2,
+                    //   ));
+                    // }

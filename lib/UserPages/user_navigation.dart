@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:snacc/Admin/adminaccount.dart';
+import 'package:snacc/Admin/admin_account.dart';
 import 'dart:ui';
 import 'package:snacc/UserPages/bag.dart';
 import 'package:snacc/UserPages/favorites.dart';
-import 'package:snacc/UserPages/useraccount.dart';
-import 'package:snacc/UserPages/userhome.dart';
+import 'package:snacc/UserPages/user_account.dart';
+import 'package:snacc/UserPages/user_home.dart';
 
 class UserNavigation extends StatefulWidget {
   // final String? username;
-  const UserNavigation({super.key,});
+  const UserNavigation({
+    super.key,
+  });
 
   @override
   State<UserNavigation> createState() => _UserNavigationState();
 }
 
-
 int selectedIndex = 0;
 List<Widget> routes = <Widget>[
   const UserHome(
-    categories: [],
+    
   ),
   const Favorites(),
   const UserBag(),
@@ -38,15 +39,13 @@ class _UserNavigationState extends State<UserNavigation> {
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
             child: BottomNavigationBar(
-              
                 onTap: (index) {
                   setState(() {
                     selectedIndex = index;
                   });
                 },
-                backgroundColor: 
-                Color.fromARGB(81, 42, 42, 42),
-                elevation: 0,
+                backgroundColor:Colors.grey,
+                elevation: 5,
                 unselectedItemColor: Colors.black,
                 selectedItemColor: Colors.amber,
                 currentIndex: selectedIndex,

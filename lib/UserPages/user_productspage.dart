@@ -5,7 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:snacc/DataModels/category_model.dart';
 import 'package:snacc/DataModels/product_model.dart';
-import 'package:snacc/Login/Widgets/button.dart';
+import 'package:snacc/Widgets/button.dart';
 
 class UserListProducts extends StatefulWidget {
   final int? id;
@@ -34,7 +34,7 @@ class _UserListProductsState extends State<UserListProducts> {
       if (products != null) {
         productlistNotifier.value = products;
       } else {
-        print('products is null');
+        print('no products available');
       }
     });
   }
@@ -62,78 +62,89 @@ class _UserListProductsState extends State<UserListProducts> {
               itemBuilder: (context, index) {
                 final product = productlist[index];
 
-                return Column(
-                  children: [
-                    Column(mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Column(
+                return Card(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            Column(
                               children: [
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    SizedBox(
-                                      height: 70,
-                                      width: 70,
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: Image.file(
-                                          File(product.prodimgUrl!),
-                                          fit: BoxFit.cover,
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        SizedBox(
+                                          height: 70,
+                                          width: 70,
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            child: Image.file(
+                                              File(product.prodimgUrl!),
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              product.prodname!,
+                                              style:
+                                                  const TextStyle(fontSize: 18),
+                                            ),
+                                            Text('₹${product.prodprice!}',
+                                                style: const TextStyle(
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 18)),
+                                          ],
+                                        ),
+                                      ],
                                     ),
                                     Column(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                          CrossAxisAlignment.end,
                                       children: [
-                                        Text(
-                                          product.prodname!,
-                                          style: const TextStyle(fontSize: 18),
+                                        IconButton(
+                                            icon: const Icon(
+                                                Icons.favorite_border),
+                                            onPressed: () {}),
+                                        SnaccButton(
+                                          inputText: 'ADD',
+                                          callBack: () {},
+                                          btncolor: Colors.amber,
                                         ),
-                                        Text('${product.prodprice!}',
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 18)),
                                       ],
-                                    ),
+                                    )
                                   ],
                                 ),
-                                Column(crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    IconButton(
-                                        icon: const Icon(Icons.favorite_border),
-                                        onPressed: () {}),
-                                    SnaccButton(
-                                      minimumSize: Size.infinite,
-                                      inputText: 'ADD',
-                                      callBack: () {},
-                                      btncolor: Colors.amber,
-                                    ),
-                                  ],
-                                )
                               ],
                             ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            )
                           ],
                         ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        )
-                      ],
-                    ),
-                  ],
+                      ),
+                    ],
+                  ),
                 );
               },
               itemCount: productlistNotifier.value.length,
@@ -182,18 +193,18 @@ class _UserListProductsState extends State<UserListProducts> {
   Future<void> updatedCategory(Category updatedCategory) async {
     final categoryBox = await Hive.openBox<Category>('category');
 
-    final existingCategory = categoryBox.get(updatedCategory.id);
+    final existingCategory = categoryBox.get(updatedCategory.categoryID);
 
     if (existingCategory != null) {
       existingCategory.categoryName = updatedCategory.categoryName;
       existingCategory.imageUrl = updatedCategory.imageUrl;
-      await categoryBox.put(updatedCategory.id, existingCategory);
+      await categoryBox.put(updatedCategory.categoryID, existingCategory);
     }
   }
 
   Future<void> saveCategory(Category category) async {
     final categoryBox = Hive.box<Category>('category');
-    await categoryBox.put(category.id, category);
+    await categoryBox.put(category.categoryID, category);
   }
 
   void addProduct() async {
@@ -214,7 +225,7 @@ class _UserListProductsState extends State<UserListProducts> {
     if (currentcategory != null) {
       currentcategory.products ??= [];
       currentcategory.products!.add(currentProduct);
-      print(currentcategory.id);
+      print(currentcategory.categoryID);
     }
 
     await saveCategory(currentcategory!);

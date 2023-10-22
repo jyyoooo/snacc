@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:snacc/Admin/adminaccount.dart';
+import 'package:snacc/Admin/admin_account.dart';
 import 'dart:ui';
 
-import 'package:snacc/Admin/adminhome.dart';
+import 'package:snacc/Admin/admin_home.dart';
 import 'package:snacc/Admin/orders.dart';
 
-class Navigation extends StatefulWidget {
-  Navigation({super.key});
+class AdminNavigation extends StatefulWidget {
+ const AdminNavigation({super.key});
 
   @override
-  State<Navigation> createState() => _NavigationState();
+  State<AdminNavigation> createState() => _AdminNavigationState();
 }
 
 int selectedIndex = 0;
 List<Widget> routes = <Widget>[const AdminHome(), const Orders(), const AdminAccount()];
 
-class _NavigationState extends State<Navigation> {
+class _AdminNavigationState extends State<AdminNavigation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(extendBody: true,

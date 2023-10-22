@@ -17,7 +17,7 @@ class CategoryAdapter extends TypeAdapter<Category> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Category(
-      id: fields[0] as int?,
+      categoryID: fields[0] as int?,
       categoryName: fields[1] as String?,
       imageUrl: fields[2] as String?,
       products: (fields[3] as List?)?.cast<Product>(),
@@ -29,7 +29,7 @@ class CategoryAdapter extends TypeAdapter<Category> {
     writer
       ..writeByte(4)
       ..writeByte(0)
-      ..write(obj.id)
+      ..write(obj.categoryID)
       ..writeByte(1)
       ..write(obj.categoryName)
       ..writeByte(2)

@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:snacc/Admin/adminhome.dart';
+import 'package:snacc/Admin/admin_home.dart';
+import 'package:snacc/Admin/popular_combo.dart';
 import 'package:snacc/DataModels/user_model.dart';
 import 'package:snacc/DataModels/category_model.dart';
 import 'package:snacc/DataModels/product_model.dart';
-import 'package:snacc/DataModels/signup_model.dart';
+import 'package:snacc/Login/login.dart';
 import 'package:snacc/Login/select_login.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:snacc/UserPages/userhome.dart';
+import 'package:snacc/Login/splash_page.dart';
+import 'package:snacc/UserPages/user_home.dart';
+import 'package:snacc/UserPages/user_navigation.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,8 +34,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(primarySwatch: Colors.amber),
-      home: const SelectLogin(),
+      home: const SnaccSplash(),
       debugShowCheckedModeBanner: false,
+      routes: {
+        '/selectLogin': (context) => const SelectLogin(),
+        '/userNavigation': (context) => const UserNavigation(),
+        '/login': (context) => const Login(),
+        '/popularcombo': (context) => const PopularCombo()
+      },
     );
   }
 }

@@ -3,11 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:snacc/Admin/products.dart';
 import 'package:snacc/DataModels/category_model.dart';
-import 'package:snacc/UserPages/userproductspage.dart';
+import 'package:snacc/UserPages/user_productspage.dart';
 
 class UserHome extends StatefulWidget {
-  final List<Category> categories;
-  const UserHome({super.key, required this.categories});
+  // final List<Category> categories;
+  const UserHome({super.key});
 
   @override
   State<UserHome> createState() => _UserHomeState();
@@ -17,11 +17,12 @@ class _UserHomeState extends State<UserHome> {
   // @override
   // void initState() {
   //   super.initState();
-  //   fetchCategories();
+  //    fetchCategories();
   // }
 
-  // void fetchCategories() {
-  //   categoryListNotifier.value = widget.categories;
+  // List<Category> fetchCategories() {
+  //   final categories = categoryListNotifier.value;
+  //   return categories;
   // }
 
   @override
@@ -29,7 +30,12 @@ class _UserHomeState extends State<UserHome> {
     return Scaffold(
       // extendBody: true,
       appBar: AppBar(
-        leading: null,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 15.0),
+          child: Image.asset(
+            'assets/images/Snacc.png',
+          ),
+        ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -66,7 +72,7 @@ class _UserHomeState extends State<UserHome> {
                           Navigator.of(context).push((MaterialPageRoute(
                             builder: (context) => UserListProducts(
                               categoryName: category.categoryName,
-                              id: category.id,
+                              id: category.categoryID,
                             ),
                           )));
                         },
@@ -133,38 +139,41 @@ class _UserHomeState extends State<UserHome> {
                 itemCount: 6,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2),
-                itemBuilder: (context, index) => SizedBox(
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15)),
-                        elevation: 3,
-                        margin: const EdgeInsets.fromLTRB(10, 20, 10, 10),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const SizedBox(height: 10),
-                            Expanded(
-                              child: Image.asset(
-                                'assets/popular_combos/Popcorn and cola.png',
-                                height: 100,
+                itemBuilder: (context, index) => GestureDetector(
+                      onTap: () => null,
+                      child: SizedBox(
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)),
+                          elevation: 3,
+                          margin: const EdgeInsets.fromLTRB(10, 20, 10, 10),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const SizedBox(height: 10),
+                              Expanded(
+                                child: Image.asset(
+                                  'assets/popular_combos/Popcorn and cola.png',
+                                  height: 100,
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 10),
-                            const Text(
-                              'Product',
-                              style: TextStyle(
-                                fontSize: 18,
+                              const SizedBox(height: 10),
+                              const Text(
+                                'Product',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 5),
-                            const Text(
-                              '\$12.50',
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w500),
-                            ),
-                            const SizedBox(height: 10),
-                          ],
+                              const SizedBox(height: 5),
+                              const Text(
+                                '\$12.50',
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w500),
+                              ),
+                              const SizedBox(height: 10),
+                            ],
+                          ),
                         ),
                       ),
                     )),
