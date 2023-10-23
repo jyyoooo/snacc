@@ -4,6 +4,7 @@ import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:snacc/Admin/products.dart';
 import 'package:snacc/DataModels/category_model.dart';
+import 'package:snacc/Functions/category_functions.dart';
 import 'package:snacc/Widgets/button.dart';
 
 class AdminHome extends StatefulWidget {
@@ -121,7 +122,10 @@ class _AdminHomeState extends State<AdminHome> {
                                     SnaccButton(
                                       callBack: () {
                                         if (_formKey.currentState!.validate()) {
-                                          addbtn();
+                                          final name = catgoryNameCtrl.text.trim();
+
+                                          // ADD NEW CATEGORY
+                                          addbtn(name,selectedImgUrl);
 
                                           selectedImgUrl = null;
                                           catgoryNameCtrl.clear();
@@ -292,21 +296,5 @@ class _AdminHomeState extends State<AdminHome> {
     );
   }
 
-  Future<void> addbtn() async {
-    final name = catgoryNameCtrl.text.trim();
-    if (name.isEmpty) {
-      return;
-    }
-    
-    final imagePath = selectedImgUrl??'assets/images/no-image-available.png';
-
-    final category = Category(categoryName: name, imageUrl: imagePath);
-
-     addCategory(category);
-
-    categorieslist = Hive.box<Category>('category').values.toList();
-    categoryListNotifier.value = categorieslist;
-
-    await displayalldata();
-  }
+  
 }

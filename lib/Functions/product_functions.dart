@@ -2,7 +2,7 @@ import 'package:snacc/DataModels/category_model.dart';
 import 'package:snacc/DataModels/product_model.dart';
 import 'package:snacc/Functions/category_functions.dart';
 
-void addProduct(productName, productPrice, productImgUrl, categoryID) async {
+void addProduct(String productName,double productPrice,String?  productImgUrl,int? categoryID) async {
   //NEW PEODUCT OBJECT
   Product newProduct = Product(
     prodimgUrl: productImgUrl ?? 'assets/images/no-image-available.png',
@@ -23,19 +23,19 @@ void addProduct(productName, productPrice, productImgUrl, categoryID) async {
 
   if (currentcategory != null) {
     currentcategory.products ??= [];
-    currentcategory.products?.add(newProduct);
+    currentcategory.products!.add(newProduct);
     //ignore:avoid_print
-    print('will be added to ${currentcategory.categoryName}');
+    print('${newProduct.prodname} will be added to ${currentcategory.categoryName}');
+    await saveCategory(currentcategory);
   }else{
     //ignore:avoid_print
   print('category error');
 
   }
 
-  await saveCategory(currentcategory!);
-
+  
   //ignore:avoid_print
-  print('products list = ${currentcategory.products}');
+  print('products list = ${currentcategory?.products}');
   //ignore:avoid_print
-  print('category of = ${currentcategory.categoryName}');
+  print('category of = ${currentcategory?.categoryName}');
 }

@@ -207,9 +207,9 @@ class _ListProductsState extends State<ListProducts> {
                                     addProduct( productName, productPrice,productImgUrl,categoryID);
                                     productnamectrl.clear();
                                     productpricectrl.clear();
-                                    setState(() {
-                                      productImgUrl = null;
-                                    });
+                                    // setState(() {
+                                    //   productImgUrl = null;
+                                    // });
                                   },
                                   inputText: 'ADD PRODUCT', 
                                 )

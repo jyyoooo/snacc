@@ -29,7 +29,6 @@ class Category {
 ValueNotifier<List<Category>> categoryListNotifier = ValueNotifier([]);
 
 void addCategory(Category category) async {
-  
   final categoryBox = await Hive.openBox<Category>('category');
   final id = await categoryBox.add(category);
   //ignore:avoid_print
@@ -37,13 +36,15 @@ void addCategory(Category category) async {
 
   category.categoryID = id;
 
-  await categoryBox.put(category.categoryID,category);
+  await categoryBox.put(id, category);
 
   //ignore:avoid_print
   print('category id = ${category.categoryID}');
 
-  categoryListNotifier.value.add(category);
-  categoryListNotifier.notifyListeners();
+  if (!categoryListNotifier.value.any((category) => category.categoryID == id)) {
+    categoryListNotifier.value.add(category);
+    categoryListNotifier.notifyListeners();
+  }
 }
 
 Future<void> displayalldata() async {
@@ -53,6 +54,5 @@ Future<void> displayalldata() async {
   for (final category in allvalues) {
     //ignore:avoid_print
     print('name = ${category.categoryName}  with id = ${category.categoryID}');
-    
   }
 }

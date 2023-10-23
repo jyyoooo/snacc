@@ -1,7 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+// import 'package:hive/hive.dart';
 import 'package:snacc/DataModels/category_model.dart';
 import 'package:snacc/DataModels/product_model.dart';
+
+Future<void> addbtn(name,String? selectedImgUrl) async {
+    
+    // if (name.isEmpty) {
+    //   return;
+    // }
+    
+    final String imagePath = selectedImgUrl??'assets/images/no-image-available.png';
+
+    final category = Category(categoryName: name, imageUrl: imagePath);
+
+     addCategory(category);
+
+    final categorieslist = Hive.box<Category>('category').values.toList();
+    categoryListNotifier.value = categorieslist;
+
+    await displayalldata();
+  }
 
 void deleteCategory(int? id) async {
   final categoryBox = await Hive.openBox<Category>('category');
@@ -47,10 +66,11 @@ Future<void> updatedCategory(Category updatedCategory) async {
 //SAVE CATEGORY
 Future<void> saveCategory(Category category) async {
   final categoryBox = Hive.box<Category>('category');
-  await categoryBox.put(category.categoryID, category);
-  await categoryBox.add(category);
+  // await categoryBox.put(category.categoryID, category);
+  await categoryBox.put(category.categoryID,category);
 }
 
+// FETCH CATEGORY BY ID
 Category? getCategoryById(int? categoryId) {
   if (categoryId == null) return null ;
 

@@ -41,13 +41,15 @@ class SelectLogin extends StatelessWidget {
                     callBack: () {
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: (BuildContext context) => const SignUp()));
-                    }),
+                    },
+                    width: 100,),
                 SnaccButton(
                     inputText: 'LOGIN',
                     callBack: () {
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: (BuildContext context) => const Login()));
-                    })
+                    },
+                    width: 100)
               ],
             )
           ],

@@ -100,36 +100,3 @@ class Login extends StatelessWidget {
     );
   }
 }
-
-
-  // Future<bool> userExists() async {
-    //   final usermail = mailCtrl.text.trim();
-    //   final userpass = passCtrl.text.trim();
-
-    //   final userbox = await Hive.box<UserModel>('userinfo');
-
-    //   final userExists = userbox.values.any((storeduser) =>
-    //       storeduser.userMail == usermail && storeduser.userPass == userpass);
-
-    //   return userExists;
-    // }
-
-
-// LOGIN BTN CALL BACK
-
-    // if (await adminLogin()) {
-                    //   Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    //       builder: ((context) => Navigation())));
-                    // }
-                    //  else if (await
-
-                    //  userLogin();
-                    //  ) {
-                    //   Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    //       builder: (context) => const UserNavigation()));
-                    // } else {
-                    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    //     content: Text('Invalid login credentials!'),
-                    //     elevation: 2,
-                    //   ));
-                    // }
