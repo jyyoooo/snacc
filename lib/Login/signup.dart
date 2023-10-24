@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:snacc/DataModels/user_model.dart';
 import 'package:snacc/Functions/login_functions.dart';
-import 'package:snacc/Widgets/button.dart';
+import 'package:snacc/Widgets/snacc_button.dart';
 import 'package:snacc/Widgets/textfield.dart';
 import 'package:snacc/Login/login.dart';
 import 'package:snacc/UserPages/user_home.dart';

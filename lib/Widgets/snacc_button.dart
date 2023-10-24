@@ -4,16 +4,18 @@ class SnaccButton extends StatelessWidget {
   final double width;
   final double height;
   final String inputText;
+  final Color? textColor;
   final VoidCallback? callBack;
   final Color? btncolor;
-  final Icon? icon;
+  final Widget? icon;
 
   const SnaccButton({
     Key? key,
     this.width = 150.0,
-    this.height = 40.0,
+    this.height = 33.0,
     required this.inputText,
     required this.callBack,
+    this.textColor,
     this.btncolor,
     this.icon,
   }) : super(key: key);
@@ -34,15 +36,13 @@ class SnaccButton extends StatelessWidget {
           onPressed: () {
             callBack!();
           },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                inputText,
-                style: const TextStyle(color: Colors.white),
-              ),
-            ],
-          ),
+          child:  icon??
+               Center(
+                  child: Text(
+                    inputText,
+                    style: TextStyle(color: textColor ?? Colors.white),
+                  ),
+                ),
         ),
       ),
     );

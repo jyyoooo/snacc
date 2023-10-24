@@ -5,7 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:snacc/DataModels/category_model.dart';
 import 'package:snacc/DataModels/product_model.dart';
-import 'package:snacc/Widgets/button.dart';
+import 'package:snacc/Widgets/snacc_button.dart';
 
 class UserListProducts extends StatefulWidget {
   final int? id;

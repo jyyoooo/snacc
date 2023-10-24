@@ -6,8 +6,9 @@ import 'package:snacc/Admin/admin_home.dart';
 import 'package:snacc/DataModels/category_model.dart';
 import 'package:snacc/DataModels/product_model.dart';
 import 'package:snacc/Functions/category_functions.dart';
+import 'package:snacc/Functions/image_picker.dart';
 import 'package:snacc/Functions/product_functions.dart';
-import 'package:snacc/Widgets/button.dart';
+import 'package:snacc/Widgets/snacc_button.dart';
 import 'package:snacc/Widgets/textfield.dart';
 
 class ListProducts extends StatefulWidget {
@@ -36,6 +37,7 @@ class _ListProductsState extends State<ListProducts> {
       if (products != null) {
         productlistNotifier.value = products;
       } else {
+        // ignore:avoid_print
         print('products is null');
       }
     });
@@ -48,6 +50,8 @@ class _ListProductsState extends State<ListProducts> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
+
+          // EDIT CATEGORY
           IconButton(
               onPressed: () async {
                 final category = getCategoryById(widget.id);
@@ -69,15 +73,10 @@ class _ListProductsState extends State<ListProducts> {
                               SnaccTextField(
                                 controller: newcategorynamectrl,
                               ),
-                              SnaccButton(
-                                  inputText: 'new image',
-                                  callBack: () async {
-                                    final newImageURL = await pickprodImage();
-                                    if (newImageURL != null) {
-                                      updatedImgUrl = updatedImgUrl;
-                                    }
-                                  }),
-                              SizedBox(
+                              const SizedBox(height: 20,),
+                              Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  SizedBox(
                                   height: 80,
                                   width: 80,
                                   child: updatedImgUrl != null
@@ -87,8 +86,22 @@ class _ListProductsState extends State<ListProducts> {
                                         )
                                       : Container(
                                           color: Colors.grey,
-                                          child: const Icon(Icons.image),
-                                        ))
+                                          child: const Icon(Icons.image,color: Colors.blue,),
+                                        )),
+                                  SnaccButton(
+                                    width: 60,
+                                    icon: const Icon(Icons.photo),
+                                    btncolor: Colors.white70,
+                                      inputText: 'new image',
+                                      callBack: () async {
+                                        final String? newImageURL = await pickImageFromGallery();
+                                        if (newImageURL != null) {
+                                          updatedImgUrl = updatedImgUrl;
+                                        }
+                                      }),
+                                ],
+                              ),
+                              
                             ],
                           ),
                           actions: <Widget>[
@@ -112,6 +125,8 @@ class _ListProductsState extends State<ListProducts> {
                 Icons.edit,
                 color: Colors.blue,
               )),
+
+              // DELETE CATEGORY
           IconButton.filled(
               onPressed: () async {
                 await showDialog(
@@ -143,24 +158,29 @@ class _ListProductsState extends State<ListProducts> {
                 Icons.delete,
                 color: Colors.red,
               )),
+
+
+              // ADD PRODUCT
           IconButton(
               onPressed: () {
                 showModalBottomSheet(
+                  shape:const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
                     context: context,
                     builder: (context) {
-                      return ClipRRect(
-                        borderRadius: BorderRadius.circular(30),
-                        child: Form(
-                          key: productformkey,
-                          child: Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    SizedBox(
+                      return Form(
+                        key: productformkey,
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Column(
+                            children: [
+                              const Text('Add a new Product',style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500),),
+                              const SizedBox(height: 20,),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  ClipRRect(borderRadius: BorderRadius.circular(10),
+                                    child: SizedBox(
                                         height: 80,
                                         width: 80,
                                         child: productImgUrl != null
@@ -169,52 +189,54 @@ class _ListProductsState extends State<ListProducts> {
                                                 fit: BoxFit.cover,
                                               )
                                             : Container(
-                                                color: Colors.grey,
-                                                child: const Icon(Icons.image),
+                                                color: Colors.grey[300],
+                                                child: Image.asset('assets/images/no-image-available.png'),
                                               )),
-                                    SnaccButton(
-                                        inputText: 'Pick Image',
-                                        callBack: () {
-                                          pickprodImage();
-                                        }),
-                                  ],
-                                ),
-                                const SizedBox(height: 10),
-                                TextFormField(
-                                  controller: productnamectrl,
-                                  decoration: const InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    hintText: 'Product name',
                                   ),
-                                ),
-                                const SizedBox(height: 10),
-                                TextFormField(
-                                  controller: productpricectrl,
-                                  decoration: const InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    hintText: 'Price',
-                                  ),
-                                ),
+                                  SnaccButton(
+                                      inputText: 'Pick Image',
+                                      callBack: () async{
+                                        
 
-                                const SizedBox(height: 10),
-                                SnaccButton(
-                                  callBack: () {
-                                    final String productName = productnamectrl.text.trim();
-                                    final double productPrice = double.tryParse(productpricectrl.text) ??0.00;
-                                    final categoryID = widget.id;
+                                        productImgUrl = await pickImageFromGallery();
+                                      }),
+                                ],
+                              ),
+                              const SizedBox(height: 10),
+                              TextFormField(
+                                controller: productnamectrl,
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  hintText: 'Product name',
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              TextFormField(
+                                controller: productpricectrl,
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  hintText: 'Price',
+                                ),
+                              ),
 
-                                    // ADD PRODUCT
-                                    addProduct( productName, productPrice,productImgUrl,categoryID);
-                                    productnamectrl.clear();
-                                    productpricectrl.clear();
-                                    // setState(() {
-                                    //   productImgUrl = null;
-                                    // });
-                                  },
-                                  inputText: 'ADD PRODUCT', 
-                                )
-                              ],
-                            ),
+                              const SizedBox(height: 10),
+                              SnaccButton(
+                                callBack: () {
+                                  final String productName = productnamectrl.text.trim();
+                                  final double productPrice = double.tryParse(productpricectrl.text) ??0.00;
+                                  final categoryID = widget.id;
+
+                                  // ADD PRODUCT
+                                  addProduct( productName, productPrice,productImgUrl,categoryID);
+                                  productnamectrl.clear();
+                                  productpricectrl.clear();
+                                  // setState(() {
+                                  //   productImgUrl = null;
+                                  // });
+                                },
+                                inputText: 'ADD PRODUCT', 
+                              )
+                            ],
                           ),
                         ),
                       );
@@ -342,26 +364,27 @@ class _ListProductsState extends State<ListProducts> {
     );
   }
 
-  bool isImagepickerActive = false;
-  Future pickprodImage() async {
-    if (isImagepickerActive) return;
-    isImagepickerActive = true;
+  // bool isImagepickerActive = false;
+  // Future pickprodImage() async {
+  //   if (isImagepickerActive) return;
+  //   isImagepickerActive = true;
 
-    final imagePicker = ImagePicker();
-    try {
-      final pickedImage =
-          await imagePicker.pickImage(source: ImageSource.gallery);
-      if (pickedImage != null) {
-        setState(() {
-          productImgUrl = pickedImage.path;
-        });
-      } else if (pickedImage == null) {
-        productImgUrl = 'assets/images/no-image-available.png';
-      }
-    } catch (e) {
-      print('Error picking image: $e');
-    }
-  }
+  //   final imagePicker = ImagePicker();
+  //   try {
+  //     final pickedImage =
+  //         await imagePicker.pickImage(source: ImageSource.gallery);
+  //     if (pickedImage != null) {
+  //       setState(() {
+  //         productImgUrl = pickedImage.path;
+  //       });
+  //     } else if (pickedImage == null) {
+  //       productImgUrl = 'assets/images/no-image-available.png';
+  //     }
+  //   } catch (e) {
+  //     print('Error picking image: $e');
+  //   }
+  // }
+
 
   void editProduct(Product product) async {
     final TextEditingController newprodnamectrl = TextEditingController();
@@ -418,23 +441,19 @@ class _ListProductsState extends State<ListProducts> {
             icon: const Icon(Icons.delete_forever),
             title: const Text('Delete Product?'),
             actions: [
+              
               SnaccButton(
-                  btncolor: Colors.white,
-                  inputText: 'Cancel',
-                  callBack: () {
-                    Navigator.of(context).pop();
-                  }),
-              SnaccButton(
+                btncolor: Colors.red,
                   inputText: 'Delete',
                   callBack: () {
                     Category? currentCategory = getCategoryById(widget.id);
 
                     final int productindex = currentCategory!.products!
                         .indexWhere((element) => element == product);
-
                     currentCategory.products!.removeAt(productindex);
 
                     saveCategory(currentCategory);
+                    Navigator.of(context).pop();
 
                     productlistNotifier.notifyListeners();
                   })

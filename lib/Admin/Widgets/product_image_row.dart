@@ -55,16 +55,21 @@ class ProductImageRow extends StatelessWidget {
               child: productOne?.prodimgUrl != null && productOne != null
                   ? Image.file(
                       File(productOne!.prodimgUrl!),
-                      height: 80,
+                      height: 60,
                     )
                   : SizedBox(
                       child: Image.asset('assets/images/no-image-available.png',
-                          height: 80),
+                          height: 60),
                     ),
             ),
           ],
         ),
-        const Icon(Icons.add),
+       const Column(
+          children: [
+            SizedBox(height: 20,),
+             Icon(Icons.add),
+          ],
+        ),
 
         //PRODUCT TWO
         Column(
@@ -103,11 +108,11 @@ class ProductImageRow extends StatelessWidget {
               child: productTwo?.prodimgUrl == null && productTwo == null
                   ? SizedBox(
                       child: Image.asset('assets/images/no-image-available.png',
-                          height: 80),
+                          height: 60),
                     )
                   : Image.file(
                       File(productTwo!.prodimgUrl!),
-                      height: 80,
+                      height: 60,
                     ),
             )
           ],

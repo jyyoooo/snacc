@@ -5,7 +5,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:snacc/Admin/products.dart';
 import 'package:snacc/DataModels/category_model.dart';
 import 'package:snacc/Functions/category_functions.dart';
-import 'package:snacc/Widgets/button.dart';
+import 'package:snacc/Functions/combos_functions.dart';
+import 'package:snacc/Widgets/snacc_button.dart';
 
 class AdminHome extends StatefulWidget {
   const AdminHome({super.key});
@@ -73,9 +74,13 @@ class _AdminHomeState extends State<AdminHome> {
             children: [
               const Text('Catergories',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+
+
+              // ADD NEW CATEGORY
               IconButton(
                   onPressed: () {
                     showModalBottomSheet(
+                      shape:const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
                         context: context,
                         builder: (context) {
                           return ClipRRect(
@@ -86,23 +91,27 @@ class _AdminHomeState extends State<AdminHome> {
                                 padding: const EdgeInsets.all(10),
                                 child: Column(
                                   children: [
+                                    const Text('Add a new Category',style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500),),
+                                    const SizedBox(height: 20,),
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceEvenly,
                                       children: [
-                                        SizedBox(
-                                            height: 80,
-                                            width: 80,
-                                            child: selectedImgUrl != null
-                                                ? Image.file(
-                                                    File(selectedImgUrl!),
-                                                    fit: BoxFit.cover,
-                                                  )
-                                                : Container(
-                                                    color: Colors.grey,
-                                                    child:
-                                                        const Icon(Icons.image),
-                                                  )),
+                                        ClipRRect(borderRadius: BorderRadius.circular(10),
+                                          child: SizedBox(
+                                              height: 80,
+                                              width: 80,
+                                              child: selectedImgUrl != null
+                                                  ? Image.file(
+                                                      File(selectedImgUrl!),
+                                                      fit: BoxFit.cover,
+                                                    )
+                                                  : Container(
+                                                      color: Colors.grey,
+                                                      child:
+                                                          Image.asset('assets/images/no-image-available.png'),
+                                                    )),
+                                        ),
                                         SnaccButton(
                                             inputText: 'Pick Image',
                                             callBack: () {
@@ -247,49 +256,73 @@ class _AdminHomeState extends State<AdminHome> {
                   icon: const Icon(size: 30, color: Colors.blue, Icons.edit))
             ],
           ),
+
+
+          
           Expanded(
-            child: GridView.builder(
-                physics: const BouncingScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                shrinkWrap: false,
-                itemCount: 6,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2),
-                itemBuilder: (context, index) => SizedBox(
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15)),
-                        elevation: 3,
-                        margin: const EdgeInsets.fromLTRB(10, 20, 10, 10),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const SizedBox(height: 10),
-                            Expanded(
-                              child: Image.asset(
-                                'assets/popular_combos/Popcorn and cola.png',
-                                height: 100,
+            child: FutureBuilder(
+              future: getcomboListFromHive(),
+              builder:(context, snapshot) {
+                if(snapshot.connectionState == ConnectionState.done){
+
+
+                  final testCombos = snapshot.data;
+                  if(testCombos != null){
+                    return GridView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: false,
+                  itemCount: testCombos.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2),
+                  itemBuilder: (context, index) {
+                    
+                    final testList = testCombos[index];
+
+                    return SizedBox(
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)),
+                          elevation: 3,
+                          margin: const EdgeInsets.fromLTRB(10, 20, 10, 10),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const SizedBox(height: 10),
+                              Expanded(
+                                child: Image.file(
+                                  File(testList.comboImgUrl??'assets/images/no-image-available.png'),
+                                  height: 100,
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 10),
-                            const Text(
-                              'Product',
-                              style: TextStyle(
-                                fontSize: 18,
+                              const SizedBox(height: 10),
+                               Text(
+                                testList.comboName??'not available',
+                                style:const TextStyle(
+                                  fontSize: 18,
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 5),
-                            const Text(
-                              '\$12.50',
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w500),
-                            ),
-                            const SizedBox(height: 10),
-                          ],
+                              const SizedBox(height: 5),
+                               Text(
+                                "${testList.comboPrice}",
+                                style:const TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w500),
+                              ),
+                              const SizedBox(height: 10),
+                            ],
+                          ),
                         ),
-                      ),
-                    )),
+                      );});
+                  }else{
+                    return const Text("no data");
+                  }
+                }else{
+                  return const  CircularProgressIndicator();
+                }
+              }
+              
+            ),
           )
         ]),
       ),

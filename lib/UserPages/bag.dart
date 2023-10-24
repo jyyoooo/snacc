@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:snacc/Widgets/button.dart';
+import 'package:snacc/Widgets/snacc_button.dart';
 
 class UserBag extends StatefulWidget {
   const UserBag({super.key});

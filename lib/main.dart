@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:snacc/Admin/admin_home.dart';
 import 'package:snacc/Admin/popular_combo.dart';
+import 'package:snacc/DataModels/combo_model.dart';
 import 'package:snacc/DataModels/user_model.dart';
 import 'package:snacc/DataModels/category_model.dart';
 import 'package:snacc/DataModels/product_model.dart';
@@ -17,10 +18,12 @@ void main() async {
 
   if (!Hive.isAdapterRegistered(CategoryAdapter().typeId) &&
       !Hive.isAdapterRegistered(ProductAdapter().typeId) &&
-      !Hive.isAdapterRegistered(UserModelAdapter().typeId)) {
+      !Hive.isAdapterRegistered(UserModelAdapter().typeId)&&
+      !Hive.isAdapterRegistered(ComboModelAdapter().typeId)) {
     Hive.registerAdapter(CategoryAdapter());
     Hive.registerAdapter(ProductAdapter());
     Hive.registerAdapter(UserModelAdapter());
+    Hive.registerAdapter(ComboModelAdapter());
   }
   await Hive.openBox<Category>('category');
   await Hive.openBox<UserModel>('userinfo');

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:snacc/DataModels/user_model.dart';
 import 'package:snacc/Functions/login_functions.dart';
-import 'package:snacc/Widgets/button.dart';
+import 'package:snacc/Widgets/snacc_button.dart';
 import 'package:snacc/Login/login.dart';
 
 class UserAccount extends StatelessWidget {

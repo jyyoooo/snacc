@@ -6,7 +6,7 @@ import 'package:snacc/Admin/admin_navigation.dart';
 import 'package:snacc/DataModels/user_model.dart';
 import 'package:snacc/Functions/login_functions.dart';
 import 'package:snacc/Login/signup.dart';
-import 'package:snacc/Widgets/button.dart';
+import 'package:snacc/Widgets/snacc_button.dart';
 import 'package:snacc/Widgets/textfield.dart';
 import 'package:snacc/UserPages/user_account.dart';
 import 'package:snacc/UserPages/user_navigation.dart';

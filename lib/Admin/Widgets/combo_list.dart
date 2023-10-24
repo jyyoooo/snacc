@@ -4,7 +4,6 @@ import 'package:snacc/DataModels/product_model.dart';
 import 'package:snacc/Functions/combos_functions.dart';
 
 class ComboItemList extends StatefulWidget {
-  
   final void Function(Product?) onProductSelected;
 
   const ComboItemList({super.key, required this.onProductSelected});
@@ -43,51 +42,102 @@ class _ComboItemListState extends State<ComboItemList> {
         ),
         Padding(
           padding: const EdgeInsets.all(15.0),
-          child: Row(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-
-              // CATEGORY LIST
-              Column(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  const Text('Category',style: TextStyle(color: Colors.blue)),
                   const SizedBox(
                     height: 10,
                   ),
-                  DropdownButton(
-                    itemHeight: 60,
-                    value: selectedCategory,
-                    items: categoryItem,
-                    onChanged: (category) {
-                      setState(() {
-                        selectedCategory = category;
-                        selectedProduct = null;
-                        productItems = fetchProducts(selectedCategory!);
-                      });
-                    },
+
+                  // CATEGORY LIST
+                  Column(
+                    children: [
+                      const Text('Category',
+                          style: TextStyle(color: Colors.blue)),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        height: 50,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.grey[200]),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+
+                          // DROPDOWN
+                          child: DropdownButton(
+                            underline:const SizedBox(),
+                            focusColor: Colors.lightBlue,
+                            borderRadius: BorderRadius.circular(10),
+                            hint: const Text(
+                              'select category',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                            itemHeight: 60,
+                            value: selectedCategory,
+                            items: categoryItem,
+                            onChanged: (category) {
+                              setState(() {
+                                selectedCategory = category;
+                                selectedProduct = null;
+                                productItems = fetchProducts(selectedCategory!);
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
+
+                  const SizedBox(
+                    height: 10,
+                  ),
+
+                  // PRODUCT LIST
+                  Column(
+                    children: [
+                      const Text('Product',
+                          style: TextStyle(color: Colors.blue)),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        height: 50,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.grey[200]),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          
+                          // DROPDOWN
+                          child: DropdownButton(
+                            underline:const SizedBox(),
+                              borderRadius: BorderRadius.circular(10),
+                              hint: const Text(
+                                'select product',
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                              itemHeight: 60,
+                              value: selectedProduct,
+                              items: productItems,
+                              onChanged: (product) {
+                                setState(() {
+                                  selectedProduct = product;
+                                  widget.onProductSelected(selectedProduct);
+                                });
+                              }),
+                        ),
+                      ),
+                    ],
+                  )
                 ],
               ),
-              
+
               // PRODUCT LIST
-              Column(
-                children: [
-                  const Text('Product',style: TextStyle(color: Colors.blue)),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  DropdownButton(
-                      itemHeight: 60,
-                      value: selectedProduct,
-                      items: productItems,
-                      onChanged: (product) {
-                        setState(() {
-                          selectedProduct = product;
-                          widget.onProductSelected(selectedProduct);
-                        });
-                      }),
-                ],
-              )
             ],
           ),
         ),

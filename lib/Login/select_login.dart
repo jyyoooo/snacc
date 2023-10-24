@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:snacc/Login/login.dart';
 import 'package:snacc/Login/signup.dart';
-import 'package:snacc/Widgets/button.dart';
+import 'package:snacc/Widgets/snacc_button.dart';
 
 class SelectLogin extends StatelessWidget {
   const SelectLogin({super.key});
