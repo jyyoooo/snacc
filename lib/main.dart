@@ -28,13 +28,15 @@ void main() async {
       !Hive.isAdapterRegistered(UserModelAdapter().typeId) &&
       !Hive.isAdapterRegistered(ComboModelAdapter().typeId) &&
       !Hive.isAdapterRegistered(OrderAdapter().typeId)&&
-      !Hive.isAdapterRegistered(PaymentOptionAdapter().typeId)) {
+      !Hive.isAdapterRegistered(PaymentOptionAdapter().typeId)&&
+      !Hive.isAdapterRegistered(OrderStatusAdapter().typeId)) {
     Hive.registerAdapter(CategoryAdapter());
     Hive.registerAdapter(ProductAdapter());
     Hive.registerAdapter(UserModelAdapter());
     Hive.registerAdapter(ComboModelAdapter());
     Hive.registerAdapter(OrderAdapter());
     Hive.registerAdapter(PaymentOptionAdapter());
+    Hive.registerAdapter(OrderStatusAdapter());
   }
   await Hive.openBox<Order>('orders');
   await Hive.openBox<Category>('category');

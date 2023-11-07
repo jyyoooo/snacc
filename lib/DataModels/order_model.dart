@@ -43,3 +43,18 @@ enum OrderStatus {
   delivered,
   cancelled
 }
+
+class OrderStatusAdapter extends TypeAdapter<OrderStatus> {
+  @override
+  final int typeId = 6;
+
+  @override
+  OrderStatus read(BinaryReader reader) {
+    return OrderStatus.values[reader.readByte()];
+  }
+
+  @override
+  void write(BinaryWriter writer, OrderStatus orderStatus) {
+    writer.writeByte(orderStatus.index);
+  }
+}

@@ -241,7 +241,7 @@ enum PaymentOption {
 
 class PaymentOptionAdapter extends TypeAdapter<PaymentOption> {
   @override
-  final int typeId = 7; // Assign a unique type ID for the enum
+  final int typeId = 7;
 
   @override
   PaymentOption read(BinaryReader reader) {

@@ -3,9 +3,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:snacc/DataModels/order_model.dart';
 import '../UserPages/Your Bag/payment.dart';
+import 'package:intl/intl.dart';
 
-Future<bool> createOrder(int? userId, List<dynamic>? orderItems, double orderPrice,
-    PaymentOption method) async {
+Future<bool> createOrder(int? userId, List<dynamic>? orderItems,
+    double orderPrice, PaymentOption method) async {
   final ordersBox = Hive.box<Order>('orders');
   bool isDuplicate = false;
 
@@ -45,4 +46,11 @@ Future<bool> createOrder(int? userId, List<dynamic>? orderItems, double orderPri
 Future<List<Order>> fetchOrders() async {
   final allOrders = Hive.box<Order>('orders');
   return allOrders.values.toList();
+}
+
+getFormattedOrderedTime(time) {
+  var now = time;
+  String formattedTime = DateFormat('kk:mm:a').format(now);
+  log(formattedTime);
+  return formattedTime;
 }

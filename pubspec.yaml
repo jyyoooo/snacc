@@ -49,6 +49,7 @@ dependencies:
   google_fonts: ^6.1.0
   bottom_blur_bar: ^0.0.1
   gap: ^3.0.1
+  intl: ^0.18.1
   
 
 dev_dependencies:
