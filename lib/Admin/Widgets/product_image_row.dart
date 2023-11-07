@@ -7,7 +7,7 @@ class ProductImageRow extends StatelessWidget {
   final Product? productOne;
   final Product? productTwo;
 
-  ProductImageRow({
+  const ProductImageRow({
     required this.productOne,
     required this.productTwo,
   });

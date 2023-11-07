@@ -1,7 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:snacc/Login/login.dart';
+import 'package:snacc/Functions/login_functions.dart';
+import 'package:snacc/Authentication/login.dart';
 import 'package:snacc/Widgets/snacc_appbar.dart';
 
 class AdminAccount extends StatelessWidget {
@@ -14,28 +15,31 @@ class AdminAccount extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      appBar:const  PreferredSize(
-          preferredSize: Size.fromHeight(60),
-          child: SnaccAppBar()),
-          
+      appBar: const PreferredSize(
+          preferredSize: Size.fromHeight(60), child: SnaccAppBar()),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(20,10,20,10),
+        padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Card(
+            Card(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
               elevation: 2,
               child: Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     CircleAvatar(
                       radius: 40,
                       backgroundColor: Colors.amber[100],
-                      // backgroundImage: Image.file(File(user)),
+                      child: const Icon(
+                        Icons.person,
+                        size: 50,
+                      ),
                     ),
-                    const Text('Admin')
+                    const Text('Admin',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold))
                   ],
                 ),
               ),
@@ -45,8 +49,7 @@ class AdminAccount extends StatelessWidget {
             ),
             TextButton.icon(
                 onPressed: () {
-                  Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (context) => const Login()));
+                  logOutAdmin(context);
                 },
                 icon: const Icon(
                   Icons.logout_rounded,

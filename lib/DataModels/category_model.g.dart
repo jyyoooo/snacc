@@ -20,7 +20,7 @@ class CategoryAdapter extends TypeAdapter<Category> {
       categoryID: fields[0] as int?,
       categoryName: fields[1] as String?,
       imageUrl: fields[2] as String?,
-      products: (fields[3] as List?)?.cast<Product>(),
+      productsReference: (fields[3] as List?)?.cast<int>(),
     );
   }
 
@@ -35,7 +35,7 @@ class CategoryAdapter extends TypeAdapter<Category> {
       ..writeByte(2)
       ..write(obj.imageUrl)
       ..writeByte(3)
-      ..write(obj.products);
+      ..write(obj.productsReference);
   }
 
   @override

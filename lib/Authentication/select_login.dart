@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:snacc/Login/login.dart';
-import 'package:snacc/Login/signup.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:snacc/Authentication/login.dart';
+import 'package:snacc/Authentication/signup.dart';
 import 'package:snacc/Widgets/snacc_button.dart';
 
 class SelectLogin extends StatelessWidget {
@@ -24,10 +25,11 @@ class SelectLogin extends StatelessWidget {
               height: 300,
               child: Image.asset("assets/images/indofeb25 1.png"),
             ),
-            const Text(
+             Text(
               textAlign: TextAlign.center,
               'Skip the Line, Enjoy the Show\nBook Your Theater Snacks in a Snap!',
-              style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
+              style: GoogleFonts.nunitoSans(
+                      fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(
               height: 20,
@@ -44,6 +46,7 @@ class SelectLogin extends StatelessWidget {
                     },
                     width: 100,),
                 SnaccButton(
+                  textColor: Colors.white,
                     inputText: 'LOGIN',
                     callBack: () {
                       Navigator.of(context).pushReplacement(MaterialPageRoute(

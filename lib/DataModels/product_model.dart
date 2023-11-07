@@ -3,27 +3,34 @@ part 'product_model.g.dart';
 
 @HiveType(typeId: 1)
 class Product {
-
   @HiveField(0)
-  String? prodimgUrl;
+  int? productID;
 
   @HiveField(1)
-  String? prodname;
+  String? prodimgUrl;
 
   @HiveField(2)
-  double? prodprice;
+  String? prodname;
 
   @HiveField(3)
-  int? quantity;
+  double? prodprice;
 
   @HiveField(4)
+  int? quantity;
+
+  @HiveField(5)
   bool? isFavorite;
 
+  @HiveField(6)
+  int? categoryID;
+
   Product(
-      {required this.prodimgUrl,
+      {String? prodimgUrl,
       required this.prodname,
       required this.prodprice,
-      this.quantity,this.isFavorite = false});
+      this.quantity,
+      this.isFavorite = false,
+      this.categoryID,
+      this.productID})
+      : prodimgUrl = prodimgUrl ?? 'assets/images/no-image-available.png';
 }
-
-

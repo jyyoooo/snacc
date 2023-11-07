@@ -4,18 +4,30 @@ part 'combo_model.g.dart';
 
 @HiveType(typeId: 3)
 class ComboModel {
-
   @HiveField(0)
-  String? comboName;
+  int? comboID;
 
   @HiveField(1)
-  double? comboPrice;
+  String? comboName;
 
   @HiveField(2)
-  String? comboImgUrl;
+  double? comboPrice;
 
   @HiveField(3)
+  String? comboImgUrl;
+
+  @HiveField(4)
   List<Product?>? comboItems = [];
 
-  ComboModel({this.comboImgUrl, this.comboItems, this.comboName, this.comboPrice});
+  @HiveField(5)
+  bool? isFavorite;
+
+  ComboModel(
+      {this.comboID,
+      String? comboImgUrl,
+      this.comboItems,
+      this.comboName,
+      this.comboPrice,
+      this.isFavorite = false})
+      : comboImgUrl = comboImgUrl ?? 'assets/images/no-image-available.png';
 }

@@ -1,12 +1,18 @@
 import 'dart:io';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:snacc/Admin/Widgets/add_category.dart';
+import 'package:snacc/Admin/Widgets/combo_list_builder.dart';
 import 'package:snacc/Admin/products.dart';
 import 'package:snacc/DataModels/category_model.dart';
 import 'package:snacc/Functions/category_functions.dart';
 import 'package:snacc/Functions/combos_functions.dart';
 import 'package:snacc/Widgets/snacc_button.dart';
+
+import '../DataModels/product_model.dart';
 
 class AdminHome extends StatefulWidget {
   const AdminHome({super.key});
@@ -16,37 +22,20 @@ class AdminHome extends StatefulWidget {
 }
 
 class _AdminHomeState extends State<AdminHome> {
-  List<Category> categorieslist = [];
+  List<Category>? categorieslist = [];
+  final carouselCtrl = CarouselController();
 
   @override
   void initState() {
     super.initState();
     final categorieslist = Hive.box<Category>('category').values.toList();
     categoryListNotifier.value = categorieslist;
+    print("catlist from init: $categorieslist");
   }
 
-  String? selectedImgUrl;
-
-  final catgoryNameCtrl = TextEditingController();
+  // String? selectedImgUrl;
 
   final _formKey = GlobalKey<FormState>();
-  // File? image;
-
-  Future pickImage() async {
-    final imagePicker = ImagePicker();
-    final pickedImage =
-        await imagePicker.pickImage(source: ImageSource.gallery);
-
-    if (pickedImage != null) {
-      setState(() {
-        selectedImgUrl = pickedImage.path;
-      });
-    } else {
-      setState(() {
-        selectedImgUrl ?? 'assets/images/no-image-available.png';
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,274 +49,198 @@ class _AdminHomeState extends State<AdminHome> {
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
-        // primary: true,
-        title: const Text(
+        title: Text(
           'Welcome back, Admin',
-          style: TextStyle(fontSize: 20, color: Colors.amber),
+          style: TextStyle(fontSize: 20, color: Colors.grey[800]),
         ),
+        actions: [
+          TextButton(
+              onPressed: () {
+                Hive.box<Product>('products').clear();
+                Hive.box<Category>('category').clear();
+              },
+              child: const Text(
+                'clear all data',
+                style: TextStyle(color: Colors.red),
+              ))
+        ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text('Catergories',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(20)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('    Catergories',
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.grey[800])),
 
-
-              // ADD NEW CATEGORY
-              IconButton(
-                  onPressed: () {
-                    showModalBottomSheet(
-                      shape:const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
-                        context: context,
-                        builder: (context) {
-                          return ClipRRect(
-                            borderRadius: BorderRadius.circular(30),
-                            child: Form(
-                              key: _formKey,
-                              child: Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Column(
-                                  children: [
-                                    const Text('Add a new Category',style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500),),
-                                    const SizedBox(height: 20,),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        ClipRRect(borderRadius: BorderRadius.circular(10),
-                                          child: SizedBox(
-                                              height: 80,
-                                              width: 80,
-                                              child: selectedImgUrl != null
-                                                  ? Image.file(
-                                                      File(selectedImgUrl!),
-                                                      fit: BoxFit.cover,
-                                                    )
-                                                  : Container(
-                                                      color: Colors.grey,
-                                                      child:
-                                                          Image.asset('assets/images/no-image-available.png'),
-                                                    )),
-                                        ),
-                                        SnaccButton(
-                                            inputText: 'Pick Image',
-                                            callBack: () {
-                                              pickImage();
-                                            }),
-                                      ],
-                                    ),const SizedBox(height: 10),
-                                    TextFormField(
-                                      controller: catgoryNameCtrl,
-                                      decoration: const InputDecoration(
-                                        border: OutlineInputBorder(),
-                                        hintText: 'Category name',
-                                      ),
-                                    ),
-                                    
-                                    const SizedBox(height: 10),
-                                    SnaccButton(
-                                      callBack: () {
-                                        if (_formKey.currentState!.validate()) {
-                                          final name = catgoryNameCtrl.text.trim();
-
-                                          // ADD NEW CATEGORY
-                                          addbtn(name,selectedImgUrl);
-
-                                          selectedImgUrl = null;
-                                          catgoryNameCtrl.clear();
-                                        } else {
-                                          showDialog(
-                                              context: context,
-                                              builder: (context) =>
-                                                  const AlertDialog(
-                                                    title: Text(
-                                                        'Fields are empty'),
-                                                  ));
-                                        }
-                                      },
-                                      inputText: 'Add New Category',
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
-                        });
-                  },
-                  icon: const Icon(size: 30, color: Colors.blue, Icons.edit))
-            ],
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          SizedBox(
-            width: double.infinity,
-            height: 100,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                ValueListenableBuilder(
-                  valueListenable: categoryListNotifier,
-                  builder: (BuildContext context, List<Category> categorylist,
-                          Widget? child) =>
-                      Expanded(
-                          child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              physics: const BouncingScrollPhysics(),
-                              itemCount: categorylist.length,
-                              itemBuilder: (context, index) {
-                                final category = categorylist[index];
-
-                                return GestureDetector(
-                                  onTap: () {
-                                    print('tap id is ${category.categoryID}');
-                                    Navigator.of(context)
-                                        .push((MaterialPageRoute(
-                                      builder: (context) => ListProducts(
-                                        categoryName: category.categoryName,
-                                        id: category.categoryID,
-                                      ),
-                                    )));
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(right: 8.0),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(50),
-                                            child: Container(
-                                              width: 70,
-                                              height: 70,
-                                              color: Colors.transparent,
-                                              child: Image.file(
-                                                  File(category.imageUrl!)),
-                                            )),
-                                        const SizedBox(height: 5),
-                                        Text(
-                                          category.categoryName!,
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              })),
-                ),
-              ],
+                  // ADD NEW CATEGORY
+                  IconButton(
+                    onPressed: () {
+                      addCategoryModalSheet(context, _formKey,);
+                    },
+                    icon: const Icon(
+                        size: 30, color: Colors.blue, Icons.add_rounded),
+                  )
+                ],
+              ),
             ),
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //   children: [
-          //     const Text('Offers Section',
-          //         style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
-          //     IconButton(
-          //         onPressed: () {},
-          //         icon: const Icon(size: 30, color: Colors.blue, Icons.edit))
-          //   ],
-          // ),
-          // const SizedBox(
-          //   height: 8,
-          // ),
-          // Card(
-          //   child: Image.asset('assets/images/Admin_page/ad_items.png'),
-          // ),
-          const SizedBox(
-            height: 8,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text('Popular Combos',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
-              IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed('/popularcombo');
-                  },
-                  icon: const Icon(size: 30, color: Colors.blue, Icons.edit))
-            ],
-          ),
-
-
-          
-          Expanded(
-            child: FutureBuilder(
-              future: getcomboListFromHive(),
-              builder:(context, snapshot) {
-                if(snapshot.connectionState == ConnectionState.done){
-
-
-                  final testCombos = snapshot.data;
-                  if(testCombos != null){
-                    return GridView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: false,
-                  itemCount: testCombos.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2),
-                  itemBuilder: (context, index) {
-                    
-                    final testList = testCombos[index];
-
-                    return SizedBox(
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15)),
-                          elevation: 3,
-                          margin: const EdgeInsets.fromLTRB(10, 20, 10, 10),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const SizedBox(height: 10),
+            const SizedBox(
+              height: 5,
+            ),
+            SizedBox(
+              width: double.infinity,
+              height: 100,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  categoryListNotifier.value.isNotEmpty
+                      ? ValueListenableBuilder(
+                          valueListenable: categoryListNotifier,
+                          builder: (BuildContext context,
+                                  List<Category> categorylist, Widget? child) =>
                               Expanded(
-                                child: Image.file(
-                                  File(testList.comboImgUrl??'assets/images/no-image-available.png'),
-                                  height: 100,
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                               Text(
-                                testList.comboName??'not available',
-                                style:const TextStyle(
-                                  fontSize: 18,
-                                ),
-                              ),
-                              const SizedBox(height: 5),
-                               Text(
-                                "${testList.comboPrice}",
-                                style:const TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w500),
-                              ),
-                              const SizedBox(height: 10),
-                            ],
-                          ),
+                                  child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      physics: const BouncingScrollPhysics(),
+                                      itemCount: categorylist.length,
+                                      itemBuilder: (context, index) {
+                                        final category = categorylist[index];
+                                        return InkWell(
+                                          onLongPress: () {
+                                            deleteCategoryDialog(
+                                                context, category);
+                                          },
+                                          onTap: () {
+                                            print(
+                                                'tap id is ${category.categoryID}');
+                                            Navigator.of(context)
+                                                .push((MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ListProducts(
+                                                categoryName:
+                                                    category.categoryName,
+                                                id: category.categoryID,
+                                              ),
+                                            )));
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 8.0),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            50),
+                                                    child: 
+                                                    category.imageUrl == null?
+                                                    Container(
+                                                      width: 70,
+                                                      height: 70,
+                                                      color: Colors.transparent,
+                                                      child:
+                                                           Image.asset('assets/images/no-image-available.png',
+                                                                  height: 40),
+                                                    )
+                                                    :Container(
+                                                      width: 70,
+                                                      height: 70,
+                                                      color: Colors.transparent,
+                                                      child:
+                                                            Image.file(File(
+                                                              category.imageUrl!))
+                                                    )),
+                                                const SizedBox(height: 5),
+                                                Text(
+                                                  category.categoryName!,
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      })),
+                        )
+                      : const Padding(
+                          padding: EdgeInsets.only(left: 120.0),
+                          child: Center(
+                              child: Text("No Categories found",
+                                  style: TextStyle(color: Colors.grey))),
                         ),
-                      );});
-                  }else{
-                    return const Text("no data");
-                  }
-                }else{
-                  return const  CircularProgressIndicator();
-                }
-              }
-              
+                ],
+              ),
             ),
-          )
-        ]),
+            const SizedBox(
+              height: 8,
+            ),
+
+            // CAROUSEL
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   children: [
+            //     // CarouselSlider.builder(carouselController: carouselCtrl,itemCount: 3, itemBuilder: , options: ),
+            //     const Text('Offers Section',
+            //         style:
+            //             TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+            //     IconButton(
+            //         onPressed: () {},
+            //         icon: const Icon(size: 30, color: Colors.blue, Icons.edit))
+            //   ],
+            // ),
+            // const SizedBox(
+            //   height: 8,
+            // ),
+            // Card(
+            //   child: Image.asset('assets/images/Admin_page/ad_items.png'),
+            // ),
+
+            // const SizedBox(
+            //   height: 8,
+            // ),
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(20)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('    Popular Combos',
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.grey[800])),
+                  IconButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed('/popularcombo');
+                      },
+                      icon: const Icon(
+                          size: 30, color: Colors.blue, Icons.add_rounded))
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+
+            const ComboListBuilder(
+              isAdmin: true,
+            )
+          ]),
+        ),
       ),
     );
   }
-
-  
 }

@@ -12,6 +12,7 @@ class _SnaccSplashState extends State<SnaccSplash> {
   @override
   void initState() {
     super.initState();
+    print('CHECKING FOR LOGGED USERS');
     splashLoginCheck(context);
   }
 

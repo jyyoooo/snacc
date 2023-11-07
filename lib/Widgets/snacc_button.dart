@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SnaccButton extends StatelessWidget {
   final double width;
@@ -11,7 +12,7 @@ class SnaccButton extends StatelessWidget {
 
   const SnaccButton({
     Key? key,
-    this.width = 150.0,
+    this.width = 160.0,
     this.height = 33.0,
     required this.inputText,
     required this.callBack,
@@ -36,13 +37,16 @@ class SnaccButton extends StatelessWidget {
           onPressed: () {
             callBack!();
           },
-          child:  icon??
-               Center(
-                  child: Text(
-                    inputText,
-                    style: TextStyle(color: textColor ?? Colors.white),
-                  ),
+          child: icon ??
+              Center(
+                child: Text(
+                  inputText,
+                  style: GoogleFonts.nunitoSans(
+                      color: textColor ?? Colors.black87,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold),
                 ),
+              ),
         ),
       ),
     );

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -17,42 +19,34 @@ class Category {
   String? imageUrl;
 
   @HiveField(3)
-  List<Product>? products = [];
+  List<int>? productsReference;
 
   Category(
       {this.categoryID,
       required this.categoryName,
-      required this.imageUrl,
-      this.products});
+      String? imageUrl,
+      List<int>? productsReference})
+      : imageUrl = imageUrl ?? 'assets/images/no-image-available.png',
+        productsReference = productsReference ?? [];
 }
 
 ValueNotifier<List<Category>> categoryListNotifier = ValueNotifier([]);
 
 void addCategory(Category category) async {
-  final categoryBox = await Hive.openBox<Category>('category');
+  final categoryBox = Hive.box<Category>('category');
   final id = await categoryBox.add(category);
-  //ignore:avoid_print
-  print('category id from hive = $id');
+
+  log('category id from hive = $id');
 
   category.categoryID = id;
 
   await categoryBox.put(id, category);
 
-  //ignore:avoid_print
-  print('category id = ${category.categoryID}');
+  log('category id = ${category.categoryID}');
 
-  if (!categoryListNotifier.value.any((category) => category.categoryID == id)) {
+  if (!categoryListNotifier.value
+      .any((category) => category.categoryID == id)) {
     categoryListNotifier.value.add(category);
     categoryListNotifier.notifyListeners();
-  }
-}
-
-Future<void> displayalldata() async {
-  final box = await Hive.openBox<Category>('category');
-  final allvalues = box.values.toList();
-
-  for (final category in allvalues) {
-    //ignore:avoid_print
-    print('name = ${category.categoryName}  with id = ${category.categoryID}');
   }
 }

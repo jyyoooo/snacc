@@ -15,12 +15,15 @@ class SnaccAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      title: title,
-      leading: leading,
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      actions: const <Widget>[],
+    return PreferredSize(
+      preferredSize: const Size.fromHeight(60),
+      child: AppBar(
+        title: title,
+        leading: leading,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        actions:  actions ?? <Widget>[],
+      ),
     );
   }
 }

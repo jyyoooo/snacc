@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'package:snacc/DataModels/category_model.dart';
+
 import 'package:snacc/DataModels/product_model.dart';
 import 'package:snacc/Functions/combos_functions.dart';
 
@@ -136,8 +138,6 @@ class _ComboItemListState extends State<ComboItemList> {
                   )
                 ],
               ),
-
-              // PRODUCT LIST
             ],
           ),
         ),

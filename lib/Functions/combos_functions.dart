@@ -1,13 +1,16 @@
+import 'dart:developer';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:snacc/DataModels/category_model.dart';
 import 'package:snacc/DataModels/combo_model.dart';
 import 'package:snacc/DataModels/product_model.dart';
+import 'package:snacc/Widgets/snacc_button.dart';
+
+// FETCH CATEGORIES + +
 
 Future<List<DropdownMenuItem<Category>>> fetchCategories() async {
-  final categoriesBox = await Hive.openBox<Category>('category');
+  final categoriesBox = Hive.box<Category>('category');
   final categoriesList = categoriesBox.values.toList();
   final categorydropdownitems = categoriesList
       .map((category) => DropdownMenuItem<Category>(
@@ -28,8 +31,17 @@ Future<List<DropdownMenuItem<Category>>> fetchCategories() async {
   return categorydropdownitems;
 }
 
+///////////////////////////////////////////////////////////FIX//////////////////////////////////////////////////////////////////////
+
+// FETCH PRODUCTS + +
+
 List<DropdownMenuItem<Product>> fetchProducts(Category selectedCategory) {
-  return (selectedCategory.products ?? []).map((product) {
+  final allProducts = Hive.box<Product>('products').values.toList();
+  return (selectedCategory.productsReference ?? []).map((productID) {
+    final product = allProducts.firstWhere(
+      (product) => product.productID == productID,
+      orElse: () => Product(prodname: "Product not found", prodprice: null),
+    );
     return DropdownMenuItem<Product>(
       value: product,
       child: Row(
@@ -54,49 +66,77 @@ List<DropdownMenuItem<Product>> fetchProducts(Category selectedCategory) {
   }).toList();
 }
 
-createCombo(Product? productOne, Product? productTwo, String? comboImage) async {
+// CREATE COMBO + +
+
+final ValueNotifier<List<ComboModel>> comboListNotifier = ValueNotifier([]);
+
+Future<bool> createCombo(
+    Product? productOne, Product? productTwo, String? comboImage) async {
+  if (productOne == null || productTwo == null) {
+    return false;
+  }
   final comboBox = await Hive.openBox<ComboModel>('combos');
   final comboName = await getComboName(productOne, productTwo);
   final comboPrice = await getComboPrice(productOne, productTwo);
-  
-  comboImage ??= 'assets/images/no-image-available.png';
 
   final List<Product?> comboItems = [];
   comboItems.add(productOne);
   comboItems.add(productTwo);
-  // ignore:avoid_print
-  print(comboName);
-  // ignore:avoid_print
-  print(comboItems);
 
+  log('$comboName');
+  log("$comboItems");
 
-  final newCombo = ComboModel(comboName: comboName, comboImgUrl: comboImage, comboPrice: comboPrice,comboItems: comboItems);
-  comboBox.add(newCombo);
-  // ignore:avoid_print
-  print(comboBox.values.last.comboName);
+  final newCombo = ComboModel(
+      comboName: comboName,
+      comboImgUrl: comboImage,
+      comboPrice: comboPrice,
+      comboItems: comboItems);
 
-  
-  
+  final id = await comboBox.add(newCombo);
+  newCombo.comboID = id;
+
+  await comboBox.put(id, comboBox.values.last);
+
+  log('${comboBox.values.last.comboName}');
+  if (comboBox.values.last == newCombo) {
+    comboListNotifier.value.add(newCombo);
+    comboListNotifier.notifyListeners();
+    return true;
+  }
+  return false;
 }
 
-Future<List<ComboModel>> getcomboListFromHive()async{
+// DELETE COMBO + +
 
+void deleteCombo(int id) async {
+  final comboBox = await Hive.openBox<ComboModel>('combos');
+  comboBox.delete(id);
+
+  comboListNotifier.value.removeWhere((combo) => combo.comboID == id);
+  comboListNotifier.notifyListeners();
+}
+
+// GET COMBO FROM HIVE Database + +
+
+Future<List<ComboModel>> getcomboListFromHive() async {
   final comboBox = await Hive.openBox<ComboModel>('combos');
 
   final List<ComboModel> combosList = comboBox.values.toList();
-  // ignore:avoid_print
-  print('from comboListFromHive $combosList');
 
   return combosList;
 }
 
-Future<double> getComboPrice(Product? p1, Product? p2) async {
-  final p1Price = p1?.prodprice ??= 0;
-  final p2Price = p2?.prodprice ??= 0;
+// GET COMBO PRICE + +
 
-  final comboPrice = p1Price! + p2Price!;
+Future<double> getComboPrice(Product? p1, Product? p2) async {
+  final p1Price = p1?.prodprice ?? 0;
+  final p2Price = p2?.prodprice ?? 0;
+
+  final comboPrice = p1Price + p2Price;
   return comboPrice;
 }
+
+// GET COOMBO NAME + +
 
 Future<String?> getComboName(Product? productOne, Product? productTwo) async {
   final String? nameOne = productOne?.prodname;
@@ -108,4 +148,44 @@ Future<String?> getComboName(Product? productOne, Product? productTwo) async {
   }
 
   return comboName;
+}
+
+//  EDIT COMBO
+
+void editCombo() async {}
+
+Future<List<ComboModel>> getAllCombos() async {
+  final comboBox = await Hive.openBox<ComboModel>('combos');
+  return comboBox.values.toList();
+}
+
+deleteComboDialog(
+  context,
+  ComboModel combo,
+) async {
+  await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Delete ${combo.comboName} Combo?'),
+          // content: const Text('tap outside to cancel',style: TextStyle(color: Colors.grey),),
+          actions: <Widget>[
+            SnaccButton(
+              btncolor: Colors.red,
+              inputText: 'Delete',
+              callBack: () {
+                if (combo.comboID != null) {
+                  deleteCombo(combo.comboID!);
+
+                  Navigator.of(context).pop();
+
+                  print('deleted id = ${combo.comboID!}');
+                } else {
+                  print('deletion error');
+                }
+              },
+            )
+          ],
+        );
+      });
 }

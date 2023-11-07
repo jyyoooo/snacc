@@ -17,25 +17,31 @@ class ComboModelAdapter extends TypeAdapter<ComboModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return ComboModel(
-      comboImgUrl: fields[2] as String?,
-      comboItems: (fields[3] as List?)?.cast<Product?>(),
-      comboName: fields[0] as String?,
-      comboPrice: fields[1] as double?,
+      comboID: fields[0] as int?,
+      comboImgUrl: fields[3] as String?,
+      comboItems: (fields[4] as List?)?.cast<Product?>(),
+      comboName: fields[1] as String?,
+      comboPrice: fields[2] as double?,
+      isFavorite: fields[5] as bool?,
     );
   }
 
   @override
   void write(BinaryWriter writer, ComboModel obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(6)
       ..writeByte(0)
-      ..write(obj.comboName)
+      ..write(obj.comboID)
       ..writeByte(1)
-      ..write(obj.comboPrice)
+      ..write(obj.comboName)
       ..writeByte(2)
-      ..write(obj.comboImgUrl)
+      ..write(obj.comboPrice)
       ..writeByte(3)
-      ..write(obj.comboItems);
+      ..write(obj.comboImgUrl)
+      ..writeByte(4)
+      ..write(obj.comboItems)
+      ..writeByte(5)
+      ..write(obj.isFavorite);
   }
 
   @override

@@ -1,14 +1,23 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:snacc/Admin/admin_home.dart';
 import 'package:snacc/Admin/admin_navigation.dart';
 import 'package:snacc/DataModels/user_model.dart';
-import 'package:snacc/Login/login.dart';
-import 'package:snacc/Login/select_login.dart';
-import 'package:snacc/UserPages/user_account.dart';
+import 'package:snacc/Authentication/login.dart';
+import 'package:snacc/Authentication/select_login.dart';
+import 'package:snacc/UserPages/user_profile.dart';
 import 'package:snacc/UserPages/user_navigation.dart';
 
 // UserModel? loggedUser;
+
+// void fireExample(){
+//   FirebaseFirestore firestore = FirebaseFirestore.instance;
+// }
 
 Future<bool> validateUser(String username, String password) async {
   final userBox = await Hive.openBox<UserModel>('userinfo');
@@ -19,11 +28,9 @@ Future<bool> validateUser(String username, String password) async {
   for (var user in users) {
     if (user.userMail.toString() == username &&
         user.userPass.toString() == password) {
-      // as user is found userLogin is set to TRUE
       loggedUserStatusBox.put('userLoggedIn', true);
-      // loggedin user is added to currentUsersBox
       currentUserBox.add(user);
-      print('logged user = ${user.username}');
+      log('logged user = ${user.username}');
 
       return true;
     }
@@ -31,56 +38,65 @@ Future<bool> validateUser(String username, String password) async {
   return false;
 }
 
- Future<UserModel> getCurrentUser() async {
-  final currentUserBox = await Hive.openBox<UserModel>('currentUser');
-  final currentUser = currentUserBox.values.toList();
+Future<UserModel?> getCurrentUser() async {
+  final nowUserBox = await Hive.openBox<UserModel>('currentUser');
+  final user = nowUserBox.values.first;
 
-
-  final user = currentUser.first;
-  print(user.username);
- return user;
- 
+  return user;
 }
 
 splashLoginCheck(context) async {
   final loggedUserBox = await Hive.openBox<bool>('loggedUserBox');
+  final loggedAdmin = await Hive.openBox<bool>('adminCheck');
+
   final isLoggedIn = loggedUserBox.get('userLoggedIn');
+  final isAdmin = loggedAdmin.get('adminCheck');
+
   if (isLoggedIn == true) {
     Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const UserNavigation()));
+    log('user found');
+  } else if (isAdmin == true) {
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const AdminNavigation()));
+    log('admin found');
   } else {
     Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const SelectLogin()));
+    log(' no user found');
   }
 }
 
 Future<bool> adminLogin(
     TextEditingController mailCtrl, TextEditingController passCtrl) async {
+  final isAdminLoggedIn = await Hive.openBox<bool>('adminCheck');
   final adminmail = mailCtrl.text.trim();
   final adminpass = passCtrl.text.trim();
 
   if (adminmail == 'admin' && adminpass == 'admin') {
+    isAdminLoggedIn.put('adminLoggedIn', true);
     return true;
   } else {
     return false;
   }
 }
 
-Future<void> performLogin( context, TextEditingController mailCtrl,
-    TextEditingController passCtrl) async {
-  final String username = mailCtrl.text.trim();
-  final String password = passCtrl.text.trim();
-
+Future<void> performLogin(context, username, password) async {
   if (username == 'admin' && password == 'admin') {
     Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const AdminNavigation()));
+  } else if (username.isEmpty || password.isEmpty) {
+    Fluttertoast.showToast(
+        msg: 'Enter your Email and password', backgroundColor: Colors.red);
   } else {
     final bool isValidUser = await validateUser(username, password);
     if (isValidUser) {
       // Navigate to the user's home page after successful login
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (context) => const UserNavigation(),
-      ));
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => const UserNavigation(),
+          ),
+          ModalRoute.withName('/'));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -91,21 +107,32 @@ Future<void> performLogin( context, TextEditingController mailCtrl,
     }
   }
 }
-// removed BuildContext from function parameters in logoutUser and perform login
-void logoutUser( context) async {
+
+void logoutUser(context) async {
   final loggedUserStatusBox = await Hive.openBox<bool>('loggedUserBox');
   final currentUserBox = await Hive.openBox<UserModel>('currentUser');
   loggedUserStatusBox.put('userLoggedIn', false);
-  // currentUserBox.deleteAll;
+
   currentUserBox.clear();
-  // Navigator.popUntil(context, (route) => route.isFirst);
-  Navigator.pushReplacement(
-      context, MaterialPageRoute(builder: (context) => const Login()));
+
+  Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (context) => const Login(),
+      ),
+      ModalRoute.withName(''));
+}
+
+void logOutAdmin(context) async {
+  final adminBox = await Hive.openBox<bool>('adminCheck');
+  adminBox.put('adminLoggedIn', false);
+
+  Navigator.of(context)
+      .pushReplacement(MaterialPageRoute(builder: (context) => const Login()));
 }
 
 // SIGN UP
 
-addUser(username, mailid, password, confirm, context) async {
+Future<bool> addUser(username, mailid, password, confirm, context) async {
   final userBox = await Hive.openBox<UserModel>('userinfo');
 // creating a usermodel object
   final user = UserModel(
@@ -126,23 +153,29 @@ addUser(username, mailid, password, confirm, context) async {
 
   if (!userExist) {
     if (password == confirm) {
-      userBox.add(user);
+      final id = await userBox.add(user);
+      user.userID = id;
+      await userBox.put(id, user);
+      log('${user.username}s ID: ${user.userID}');
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           backgroundColor: Colors.green,
-          content:  Text('You\'re all set! Log in now.')));
+          content: Text('You\'re all set! Log in now.')));
+      return true;
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: Colors.amber[300],
-          content: const Text('Passwords dont match')));
+          content: const Text('Passwords dont match',
+              style: TextStyle(color: Colors.black87))));
     }
   } else {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       backgroundColor: Colors.amber[300],
-      content: const Text('Oops, User Already Exists'),
+      content: const Text(
+        'Oops, User Already Exists,Log in instead.',
+        style: TextStyle(color: Colors.black87),
+      ),
       elevation: 2,
     ));
   }
-
-  print(user.userMail);
-  print(userBox.values.toList());
+  return false;
 }
