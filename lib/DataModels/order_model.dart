@@ -25,6 +25,9 @@ class Order {
   @HiveField(6)
   PaymentOption? patymentMethod;
 
+  @HiveField(7)
+  String? screenAndSeatNumber;
+
   Order(
       {this.orderID,
       required this.userID,
@@ -32,7 +35,8 @@ class Order {
       required this.orderItems,
       this.status,
       required this.patymentMethod,
-      DateTime? orderDateTime})
+      DateTime? orderDateTime,
+      required this.screenAndSeatNumber})
       : orderDateTime = orderDateTime ?? DateTime.now();
 }
 

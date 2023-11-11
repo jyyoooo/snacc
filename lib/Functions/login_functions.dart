@@ -10,7 +10,7 @@ import 'package:snacc/Admin/admin_navigation.dart';
 import 'package:snacc/DataModels/user_model.dart';
 import 'package:snacc/Authentication/login.dart';
 import 'package:snacc/Authentication/select_login.dart';
-import 'package:snacc/UserPages/user_profile.dart';
+import 'package:snacc/UserPages/user_profile/user_profile.dart';
 import 'package:snacc/UserPages/user_navigation.dart';
 
 // UserModel? loggedUser;

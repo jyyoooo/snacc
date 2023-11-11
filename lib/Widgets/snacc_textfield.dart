@@ -12,7 +12,8 @@ class SnaccTextField extends StatelessWidget {
       this.controller,
       this.validator,
       this.label = 'no labels given',
-      this.validationMessage,this.obscureText = false});
+      this.validationMessage,
+      this.obscureText = false});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +30,7 @@ class SnaccTextField extends StatelessWidget {
               autovalidateMode: AutovalidateMode.onUserInteraction,
               decoration: InputDecoration(
                 floatingLabelStyle: const TextStyle(
-                  backgroundColor: Colors.white38,
+                    backgroundColor: Colors.white38,
                     color: Colors.black54,
                     fontWeight: FontWeight.w400,
                     fontSize: 20),

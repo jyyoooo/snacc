@@ -18,7 +18,6 @@ Future<void> addbtn(name, String? selectedImgUrl) async {
   final categorieslist = Hive.box<Category>('category').values.toList();
   categoryListNotifier.value = categorieslist;
   categoryListNotifier.notifyListeners();
-
 }
 
 // DELETE CATEGORY
@@ -86,13 +85,11 @@ Category? getCategoryById(int? categoryId) {
   return category;
 }
 
-
 Future<List<Category>> getAllCategories() async {
   final categoryBox = Hive.box<Category>('category');
   final allCategories = categoryBox.values.toList();
   return allCategories;
 }
-
 
 deleteCategoryDialog(
   context,
@@ -102,10 +99,11 @@ deleteCategoryDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Delete "${category.categoryName}" category?'),
+          title: Text('Delete \'${category.categoryName}\' category?'),
           // content: const Text('tap outside to cancel',style: TextStyle(color: Colors.grey),),
           actions: <Widget>[
             SnaccButton(
+              textColor: Colors.white,
               btncolor: Colors.red,
               inputText: 'Delete',
               callBack: () {

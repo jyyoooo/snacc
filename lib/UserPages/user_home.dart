@@ -1,18 +1,18 @@
 import 'dart:developer';
 import 'dart:io';
+import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:snacc/Admin/Widgets/carousel.dart';
 import 'package:snacc/Admin/Widgets/combo_list_builder.dart';
 import 'package:snacc/DataModels/category_model.dart';
-import 'package:snacc/DataModels/combo_model.dart';
-import 'package:snacc/DataModels/product_model.dart';
 import 'package:snacc/DataModels/user_model.dart';
-import 'package:snacc/Functions/category_functions.dart';
-import 'package:snacc/Functions/combos_functions.dart';
-import 'package:snacc/Functions/favorites_functions.dart';
-import 'package:snacc/Functions/login_functions.dart';
+import 'package:snacc/UserPages/provider.dart';
 import 'package:snacc/UserPages/user_productspage.dart';
+import 'package:snacc/Widgets/screen_and_seat.dart';
+
 
 class UserHome extends StatefulWidget {
   final UserModel? user;
@@ -26,22 +26,21 @@ class _UserHomeState extends State<UserHome> {
   @override
   void initState() {
     super.initState();
-    // checkUserFav(widget.user!.favorites);
     final categorieslist = Hive.box<Category>('category').values.toList();
     categoryListNotifier.value = categorieslist;
+    var seatScreenData = context.read<SeatScreenData>();
+    log('${seatScreenData.selectedScreenNumber} ${seatScreenData.selectedSeatNumber}');
+
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // extendBody: true,
-      appBar: AppBar(
-        title: Image.asset(
-          'assets/images/Snacc.png',
-          scale: 1.5,
-        ),
+      extendBody: true,
+      appBar: AppBar(toolbarHeight: 95,
+        title: const ScreenAndSeat(),
         centerTitle: true,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -61,9 +60,7 @@ class _UserHomeState extends State<UserHome> {
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 5,
-              ),
+              const Gap(5),
               SizedBox(
                 width: double.infinity,
                 height: 100,
@@ -107,9 +104,9 @@ class _UserHomeState extends State<UserHome> {
                                 Text(
                                   category.categoryName!,
                                   style: GoogleFonts.nunitoSans(
-                                      color: Colors.grey[800],
+                                      color: Colors.black,
                                       fontSize: 15,
-                                      fontWeight: FontWeight.w400),
+                                      fontWeight: FontWeight.w500),
                                   textAlign: TextAlign.center,
                                 ),
                               ],
@@ -121,28 +118,12 @@ class _UserHomeState extends State<UserHome> {
                   },
                 ),
               ),
-              const SizedBox(
-                height: 8,
-              ),
-
-              // OFFER CARD
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Your Offers',
-                    style: GoogleFonts.nunitoSans(
-                        fontSize: 23, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              Card(
-                elevation: 0,
-                child: Image.asset('assets/images/Admin_page/ad_items.png'),
-              ),
+              const Gap(5),
+              Text('Offers For You',
+                  style: GoogleFonts.nunitoSans(
+                      fontSize: 23, fontWeight: FontWeight.bold)),
+              const Gap(5),
+              SnaccCarousel(),
               const SizedBox(
                 height: 8,
               ),

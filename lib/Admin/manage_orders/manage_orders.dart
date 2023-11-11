@@ -9,9 +9,14 @@ import 'package:snacc/Functions/order_funtions.dart';
 
 import '../../DataModels/order_model.dart';
 
-class OrdersPage extends StatelessWidget {
+class OrdersPage extends StatefulWidget {
   const OrdersPage({Key? key});
 
+  @override
+  State<OrdersPage> createState() => _OrdersPageState();
+}
+
+class _OrdersPageState extends State<OrdersPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,6 +45,7 @@ class OrdersPage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView(
+          physics:const BouncingScrollPhysics(),
           children: const [
             ManageOrderList(),
           ],
@@ -65,9 +71,9 @@ class ManageOrderList extends StatelessWidget {
             log('order snapshot has error');
             return const Text('Error loading Orders');
           } else if (snapshot.hasData) {
-            List<Order> reversedOrders =
-                snapshot.data!.reversed.toList();
+            List<Order> reversedOrders = snapshot.data!.reversed.toList();
             return ListView.builder(
+              physics: const BouncingScrollPhysics(),
               shrinkWrap: true,
               itemCount: reversedOrders.length,
               itemBuilder: (context, index) {
@@ -76,13 +82,13 @@ class ManageOrderList extends StatelessWidget {
                   onTap: () {
                     log('${order.orderID}');
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            OrderDetails(order: order)));
+                        builder: (context) => OrderDetails(order: order)));
                   },
                   child: Card(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15)),
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(8,12,16,8),
+                      padding: const EdgeInsets.fromLTRB(8, 12, 16, 8),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -91,8 +97,7 @@ class ManageOrderList extends StatelessWidget {
                               const SizedBox(width: 10),
                               Expanded(
                                 child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Row(
                                       mainAxisAlignment:
@@ -107,7 +112,7 @@ class ManageOrderList extends StatelessWidget {
                                         Text(
                                           '₹${order.orderPrice}',
                                           style: GoogleFonts.nunitoSans(
-                                            color: Colors.blue,
+                                            color: Colors.black,
                                             fontWeight: FontWeight.w500,
                                             fontSize: 18,
                                           ),
@@ -127,42 +132,52 @@ class ManageOrderList extends StatelessWidget {
                                             '${DateFormat.yMMMEd().format(order.orderDateTime!)} ',
                                             style: GoogleFonts.nunitoSans(
                                                 fontSize: 15)),
-                                      const  Row(
+                                        Row(
                                           children: [
-                                             Icon(
+                                            Icon(
                                               Icons.circle,
-                                              color: Colors.green,
-                                              size: 12,
+                                              color: getOrderStatusColor(
+                                                  order.status!),
+                                              size: 18,
                                             ),
-                                             SizedBox.square(
-                                              dimension: 5,
-                                            ),
+                                            const Gap(3),
+                                            // FIX HERE, theres overflow issue
 
-                                              // FIX HERE, theres overflow issue
-
-
-
-                                            // Text(
-                                            //   '${order.status}',
-                                            //   style: const TextStyle(
-                                            //     fontSize: 14,
-                                            //     color: Colors.grey,
-                                            //     fontWeight: FontWeight.w400,
-                                            //   ),
-                                            // ),
+                                            Text(getOrderStatus(order.status!),
+                                                style: GoogleFonts.nunitoSans(
+                                                    fontSize: 15,
+                                                    color: Colors.blue,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
                                           ],
                                         ),
                                       ],
                                     ),
                                     const Gap(8),
-                                    Text('Payment Method: ${order.patymentMethod}',style: GoogleFonts.nunitoSans(color: Colors.blue),)
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          '${getPaymentMethod(order.patymentMethod!)}',
+                                          style: GoogleFonts.nunitoSans(
+                                              color: Colors.blue,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(
+                                          order.screenAndSeatNumber!,
+                                          style: GoogleFonts.nunitoSans(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 20),
+                                        )
+                                      ],
+                                    )
                                   ],
                                 ),
                               ),
                             ],
                           ),
                           const SizedBox(height: 10),
-                          
                         ],
                       ),
                     ),

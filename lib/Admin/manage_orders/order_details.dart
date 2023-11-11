@@ -24,74 +24,8 @@ class _OrderDetailsState extends State<OrderDetails> {
   @override
   void initState() {
     super.initState();
-    selectedOrderStatus = OrderStatus.orderPlaced;
-  }
-
-  Widget buildOrderStatusPicker(
-    OrderStatus value,
-    String title,
-    String subtitle,
-    Icon icon,
-    BorderRadiusGeometry? borderRadius,
-  ) {
-    return Card(
-      margin: const EdgeInsets.all(0),
-      shape: RoundedRectangleBorder(
-          borderRadius: borderRadius ??
-              const BorderRadius.all(Radius.elliptical(15, 15))),
-      child: InkResponse(
-        onTap: () {
-          setState(() {
-            selectedOrderStatus = value;
-          });
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Radio<OrderStatus>(
-                    activeColor: Colors.blue,
-                    value: value,
-                    groupValue: selectedOrderStatus,
-                    onChanged: (OrderStatus? selectedStatus) {
-                      setState(() {
-                        selectedOrderStatus = selectedStatus;
-                      });
-                    },
-                  ),
-                  icon,
-                  const Gap(10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        style: GoogleFonts.nunitoSans(
-                          fontWeight: FontWeight.normal,
-                          fontSize: 16.5,
-                        ),
-                      ),
-                      if (subtitle.isNotEmpty)
-                        Text(
-                          subtitle,
-                          style: GoogleFonts.nunitoSans(
-                            fontWeight: FontWeight.normal,
-                            fontSize: 13,
-                            color: Colors.grey,
-                          ),
-                        ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+    final thisOrder = Hive.box<Order>('orders').getAt(widget.order.orderID!);
+    selectedOrderStatus = thisOrder?.status;
   }
 
   @override
@@ -114,9 +48,9 @@ class _OrderDetailsState extends State<OrderDetails> {
                 itemBuilder: (context, index) {
                   final orderItem = widget.order.orderItems![index];
                   if (orderItem is ComboModel) {
-                    return ComboTile(combo: orderItem);
+                    return ComboTile(combo: orderItem,isHistory: false,);
                   } else if (orderItem is Product) {
-                    return ProductTIle(product: orderItem);
+                    return ProductTIle(product: orderItem,isHistory: false,);
                   }
                   return const Center(
                       child: Text(
@@ -185,7 +119,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                       callBack: () async {
                         final allOrders = Hive.box<Order>('orders');
                         final currentOrder =
-                            await allOrders.getAt(widget.order.orderID!);
+                            allOrders.getAt(widget.order.orderID!);
                         currentOrder!.status = selectedOrderStatus;
                         allOrders.put(currentOrder.orderID, currentOrder);
                         log('order update: ${widget.order.status}');
@@ -194,6 +128,73 @@ class _OrderDetailsState extends State<OrderDetails> {
               ),
             )
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildOrderStatusPicker(
+    OrderStatus value,
+    String title,
+    String subtitle,
+    Icon icon,
+    BorderRadiusGeometry? borderRadius,
+  ) {
+    return Card(
+      margin: const EdgeInsets.all(0),
+      shape: RoundedRectangleBorder(
+          borderRadius: borderRadius ??
+              const BorderRadius.all(Radius.elliptical(15, 15))),
+      child: InkResponse(
+        onTap: () {
+          setState(() {
+            selectedOrderStatus = value;
+          });
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Radio<OrderStatus>(
+                    activeColor: Colors.blue,
+                    value: value,
+                    groupValue: selectedOrderStatus,
+                    onChanged: (OrderStatus? selectedStatus) {
+                      setState(() {
+                        selectedOrderStatus = selectedStatus;
+                      });
+                    },
+                  ),
+                  icon,
+                  const Gap(10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: GoogleFonts.nunitoSans(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 16.5,
+                        ),
+                      ),
+                      if (subtitle.isNotEmpty)
+                        Text(
+                          subtitle,
+                          style: GoogleFonts.nunitoSans(
+                            fontWeight: FontWeight.normal,
+                            fontSize: 13,
+                            color: Colors.grey,
+                          ),
+                        ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

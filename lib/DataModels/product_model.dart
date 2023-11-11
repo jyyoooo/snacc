@@ -25,12 +25,12 @@ class Product {
   int? categoryID;
 
   Product(
-      {String? prodimgUrl,
+      {required this.prodimgUrl,
       required this.prodname,
       required this.prodprice,
       this.quantity,
       this.isFavorite = false,
       this.categoryID,
-      this.productID})
-      : prodimgUrl = prodimgUrl ?? 'assets/images/no-image-available.png';
+      this.productID});
+      
 }

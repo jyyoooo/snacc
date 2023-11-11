@@ -83,7 +83,7 @@ class _ComboListBuilderState extends State<ComboListBuilder> {
                             child: Text(
                               combo.comboName!,
                               style: GoogleFonts.nunitoSans(
-                                  fontSize: 17, fontWeight: FontWeight.w400),
+                                  fontSize: 17, fontWeight: FontWeight.w500),
                               textAlign: TextAlign.start,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -114,9 +114,9 @@ class _ComboListBuilderState extends State<ComboListBuilder> {
                                     padding: const EdgeInsets.only(top: 10.0),
                                     child: Center(
                                       child: Text('₹${combo.comboPrice}',
-                                          style: const TextStyle(
-                                              fontSize: 19,
-                                              fontWeight: FontWeight.w600)),
+                                          style: GoogleFonts.nunitoSans(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold)),
                                     ),
                                   ),
                           )

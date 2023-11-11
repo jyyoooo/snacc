@@ -24,10 +24,9 @@ class Category {
   Category(
       {this.categoryID,
       required this.categoryName,
-      String? imageUrl,
+      required this.imageUrl,
       List<int>? productsReference})
-      : imageUrl = imageUrl ?? 'assets/images/no-image-available.png',
-        productsReference = productsReference ?? [];
+      : productsReference = productsReference ?? [];
 }
 
 ValueNotifier<List<Category>> categoryListNotifier = ValueNotifier([]);

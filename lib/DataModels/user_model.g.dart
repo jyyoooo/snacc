@@ -24,13 +24,13 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       confirmPass: fields[4] as String?,
       favorites: (fields[5] as List?)?.cast<dynamic>(),
       userBag: (fields[6] as List?)?.cast<dynamic>(),
-    );
+    )..userOrders = (fields[7] as List?)?.cast<Order>();
   }
 
   @override
   void write(BinaryWriter writer, UserModel obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.userID)
       ..writeByte(1)
@@ -44,7 +44,9 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       ..writeByte(5)
       ..write(obj.favorites)
       ..writeByte(6)
-      ..write(obj.userBag);
+      ..write(obj.userBag)
+      ..writeByte(7)
+      ..write(obj.userOrders);
   }
 
   @override

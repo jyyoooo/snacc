@@ -31,7 +31,6 @@ Future<List<DropdownMenuItem<Category>>> fetchCategories() async {
   return categorydropdownitems;
 }
 
-///////////////////////////////////////////////////////////FIX//////////////////////////////////////////////////////////////////////
 
 // FETCH PRODUCTS + +
 
@@ -40,7 +39,7 @@ List<DropdownMenuItem<Product>> fetchProducts(Category selectedCategory) {
   return (selectedCategory.productsReference ?? []).map((productID) {
     final product = allProducts.firstWhere(
       (product) => product.productID == productID,
-      orElse: () => Product(prodname: "Product not found", prodprice: null),
+      orElse: () => Product(prodname: "Product not found", prodprice: null,prodimgUrl: null),
     );
     return DropdownMenuItem<Product>(
       value: product,

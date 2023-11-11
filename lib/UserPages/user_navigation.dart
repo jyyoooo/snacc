@@ -5,7 +5,7 @@ import 'package:snacc/Functions/login_functions.dart';
 import 'dart:ui';
 import 'package:snacc/UserPages/Your%20Bag/bag.dart';
 import 'package:snacc/UserPages/favorites.dart';
-import 'package:snacc/UserPages/user_profile.dart';
+import 'package:snacc/UserPages/user_profile/user_profile.dart';
 import 'package:snacc/UserPages/user_home.dart';
 
 class UserNavigation extends StatefulWidget {
@@ -82,25 +82,25 @@ class _UserNavigationState extends State<UserNavigation> {
                 iconSize: 24,
                 items: [
                   BottomNavigationBarItem(
-                      backgroundColor: const Color.fromARGB(30, 134, 134, 134),
+                      backgroundColor: const Color.fromARGB(30, 112, 112, 112),
                       icon: selectedIndex == 0
                           ? const Icon(Icons.home_rounded)
                           : const Icon(Icons.home_outlined),
                       label: 'Home'),
                   BottomNavigationBarItem(
-                      backgroundColor: const Color.fromARGB(30, 134, 134, 134),
+                      backgroundColor: const Color.fromARGB(30, 112, 112, 112),
                       icon: selectedIndex == 1
                           ? const Icon(Icons.favorite_rounded)
                           : const Icon(Icons.favorite_border_rounded),
                       label: 'Favorite'),
                   BottomNavigationBarItem(
-                      backgroundColor: const Color.fromARGB(30, 134, 134, 134),
+                      backgroundColor: const Color.fromARGB(30, 112, 112, 112),
                       icon: selectedIndex == 2
                           ? const Icon(Icons.shopping_bag_rounded)
                           : const Icon(Icons.shopping_bag_outlined),
                       label: 'Bag'),
                   BottomNavigationBarItem(
-                      backgroundColor: const Color.fromARGB(30, 134, 134, 134),
+                      backgroundColor: const Color.fromARGB(30, 112, 112, 112),
                       icon: selectedIndex == 3
                           ? const Icon(Icons.account_circle_rounded)
                           : const Icon(Icons.account_circle_outlined),

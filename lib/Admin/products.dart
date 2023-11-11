@@ -3,12 +3,8 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:snacc/Admin/Widgets/add_product.dart';
-import 'package:snacc/Admin/admin_home.dart';
-import 'package:snacc/DataModels/category_model.dart';
 import 'package:snacc/DataModels/product_model.dart';
 import 'package:snacc/Functions/category_functions.dart';
 import 'package:snacc/Functions/image_picker.dart';
@@ -17,9 +13,10 @@ import 'package:snacc/Widgets/snacc_button.dart';
 import 'package:snacc/Widgets/snacc_textfield.dart';
 
 class ListProducts extends StatefulWidget {
-  final int? id;
+  final int? categoryID;
   final String? categoryName;
-  const ListProducts({Key? key, required this.categoryName, required this.id})
+  const ListProducts(
+      {Key? key, required this.categoryName, required this.categoryID})
       : super(key: key);
 
   @override
@@ -28,12 +25,13 @@ class ListProducts extends StatefulWidget {
 
 class _ListProductsState extends State<ListProducts> {
   ValueNotifier<List<Product>?> productlistNotifier = ValueNotifier([]);
+  final productformkey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
 
-    getCategoryProducts(widget.id).then((products) {
+    getCategoryProducts(widget.categoryID).then((products) {
       setState(() {
         log('products in category ${widget.categoryName}: $products');
         productlistNotifier.value = products;
@@ -50,19 +48,7 @@ class _ListProductsState extends State<ListProducts> {
     return Scaffold(
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 25.0),
-        child: FloatingActionButton.extended(
-            icon: const Icon(
-              Icons.add_rounded,
-              color: Colors.white,
-            ),
-            backgroundColor: const Color.fromARGB(255, 84, 203, 88),
-            label: const Text(
-              'New Product',
-              style: TextStyle(color: Colors.white),
-            ),
-            onPressed: () {
-              addProductModalSheet(context, widget.id, productlistNotifier);
-            }),
+        child: SnaccFloatingButton(productformkey: productformkey, widget: widget,),
       ),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -71,12 +57,11 @@ class _ListProductsState extends State<ListProducts> {
           // EDIT CATEGORY
           IconButton(
               onPressed: () async {
-                final category = getCategoryById(widget.id);
+                final category = getCategoryById(widget.categoryID);
                 if (category != null) {
                   final TextEditingController newcategorynamectrl =
                       TextEditingController(text: category.categoryName);
                   String? updatedImgUrl = category.imageUrl;
-
                   final exisitingCategoryname = category.categoryName;
 
                   await showDialog(
@@ -155,7 +140,8 @@ class _ListProductsState extends State<ListProducts> {
         ],
         title: Text(
           widget.categoryName ?? 'Category',
-          style: const TextStyle(fontSize: 20),
+          style:
+              GoogleFonts.nunitoSans(fontSize: 23, fontWeight: FontWeight.bold),
         ),
       ),
 
@@ -175,9 +161,15 @@ class _ListProductsState extends State<ListProducts> {
                       final product = productlist?[index];
 
                       return Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
                         child: InkWell(
-                          onLongPress: () async{
-                            await deleteProductDialog(product, widget.id!, context);
+                          onLongPress: () async {
+                            await deleteProductDialog(
+                                product,
+                                widget.categoryID!,
+                                context,
+                                productlistNotifier);
                             productlistNotifier.notifyListeners();
                           },
                           child: Column(
@@ -339,7 +331,8 @@ class _ListProductsState extends State<ListProducts> {
                 SnaccButton(
                     inputText: 'SAVE',
                     callBack: () async {
-                      final currentCategory = getCategoryById(widget.id);
+                      final currentCategory =
+                          getCategoryById(widget.categoryID);
                       product.prodname = newprodnamectrl.text ?? existingname;
                       saveCategory(currentCategory!);
                       product.prodprice =
@@ -391,4 +384,31 @@ class _ListProductsState extends State<ListProducts> {
 //     final category = categoryBox.get(categoryId);
 
 //     return category?.products ?? [];
+}
+
+class SnaccFloatingButton extends StatelessWidget {
+  const SnaccFloatingButton({
+    super.key,
+    required this.productformkey,
+    required this.widget,
+  });
+
+  final GlobalKey<FormState> productformkey;
+  final ListProducts widget;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(height: 40,
+      child: FloatingActionButton.extended(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          backgroundColor: const Color.fromARGB(255, 84, 203, 88),
+          label: const Text(
+            'New Product',
+            style: TextStyle(color: Colors.white),
+          ),
+          onPressed: () {
+            AddProductModalSheet.show(context, productformkey,widget.categoryID!);
+          }),
+    );
+  }
 }

@@ -6,7 +6,8 @@ import 'package:snacc/DataModels/product_model.dart';
 
 class ComboTile extends StatelessWidget {
   final ComboModel combo;
-  const ComboTile({super.key, required this.combo});
+  final bool isHistory;
+  const ComboTile({super.key, required this.combo,required this.isHistory});
 
   @override
   Widget build(BuildContext context) {
@@ -65,19 +66,20 @@ class ComboTile extends StatelessWidget {
                             ),
                           ],
                         ),
-                        // SizedBox(
-                        //   width: 89,
-                        //   child: Column(
-                        //     crossAxisAlignment: CrossAxisAlignment.end,
-                        //     children: [
-                        //       Text(
-                        //         '${combo.comboPrice} ',
-                        //         style: GoogleFonts.nunitoSans(
-                        //             fontSize: 17, fontWeight: FontWeight.bold),
-                        //       )
-                        //     ],
-                        //   ),
-                        // )
+                        isHistory?
+                        SizedBox(
+                          width: 89,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(
+                                '${combo.comboPrice} ',
+                                style: GoogleFonts.nunitoSans(
+                                    fontSize: 17, fontWeight: FontWeight.bold),
+                              )
+                            ],
+                          ),
+                        ):const SizedBox.shrink()
                       ],
                     ),
                   ],
@@ -99,7 +101,8 @@ class ComboTile extends StatelessWidget {
 
 class ProductTIle extends StatelessWidget {
   final Product product;
-  const ProductTIle({super.key, required this.product});
+  final bool isHistory;
+  const ProductTIle({super.key, required this.product,required this.isHistory});
 
   @override
   Widget build(BuildContext context) {
@@ -157,7 +160,21 @@ class ProductTIle extends StatelessWidget {
                               ],
                             ),
                           ],
-                        ),
+                          
+                        ),isHistory?
+                        SizedBox(
+                          width: 89,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(
+                                '${product.prodprice} ',
+                                style: GoogleFonts.nunitoSans(
+                                    fontSize: 17, fontWeight: FontWeight.bold),
+                              )
+                            ],
+                          ),
+                        ):const SizedBox.shrink()
                       ],
                     ),
                   ],

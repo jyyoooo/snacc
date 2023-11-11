@@ -74,12 +74,12 @@ deleteProduct(int? productID, int? categoryID) async {
   }
 }
 
-deleteProductDialog(Product product, int categoryID, context) async {
+deleteProductDialog(Product product, int categoryID, context,productlistNotifier) async {
   await showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Delete "${product.prodname}" category?'),
+          title: Text('Delete "${product.prodname}" ?'),
           // content: const Text('tap outside to cancel',style: TextStyle(color: Colors.grey),),
           actions: <Widget>[
             SnaccButton(
@@ -95,6 +95,7 @@ deleteProductDialog(Product product, int categoryID, context) async {
                   Navigator.of(context).pop();
 
                   log('deleted id = ${category.categoryID}');
+                  
                 } else {
                   log('deletion error');
                 }
