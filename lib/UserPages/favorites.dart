@@ -1,7 +1,5 @@
 import 'dart:developer';
 import 'dart:io';
-// import 'dart:js_util';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -328,10 +326,13 @@ class _ProductListItemState extends State<ProductListItem> {
                                 width: 50,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
-                                  child: Image.file(
-                                    File(widget.product.prodimgUrl!),
-                                    fit: BoxFit.cover,
-                                  ),
+                                  child: widget.product.prodimgUrl != null
+                                      ? Image.file(
+                                          File(widget.product.prodimgUrl!),
+                                          fit: BoxFit.cover,
+                                        )
+                                      : Image.asset(
+                                          'assets/images/no-image-available.png'),
                                 ),
                               ),
                               const SizedBox(

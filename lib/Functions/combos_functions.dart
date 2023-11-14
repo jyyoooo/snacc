@@ -1,11 +1,11 @@
-import 'dart:developer';
 import 'dart:io';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:snacc/DataModels/category_model.dart';
+import 'package:snacc/Widgets/snacc_button.dart';
 import 'package:snacc/DataModels/combo_model.dart';
 import 'package:snacc/DataModels/product_model.dart';
-import 'package:snacc/Widgets/snacc_button.dart';
+import 'package:snacc/DataModels/category_model.dart';
 
 // FETCH CATEGORIES + +
 
@@ -31,7 +31,6 @@ Future<List<DropdownMenuItem<Category>>> fetchCategories() async {
   return categorydropdownitems;
 }
 
-
 // FETCH PRODUCTS + +
 
 List<DropdownMenuItem<Product>> fetchProducts(Category selectedCategory) {
@@ -39,7 +38,8 @@ List<DropdownMenuItem<Product>> fetchProducts(Category selectedCategory) {
   return (selectedCategory.productsReference ?? []).map((productID) {
     final product = allProducts.firstWhere(
       (product) => product.productID == productID,
-      orElse: () => Product(prodname: "Product not found", prodprice: null,prodimgUrl: null),
+      orElse: () => Product(
+          prodname: "Product not found", prodprice: null, prodimgUrl: null),
     );
     return DropdownMenuItem<Product>(
       value: product,

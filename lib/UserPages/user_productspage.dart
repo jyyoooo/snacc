@@ -38,21 +38,18 @@ class _UserListProductsState extends State<UserListProducts> {
   final productformkey = GlobalKey<FormState>();
   String? productImgUrl;
 
-  ValueNotifier<List<Product>?> productlistNotifier = ValueNotifier([]);
-  
-
   @override
   void initState() {
     super.initState();
     getCategoryProducts(widget.id).then((products) {
       setState(() {
         log('products in category ${widget.categoryName}: ${products.map((e) => e.prodname)}');
-        productlistNotifier.value = products;
-        productlistNotifier.notifyListeners();
+        productListNotifier.value = products;
+        productListNotifier.notifyListeners();
       });
 
-      productlistNotifier.value = products;
-      productlistNotifier.notifyListeners();
+      productListNotifier.value = products;
+      productListNotifier.notifyListeners();
     });
   }
 
@@ -71,13 +68,14 @@ class _UserListProductsState extends State<UserListProducts> {
         physics: const BouncingScrollPhysics(),
         child: Padding(
           padding: const EdgeInsets.all(10.0),
-          child: productlistNotifier.value!.isNotEmpty &&
-                  productlistNotifier.value != null
+          child: productListNotifier.value!.isNotEmpty &&
+                  productListNotifier.value != null
               ? ValueListenableBuilder(
-                  valueListenable: productlistNotifier,
+                  valueListenable: productListNotifier,
                   builder: (context, productlist, child) => ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
+                    itemCount: productListNotifier.value?.length,
                     itemBuilder: (context, index) {
                       final product = productlist?[index];
 
@@ -85,7 +83,9 @@ class _UserListProductsState extends State<UserListProducts> {
                         onTap: () {
                           log('${product.isFavorite}');
                         },
-                        child: Card(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)),
                           child: Column(
                             children: [
                               Padding(
@@ -112,11 +112,16 @@ class _UserListProductsState extends State<UserListProducts> {
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             10),
-                                                    child: Image.file(
-                                                      File(
-                                                          product!.prodimgUrl!),
-                                                      fit: BoxFit.cover,
-                                                    ),
+                                                    child: product
+                                                                ?.prodimgUrl !=
+                                                            null
+                                                        ? Image.file(
+                                                            File(product!
+                                                                .prodimgUrl!),
+                                                            fit: BoxFit.cover,
+                                                          )
+                                                        : Image.asset(
+                                                            'assets/images/no-image-available.png'),
                                                   ),
                                                 ),
                                                 const SizedBox(
@@ -130,12 +135,12 @@ class _UserListProductsState extends State<UserListProducts> {
                                                           .spaceBetween,
                                                   children: [
                                                     Text(
-                                                      product.prodname!,
+                                                      '${product?.prodname!}',
                                                       style: const TextStyle(
                                                           fontSize: 18),
                                                     ),
                                                     Text(
-                                                        '₹${product.prodprice!}',
+                                                        '₹${product?.prodprice!}',
                                                         style: const TextStyle(
                                                             fontWeight:
                                                                 FontWeight.w500,
@@ -149,7 +154,7 @@ class _UserListProductsState extends State<UserListProducts> {
                                                   CrossAxisAlignment.end,
                                               children: [
                                                 IconButton(
-                                                  icon: product.isFavorite!
+                                                  icon: product!.isFavorite!
                                                       ? const Icon(
                                                           Icons
                                                               .favorite_rounded,
@@ -214,7 +219,6 @@ class _UserListProductsState extends State<UserListProducts> {
                         ),
                       );
                     },
-                    itemCount: productlistNotifier.value?.length,
                   ),
                 )
               : const Center(

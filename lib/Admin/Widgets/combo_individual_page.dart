@@ -77,6 +77,7 @@ class _ComboItemPageState extends State<ComboItemPage> {
                 style: GoogleFonts.nunitoSans(
                     fontSize: 20, fontWeight: FontWeight.normal),
               ),
+              widget.isAdmin!?const SizedBox.shrink():
               IconButton(
                   icon: widget.combo!.isFavorite!
                       ? const Icon(

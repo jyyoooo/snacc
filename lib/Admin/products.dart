@@ -1,16 +1,15 @@
-// ignore_for_file: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
-
-import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:snacc/Admin/Widgets/add_product.dart';
-import 'package:snacc/DataModels/product_model.dart';
+
 import 'package:snacc/Functions/category_functions.dart';
 import 'package:snacc/Functions/image_picker.dart';
 import 'package:snacc/Functions/product_functions.dart';
 import 'package:snacc/Widgets/snacc_button.dart';
+import 'package:snacc/Widgets/snacc_floating_button.dart';
 import 'package:snacc/Widgets/snacc_textfield.dart';
+
+import '../DataModels/product_model.dart';
 
 class ListProducts extends StatefulWidget {
   final int? categoryID;
@@ -24,7 +23,6 @@ class ListProducts extends StatefulWidget {
 }
 
 class _ListProductsState extends State<ListProducts> {
-  ValueNotifier<List<Product>?> productlistNotifier = ValueNotifier([]);
   final productformkey = GlobalKey<FormState>();
 
   @override
@@ -33,23 +31,15 @@ class _ListProductsState extends State<ListProducts> {
 
     getCategoryProducts(widget.categoryID).then((products) {
       setState(() {
-        log('products in category ${widget.categoryName}: $products');
-        productlistNotifier.value = products;
-        productlistNotifier.notifyListeners();
+        productListNotifier.value = products;
+        productListNotifier.notifyListeners();
       });
-
-      productlistNotifier.value = products;
-      productlistNotifier.notifyListeners();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 25.0),
-        child: SnaccFloatingButton(productformkey: productformkey, widget: widget,),
-      ),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -126,7 +116,7 @@ class _ListProductsState extends State<ListProducts> {
                                   category.imageUrl = updatedImgUrl;
                                   updatedCategory(category);
                                   saveCategory(category);
-                                  productlistNotifier.notifyListeners();
+                                  productListNotifier.notifyListeners();
                                 })
                           ],
                         );
@@ -146,269 +136,191 @@ class _ListProductsState extends State<ListProducts> {
       ),
 
       // PRODUCTS LIST
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: productlistNotifier.value!.isNotEmpty &&
-                  productlistNotifier.value != null
-              ? ValueListenableBuilder(
-                  valueListenable: productlistNotifier,
-                  builder: (context, productlist, child) => ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      final product = productlist?[index];
+      body: ListedProductsNotifier(categoryID: widget.categoryID),
 
-                      return Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15)),
-                        child: InkWell(
-                          onLongPress: () async {
-                            await deleteProductDialog(
-                                product,
-                                widget.categoryID!,
-                                context,
-                                productlistNotifier);
-                            productlistNotifier.notifyListeners();
-                          },
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(15, 15, 15, 0),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                SizedBox(
-                                                  height: 70,
-                                                  width: 70,
-                                                  child: ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                    child: product!
-                                                                .prodimgUrl ==
-                                                            null
-                                                        ? Image.asset(
-                                                            'assets/images/no-image-available.png')
-                                                        : Image.file(
-                                                            File(product
-                                                                .prodimgUrl!),
-                                                            fit: BoxFit.cover,
-                                                          ),
-                                                  ),
-                                                ),
-                                                const SizedBox.square(
-                                                    dimension: 20),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Text(
-                                                      product.prodname!,
-                                                      style: const TextStyle(
-                                                          fontSize: 18),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 15,
-                                                    ),
-                                                    Text(
-                                                        '₹${product.prodprice!}',
-                                                        style: const TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            fontSize: 18)),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                            const SizedBox(
-                                              width: 10,
-                                            ),
-                                            Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                IconButton(
-                                                    onPressed: () {
-                                                      editProduct(product);
-                                                    },
-                                                    icon: const Icon(
-                                                      Icons.edit,
-                                                      color: Colors.blue,
-                                                    ))
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                    itemCount: productlistNotifier.value!.length,
-                  ),
-                )
-              : const Center(
-                  heightFactor: 40,
-                  child: Text(
-                    'No Products found',
-                    style: TextStyle(color: Colors.grey),
-                  )),
+      // NEW PRODUCT FLOATING BUTTON
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 25.0),
+        child: SnaccFloatingButton(
+          productListNotifier: productListNotifier,
+          productformkey: productformkey,
+          widget: widget,
         ),
       ),
     );
   }
-
-  void editProduct(Product product) async {
-    final TextEditingController newprodnamectrl =
-        TextEditingController(text: product.prodname);
-    final TextEditingController newprodpricectrl =
-        TextEditingController(text: "${product.prodprice}");
-    // String? newprodImgUrl;
-    final existingname = product.prodname;
-    final exisitingprice = product.prodprice;
-    final productImg;
-
-    await showDialog(
-        context: context,
-        builder: (context) {
-          return StatefulBuilder(builder: (context, setState) {
-            return AlertDialog(
-              title: Text(
-                'Edit ${product.prodname}',
-                style: const TextStyle(color: Colors.blue),
-              ),
-              content: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    const Text('New product name'),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    SnaccTextField(
-                      controller: newprodnamectrl,
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    const Text('New product price'),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    SnaccTextField(
-                      controller: newprodpricectrl,
-                    ),
-                  ],
-                ),
-              ),
-              actions: <Widget>[
-                SnaccButton(
-                    inputText: 'SAVE',
-                    callBack: () async {
-                      final currentCategory =
-                          getCategoryById(widget.categoryID);
-                      product.prodname = newprodnamectrl.text ?? existingname;
-                      saveCategory(currentCategory!);
-                      product.prodprice =
-                          double.tryParse(newprodpricectrl.text) ??
-                              exisitingprice;
-                      productlistNotifier.notifyListeners();
-                      Navigator.pop(context);
-                    })
-              ],
-            );
-          });
-        });
-  }
-
-//   void deleteProduct(Product product) async {
-//     await showDialog(
-//         context: context,
-//         builder: (context) {
-//           return AlertDialog(
-//             icon: const Icon(Icons.delete_forever),
-//             title: const Text('Delete Product?'),
-//             actions: [
-//               SnaccButton(
-//                   btncolor: Colors.red,
-//                   inputText: 'Delete',
-//                   callBack: () {
-//                     Category? currentCategory = getCategoryById(widget.id);
-
-//                     final int productindex = currentCategory!.products!
-//                         .indexWhere((element) => element == product);
-
-//                     currentCategory.products!.removeAt(productindex);
-
-//                     saveCategory(currentCategory);
-//                     Navigator.of(context).pop();
-
-//                     productlistNotifier.notifyListeners();
-//                   })
-//             ],
-//           );
-//         });
-//   }
-// }
-
-// Future<List<Product>?> getCategoryProducts(int? categoryId) async {
-//     if (categoryId == null) return null;
-
-//     final categoryBox = await Hive.openBox<Category>('category');
-//     final category = categoryBox.get(categoryId);
-
-//     return category?.products ?? [];
 }
 
-class SnaccFloatingButton extends StatelessWidget {
-  const SnaccFloatingButton({
-    super.key,
-    required this.productformkey,
-    required this.widget,
-  });
+// PRODUCTS LIST WIDGET
 
-  final GlobalKey<FormState> productformkey;
-  final ListProducts widget;
+class ListedProductsNotifier extends StatefulWidget {
+  final int? categoryID;
+  const ListedProductsNotifier({super.key, required this.categoryID});
+
+  @override
+  State<ListedProductsNotifier> createState() => _ListedProductsNotifierState();
+}
+
+class _ListedProductsNotifierState extends State<ListedProductsNotifier> {
+  late List<Product> productList;
+
+  @override
+  void initState() {
+    super.initState();
+    productList = productListNotifier.value;
+  }
+
+  @override
+  void didUpdateWidget(ListedProductsNotifier oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (productList != productListNotifier.value) {
+      setState(() {
+        productList = productListNotifier.value;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(height: 40,
-      child: FloatingActionButton.extended(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          backgroundColor: const Color.fromARGB(255, 84, 203, 88),
-          label: const Text(
-            'New Product',
-            style: TextStyle(color: Colors.white),
-          ),
-          onPressed: () {
-            AddProductModalSheet.show(context, productformkey,widget.categoryID!);
-          }),
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: ValueListenableBuilder(
+        valueListenable: productListNotifier,
+        builder:
+            (BuildContext context, List<Product>? productlist, Widget? child) {
+          return productListNotifier.value.isNotEmpty
+              ? ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: productListNotifier.value.length,
+                  itemBuilder: (context, index) {
+                    final product = productlist?[index];
+                    return Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: InkWell(
+                        onLongPress: () async {
+                          await deleteProductDialog(
+                            product,
+                            widget.categoryID!,
+                            context,
+                            productListNotifier,
+                          );
+                          productListNotifier.value =
+                              await getCategoryProducts(widget.categoryID);
+                          productListNotifier.notifyListeners();
+                          setState(() {});
+                        },
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              SizedBox(
+                                                height: 70,
+                                                width: 70,
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  child: product!.prodimgUrl ==
+                                                          null
+                                                      ? Image.asset(
+                                                          'assets/images/no-image-available.png',
+                                                        )
+                                                      : Image.file(
+                                                          File(product
+                                                              .prodimgUrl!),
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                ),
+                                              ),
+                                              const SizedBox.square(
+                                                dimension: 20,
+                                              ),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    product.prodname!,
+                                                    style: const TextStyle(
+                                                      fontSize: 18,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 15,
+                                                  ),
+                                                  Text(
+                                                    '₹${product.prodprice!}',
+                                                    style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 18,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              IconButton(
+                                                onPressed: () {
+                                                  // editProduct(product);
+                                                },
+                                                icon: const Icon(
+                                                  Icons.edit,
+                                                  color: Colors.blue,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                )
+              : Center(
+                  heightFactor: 35,
+                  child: Text(
+                    'No Products found',
+                    style: GoogleFonts.nunitoSans(color: Colors.grey),
+                  ),
+                );
+        },
+      ),
     );
   }
 }

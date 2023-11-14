@@ -127,3 +127,8 @@ putOrdersToUserOrders(userOrders) async {
   final userbox = Hive.box<UserModel>('userinfo');
   userbox.put(user.userID, user);
 }
+
+Future<Order> getThisOrderToTack()async{
+  final user = await getUser();
+  return user.userOrders!.last;
+}

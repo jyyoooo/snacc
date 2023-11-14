@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:snacc/Functions/order_funtions.dart';
 import 'package:snacc/UserPages/user_navigation.dart';
 import 'package:snacc/UserPages/user_profile/track_order.dart';
 import 'package:snacc/UserPages/user_profile/user_profile.dart';
@@ -57,11 +58,13 @@ class OrderSuccess extends StatelessWidget {
                 )),
             SnaccButton(
               inputText: 'TRACK ORDER',
-              callBack: () {
-                // Navigator.pushReplacement(
-                //     context,
-                //     MaterialPageRoute(
-                //         builder: (context) => TrackSnacc(order:)));
+              callBack: () async {
+                final thisOrder = await getThisOrderToTack();
+
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => TrackSnacc(order: thisOrder,isHistory: false,)));
               },
               textColor: Colors.white,
             )

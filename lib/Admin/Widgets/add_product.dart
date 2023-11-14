@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:snacc/DataModels/product_model.dart';
 import 'package:snacc/Functions/product_functions.dart';
 import 'package:snacc/Widgets/snacc_button.dart';
 import 'package:snacc/Widgets/snacc_textfield.dart';
@@ -10,13 +11,16 @@ import 'package:snacc/Widgets/snacc_textfield.dart';
 import '../../Functions/image_picker.dart';
 
 class AddProductModalSheet extends StatefulWidget {
+  final ValueNotifier<List<Product>?> productListNotifier;
   final int? categoryID;
-  const AddProductModalSheet({super.key, this.categoryID});
+  const AddProductModalSheet(
+      {super.key, this.categoryID, required this.productListNotifier});
 
   @override
   AddProductModalSheetState createState() => AddProductModalSheetState();
 
-  static void show(BuildContext context, GlobalKey<FormState> formKey,int categoryID) {
+  static void show(BuildContext context, GlobalKey<FormState> formKey,
+      int categoryID, productListNotifier) {
     showModalBottomSheet(
         backgroundColor: Colors.white,
         constraints: BoxConstraints.loose(const Size.fromHeight(700)),
@@ -27,7 +31,10 @@ class AddProductModalSheet extends StatefulWidget {
             borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
         context: context,
         builder: (context) {
-          return  AddProductModalSheet(categoryID: categoryID,);
+          return AddProductModalSheet(
+            categoryID: categoryID,
+            productListNotifier: productListNotifier,
+          );
         });
   }
 }
@@ -51,9 +58,7 @@ class AddProductModalSheetState extends State<AddProductModalSheet> {
           const Gap(10),
           Text(
             'Select image for the product',
-            style: GoogleFonts.nunitoSans(
-              fontSize: 15,
-            ),
+            style: GoogleFonts.nunitoSans(fontSize: 15, color: Colors.blue),
           ),
           const Gap(10),
           Column(
@@ -120,6 +125,9 @@ class AddProductModalSheetState extends State<AddProductModalSheet> {
                   selectedProductImgUrl,
                   categoryID,
                 );
+                widget.productListNotifier.notifyListeners();
+                Fluttertoast.showToast(
+                    msg: '$productName added', backgroundColor: Colors.amber);
               } else {
                 Fluttertoast.showToast(
                     msg: 'Oops, Fields are empty!',

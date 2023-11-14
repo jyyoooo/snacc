@@ -53,7 +53,7 @@ class AddCategoryModalSheetState extends State<AddCategoryModalSheet> {
               Text(
                 'Select image for the category',
                 style: GoogleFonts.nunitoSans(
-                  fontSize: 15,
+                  fontSize: 15,color: Colors.blue
                 ),
               ),
               const Gap(20),
@@ -89,7 +89,7 @@ class AddCategoryModalSheetState extends State<AddCategoryModalSheet> {
                     inputText: '',
                     callBack: () async {
                       selectedCategoryImageUrl = await pickImageFromGallery();
-                      setState(() {});
+                      setState(() {selectedCategoryImageUrl;});
                     },
                   ),
                 ],
@@ -116,7 +116,11 @@ class AddCategoryModalSheetState extends State<AddCategoryModalSheet> {
                       msg: "Pick image and category name",
                     );
                   }
-                  catgoryNameCtrl.clear();
+
+                  setState(() {
+                    catgoryNameCtrl.clear();
+                    selectedCategoryImageUrl = null;
+                  });
                 },
                 inputText: 'ADD CATEGORY',
               )

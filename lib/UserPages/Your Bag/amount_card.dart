@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:snacc/DataModels/user_model.dart';
 import 'package:snacc/Functions/user_bag_function.dart';
@@ -11,7 +12,7 @@ import 'package:snacc/Widgets/snacc_button.dart';
 class AmountCard extends StatefulWidget {
   final UserModel user;
   final List<dynamic>? userBag;
-  const AmountCard({super.key, required this.userBag,required this.user});
+  const AmountCard({super.key, required this.userBag, required this.user});
 
   @override
   State<AmountCard> createState() => _AmountCardState();
@@ -141,10 +142,15 @@ class _AmountCardState extends State<AmountCard> {
                               btncolor: Colors.amber,
                               inputText: "PAYMENT",
                               callBack: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => PaymentsPage(user: widget.user,
-                                          amountPayable: addedTotal,
-                                        )));
+                                if (grandTotal != 0) {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => PaymentsPage(
+                                            user: widget.user,
+                                            amountPayable: addedTotal,
+                                          )));
+                                }else{
+                                  Fluttertoast.showToast(msg: 'No Snaccs to checkout',backgroundColor: Colors.lightBlue);
+                                }
                               })
                         ],
                       ),

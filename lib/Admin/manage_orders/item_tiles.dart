@@ -7,7 +7,7 @@ import 'package:snacc/DataModels/product_model.dart';
 class ComboTile extends StatelessWidget {
   final ComboModel combo;
   final bool isHistory;
-  const ComboTile({super.key, required this.combo,required this.isHistory});
+  const ComboTile({super.key, required this.combo, required this.isHistory});
 
   @override
   Widget build(BuildContext context) {
@@ -35,10 +35,13 @@ class ComboTile extends StatelessWidget {
                               width: 50,
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
-                                child: Image.file(
-                                  File(combo.comboImgUrl!),
-                                  fit: BoxFit.cover,
-                                ),
+                                child: combo.comboImgUrl != null
+                                    ? Image.file(
+                                        File(combo.comboImgUrl!),
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Image.asset(
+                                        'assets/images/no-image-available.png'),
                               ),
                             ),
                             const SizedBox(
@@ -66,20 +69,22 @@ class ComboTile extends StatelessWidget {
                             ),
                           ],
                         ),
-                        isHistory?
-                        SizedBox(
-                          width: 89,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(
-                                '${combo.comboPrice} ',
-                                style: GoogleFonts.nunitoSans(
-                                    fontSize: 17, fontWeight: FontWeight.bold),
+                        isHistory
+                            ? SizedBox(
+                                width: 89,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      '${combo.comboPrice} ',
+                                      style: GoogleFonts.nunitoSans(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  ],
+                                ),
                               )
-                            ],
-                          ),
-                        ):const SizedBox.shrink()
+                            : const SizedBox.shrink()
                       ],
                     ),
                   ],
@@ -102,7 +107,8 @@ class ComboTile extends StatelessWidget {
 class ProductTIle extends StatelessWidget {
   final Product product;
   final bool isHistory;
-  const ProductTIle({super.key, required this.product,required this.isHistory});
+  const ProductTIle(
+      {super.key, required this.product, required this.isHistory});
 
   @override
   Widget build(BuildContext context) {
@@ -130,10 +136,13 @@ class ProductTIle extends StatelessWidget {
                               width: 50,
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
-                                child: Image.file(
-                                  File(product.prodimgUrl!),
-                                  fit: BoxFit.cover,
-                                ),
+                                child: product.prodimgUrl != null
+                                    ? Image.file(
+                                        File(product.prodimgUrl!),
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Image.asset(
+                                        'assets/images/no-image-available.png'),
                               ),
                             ),
                             const SizedBox(
@@ -160,21 +169,23 @@ class ProductTIle extends StatelessWidget {
                               ],
                             ),
                           ],
-                          
-                        ),isHistory?
-                        SizedBox(
-                          width: 89,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(
-                                '${product.prodprice} ',
-                                style: GoogleFonts.nunitoSans(
-                                    fontSize: 17, fontWeight: FontWeight.bold),
+                        ),
+                        isHistory
+                            ? SizedBox(
+                                width: 89,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      '${product.prodprice} ',
+                                      style: GoogleFonts.nunitoSans(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  ],
+                                ),
                               )
-                            ],
-                          ),
-                        ):const SizedBox.shrink()
+                            : const SizedBox.shrink()
                       ],
                     ),
                   ],
