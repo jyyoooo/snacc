@@ -39,11 +39,11 @@ class _FavoritesState extends State<Favorites> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold(backgroundColor: Colors.grey[50],
       appBar: AppBar(
         leading: const Icon(
           Icons.favorite,
-          color: Colors.transparent,
+          color: Colors.white,
         ),
         actions: [
           favoriteListNotifier.value.isNotEmpty

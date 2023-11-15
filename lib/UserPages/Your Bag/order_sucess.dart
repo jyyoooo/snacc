@@ -66,7 +66,7 @@ class OrderSuccess extends StatelessWidget {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => TrackSnacc(order: thisOrder,isHistory: false,)));
+                        builder: (context) => TrackOrders(userID: userID,)));
               },
               textColor: Colors.white,
             )

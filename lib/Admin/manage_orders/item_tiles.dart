@@ -51,20 +51,19 @@ class ComboTile extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  combo.comboName!,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: GoogleFonts.nunitoSans(
-                                    fontSize: 17,
+                                SizedBox(
+                                  width: 180,
+                                  child: Text(
+                                    combo.comboName!,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.nunitoSans(
+                                      fontSize: 17,
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                // Text('₹${combo.comboPrice!} ',
-                                //     style: GoogleFonts.nunitoSans(
-                                //         fontSize: 17,
-                                //         fontWeight: FontWeight.bold))
                               ],
                             ),
                           ],
@@ -76,7 +75,7 @@ class ComboTile extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     Text(
-                                      '${combo.comboPrice} ',
+                                      '₹${combo.comboPrice} ',
                                       style: GoogleFonts.nunitoSans(
                                           fontSize: 17,
                                           fontWeight: FontWeight.bold),
@@ -152,20 +151,19 @@ class ProductTIle extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  product.prodname!,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: GoogleFonts.nunitoSans(
-                                    fontSize: 17,
+                                SizedBox(
+                                  width: 180,
+                                  child: Text(
+                                    product.prodname!,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.nunitoSans(
+                                      fontSize: 17,
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                // Text('₹${product.prodprice!} ',
-                                //     style: GoogleFonts.nunitoSans(
-                                //         fontSize: 17,
-                                //         fontWeight: FontWeight.bold))
                               ],
                             ),
                           ],
@@ -177,7 +175,7 @@ class ProductTIle extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     Text(
-                                      '${product.prodprice} ',
+                                      '₹${product.prodprice} ',
                                       style: GoogleFonts.nunitoSans(
                                           fontSize: 17,
                                           fontWeight: FontWeight.bold),

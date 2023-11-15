@@ -8,13 +8,13 @@ import 'package:snacc/DataModels/user_model.dart';
 import 'package:snacc/Functions/favorites_functions.dart';
 
 
-ValueNotifier<List<dynamic>?> userBagNotifier = ValueNotifier([]);
+ValueNotifier<List<dynamic>> userBagNotifier = ValueNotifier([]);
 
 addProductToBag(Product product) async {
   final user = await getUser();
   user.userBag ??= [];
   user.userBag!.add(product);
-  userBagNotifier.value = user.userBag;
+  userBagNotifier.value = user.userBag!;
   userBagNotifier.notifyListeners();
   await Hive.box<UserModel>('userinfo').put(user.userID, user);
   log('${user.username}s bag: ${user.userBag?.toList().map((e) => e is ComboModel ? e.comboName : e is Product ? e.prodname : null)}');
@@ -28,7 +28,7 @@ addComboToBag(ComboModel combo) async {
   final user = await getUser();
   user.userBag ??= [];
   user.userBag!.add(combo);
-  userBagNotifier.value = user.userBag;
+  userBagNotifier.value = user.userBag!;
   userBagNotifier.notifyListeners();
   await Hive.box<UserModel>('userinfo').put(user.userID, user);
   log('${user.username}s bag: ${user.userBag?.toList().map((e) => e is ComboModel ? e.comboName : e is Product ? e.prodname : null)}');
@@ -42,7 +42,7 @@ removeItemFromBag(int index) async {
   final user = await getUser();
   final userBag = user.userBag;
   userBag?.removeAt(index);
-  userBagNotifier.value = user.userBag;
+  userBagNotifier.value = user.userBag!;
   userBagNotifier.notifyListeners();
 }
 

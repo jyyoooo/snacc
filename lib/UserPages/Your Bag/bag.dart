@@ -30,18 +30,20 @@ class _UserBagState extends State<UserBag> {
   void initState() {
     super.initState();
     setState(() {
-      // currentUserBag = widget.user?.userBag ?? [];
-      userBagNotifier.value = widget.user!.userBag;
-      userBagNotifier.notifyListeners();
+      if (widget.user!.userBag != null) {
+        userBagNotifier.value = widget.user!.userBag!;
+        userBagNotifier.notifyListeners();
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[50],
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         centerTitle: true,
         title: Text('Your Bag',
             style: GoogleFonts.nunitoSans(
@@ -52,6 +54,8 @@ class _UserBagState extends State<UserBag> {
                 widget.user!.userBag?.clear();
                 Hive.box<UserModel>('userinfo')
                     .put(widget.user?.userID, widget.user!);
+                userBagNotifier.value = widget.user!.userBag!;
+                userBagNotifier.notifyListeners();
               },
               child: Text(
                 'Remove All',
@@ -62,14 +66,17 @@ class _UserBagState extends State<UserBag> {
       body: Stack(children: <Widget>[
         Positioned(
           // BAG LIST
-          child: userBagNotifier.value?.isNotEmpty == true
-              ? BagListBuilder(
-                  userBagNotifer: userBagNotifier, user: widget.user)
-              : Center(
-                  child: Text(
+          child: userBagNotifier.value.isNotEmpty
+              ? BagListBuilder(user: widget.user)
+              :  Center(
+                  child:
+                  // SizedBox.shrink()
+                   Text(
                   'Bag is empty',
-                  style: GoogleFonts.nunitoSans(color: Colors.grey),
-                )),
+                  style:
+                      GoogleFonts.nunitoSans(color: Colors.grey, fontSize: 17),
+                )
+                ),
         ),
         ValueListenableBuilder<List<dynamic>?>(
             valueListenable: userBagNotifier,

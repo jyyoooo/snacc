@@ -23,7 +23,6 @@ class PaymentsPage extends StatefulWidget {
 }
 
 class _PaymentsPageState extends State<PaymentsPage> {
-  
   PaymentOption? selectedPaymentOption;
 
   @override
@@ -31,8 +30,9 @@ class _PaymentsPageState extends State<PaymentsPage> {
     var seatScreenData = context.read<SeatScreenData>();
     final flooredAmount = widget.amountPayable?.floorToDouble();
     return Scaffold(
+      backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         title: Text(
           'Payment',
           style:
@@ -114,7 +114,48 @@ class _PaymentsPageState extends State<PaymentsPage> {
                   const Icon(Icons.monetization_on, color: Colors.orange),
                   const BorderRadius.vertical(
                       top: Radius.zero, bottom: Radius.circular(15))),
-              const Gap(50),
+              const Gap(25),
+              Text('Your snacc will be delivered to:',
+                  style: GoogleFonts.nunitoSans(color: Colors.grey)),
+              const Gap(5),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Screen ',
+                      style: GoogleFonts.nunitoSans(
+                          fontWeight: FontWeight.bold, fontSize: 17)),
+                  Text(
+                      '${seatScreenData.selectedScreenNumber ?? 'not selected'}',
+                      style: GoogleFonts.nunitoSans(
+                        color: seatScreenData.selectedScreenNumber != null
+                            ? Colors.blue
+                            : Colors.red,
+                        fontSize: seatScreenData.selectedScreenNumber != null
+                            ? 20
+                            : 15,
+                        fontWeight: seatScreenData.selectedScreenNumber != null
+                            ? FontWeight.bold
+                            : FontWeight.normal,
+                      )),
+                  const Gap(5),
+                  Text('Seat',
+                      style: GoogleFonts.nunitoSans(
+                          fontWeight: FontWeight.bold, fontSize: 17)),
+                  Text(
+                      ' ${seatScreenData.selectedSeatNumber ?? 'not selected'}',
+                      style: GoogleFonts.nunitoSans(
+                        color: seatScreenData.selectedSeatNumber != null
+                            ? Colors.blue
+                            : Colors.red,
+                        fontSize:
+                            seatScreenData.selectedSeatNumber != null ? 20 : 15,
+                        fontWeight: seatScreenData.selectedSeatNumber != null
+                            ? FontWeight.bold
+                            : FontWeight.normal,
+                      ))
+                ],
+              ),
+              const Gap(25),
               SnaccButton(
                   btncolor: selectedPaymentOption == null
                       ? Colors.grey[300]
@@ -123,14 +164,15 @@ class _PaymentsPageState extends State<PaymentsPage> {
                   callBack: () async {
                     if (widget.user != null) {
                       log('user :${widget.user?.username}');
-                      
+
                       final String screenAndSeatNumber =
                           '${seatScreenData.selectedScreenNumber}' +
                               '${seatScreenData.selectedSeatNumber.toString()}';
 
                       log(screenAndSeatNumber);
 
-                      if (seatScreenData.selectedScreenNumber == null && seatScreenData.selectedScreenNumber != 0 &&
+                      if (seatScreenData.selectedScreenNumber == null &&
+                          seatScreenData.selectedScreenNumber != 0 &&
                           seatScreenData.selectedSeatNumber == null) {
                         Fluttertoast.showToast(
                             msg: 'select your screen and seat before placing',

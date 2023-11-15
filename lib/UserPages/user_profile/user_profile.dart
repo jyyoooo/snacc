@@ -28,11 +28,11 @@ class _UserAccountState extends State<UserAccount> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
+        child: Scaffold(backgroundColor: Colors.grey[50],
       appBar: AppBar(
         elevation: 0,
         bottomOpacity: 1,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         centerTitle: true,
         title: Text(
           'Your Profile',

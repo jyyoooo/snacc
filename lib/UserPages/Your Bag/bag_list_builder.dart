@@ -9,63 +9,70 @@ import 'package:snacc/Functions/user_bag_function.dart';
 import 'package:snacc/UserPages/favorites.dart';
 
 class BagListBuilder extends StatefulWidget {
-  final ValueNotifier userBagNotifer;
+  // final ValueNotifier userBagNotifer;
   final UserModel? user;
   const BagListBuilder(
-      {super.key, required this.userBagNotifer, required this.user});
+      {super.key, required this.user});
 
   @override
   State<BagListBuilder> createState() => _BagListBuilderState();
 }
 
 class _BagListBuilderState extends State<BagListBuilder> {
-  @override
-  void initState() {
-    super.initState();
-    if (widget.user!.userBag != null) {
-      userBagNotifier.value = widget.user?.userBag;
-    }
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   if (widget.user!.userBag != null) {
+  //     userBagNotifier.value = widget.user!.userBag!;
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: SizedBox(
+        padding: const EdgeInsets.all(8.0),
+        child: SizedBox(
           height: 710,
-          child: userBagNotifier.value!.isNotEmpty
-              ? ValueListenableBuilder(
-                  valueListenable: widget.userBagNotifer,
-                  builder: (context, items, child) => ListView.builder(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
-                    physics: const BouncingScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      final item = items[index];
+          child: ValueListenableBuilder(
+            valueListenable: userBagNotifier,
+            builder: (context, items, child) =>
+            userBagNotifier.value.isNotEmpty?
+             ListView.builder(
+              shrinkWrap: true,
+              scrollDirection: Axis.vertical,
+              physics: const BouncingScrollPhysics(),
+              itemBuilder: (context, index) {
+                final item = items[index];
 
-                      if (item is ComboModel) {
-                        return ComboListItem(
-                          index: index,
-                          isThisBag: true,
-                          combo: item,
-                          user: widget.user!,
-                          favlist: widget.userBagNotifer,
-                        );
-                      } else if (item is Product) {
-                        return ProductListItem(
-                            index: index,
-                            isThisBag: true,
-                            product: item,
-                            user: widget.user!,
-                            favlist: widget.userBagNotifer);
-                      } else {
-                        return const Text('lololololol');
-                      }
-                    },
-                    itemCount: widget.userBagNotifer.value.length,
+                if (item is ComboModel) {
+                  return ComboListItem(
+                    index: index,
+                    isThisBag: true,
+                    combo: item,
+                    user: widget.user!,
+                    favlist:userBagNotifier,
+                  );
+                } else if (item is Product) {
+                  return ProductListItem(
+                      index: index,
+                      isThisBag: true,
+                      product: item,
+                      user: widget.user!,
+                      favlist:userBagNotifier);
+                } else {
+                  return const Text('something went wrong');
+                }
+              },
+              itemCount: userBagNotifier.value.length,
+            ):
+               Center(
+                 child: Text(
+                    'Bag is empty',
+                    style:
+                        GoogleFonts.nunitoSans(color: Colors.grey, fontSize: 17),
                   ),
-                )
-              : const Text('bag mt')),
-    );
+               ),
+          ),
+        ));
   }
 }

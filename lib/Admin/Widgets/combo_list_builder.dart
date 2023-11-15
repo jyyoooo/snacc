@@ -57,7 +57,7 @@ class _ComboListBuilderState extends State<ComboListBuilder> {
                       },
                       onTap: () {
                         log('combo name: ${combo.comboName}');
-                        log('combo id: ${combo.comboID}');
+                        // log('combo id: ${combo.comboID}');
 
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => ComboItemPage(
