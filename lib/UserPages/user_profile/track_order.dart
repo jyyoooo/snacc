@@ -12,6 +12,9 @@ class TrackOrders extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    int? ordersLength;
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -28,13 +31,14 @@ class TrackOrders extends StatelessWidget {
         child: Column(
           children: [
             Text(
-              'Active orders',
+              '${ordersLength ?? 0} Active orders',
               style: GoogleFonts.nunitoSans(),
             ),
             const Gap(10),
             FutureBuilder(
                 future: fetchUserOrders(userID),
                 builder: (context, snapshot) {
+                  ordersLength = snapshot.data?.length;
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const CircularProgressIndicator();
                   } else if (snapshot.hasError) {

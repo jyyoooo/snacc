@@ -12,29 +12,29 @@ import 'package:snacc/UserPages/user_navigation.dart';
 import 'package:snacc/Widgets/snacc_button.dart';
 
 class Favorites extends StatefulWidget {
-  const Favorites({super.key});
+  final UserModel? user;
+  const Favorites({super.key,required this.user});
 
   @override
   State<Favorites> createState() => _FavoritesState();
 }
 
 class _FavoritesState extends State<Favorites> {
-  UserModel? user;
+
   List<dynamic>? favList;
-  ValueNotifier<List<dynamic>> favoriteListNotifier = ValueNotifier([]);
 
   @override
   void initState() {
     super.initState();
-    getUser().then((user) {
+
       setState(() {
-        this.user = user;
-        favList = user.favorites;
+
+        favList = widget.user?.favorites;
         favoriteListNotifier.value = favList ?? [];
         favoriteListNotifier.notifyListeners();
       });
-      log('favorites: ${user.favorites?.toList().map((e) => e is ComboModel ? e.comboName : e is Product ? e.prodname : null)}');
-    });
+      log('favorites: ${widget.user?.favorites?.toList().map((e) => e is ComboModel ? e.comboName : e is Product ? e.prodname : null)}');
+  
   }
 
   @override
@@ -99,14 +99,19 @@ class _FavoritesState extends State<Favorites> {
                           return ComboListItem(
                             isThisBag: false,
                             combo: fav,
-                            user: user!,
+                            user: widget.user!,
                             favlist: favoriteListNotifier,
                           );
                         } else if (fav is Product) {
                           return ProductListItem(
                               isThisBag: false,
                               product: fav,
-                              user: user!,
+                              user: widget.user ??
+                                  UserModel(
+                                      username: null,
+                                      userMail: null,
+                                      userPass: null,
+                                      confirmPass: null),
                               favlist: favoriteListNotifier);
                         } else {
                           return null;
@@ -126,10 +131,10 @@ class _FavoritesState extends State<Favorites> {
                         color: Colors.grey[400],
                       ),
                       Text(
-                        'No Favorites...yet! ;)',
+                        'No Favorites',
                         style: GoogleFonts.nunitoSans(
                             fontSize: 15,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.normal,
                             color: Colors.grey),
                       ),
                     ],
@@ -202,11 +207,13 @@ class _ComboListItemState extends State<ComboListItem> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  widget.combo.comboName!,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: GoogleFonts.nunitoSans(
-                                    fontSize: 17,
+                                SizedBox(width: 180,
+                                  child: Text(
+                                    widget.combo.comboName!,
+                                    // overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.nunitoSans(
+                                      fontSize: 17,
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(
@@ -343,10 +350,13 @@ class _ProductListItemState extends State<ProductListItem> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    widget.product.prodname!,
-                                    style: GoogleFonts.nunitoSans(
-                                      fontSize: 17,
+                                  SizedBox(
+                                    width: 188,
+                                    child: Text(
+                                      widget.product.prodname!,
+                                      style: GoogleFonts.nunitoSans(
+                                        fontSize: 17,
+                                      ),
                                     ),
                                   ),
                                   const SizedBox(

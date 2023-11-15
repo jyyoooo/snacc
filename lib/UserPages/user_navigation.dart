@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:snacc/Admin/admin_profile.dart';
 import 'package:snacc/DataModels/user_model.dart';
+import 'package:snacc/Functions/favorites_functions.dart';
 import 'package:snacc/Functions/login_functions.dart';
 import 'dart:ui';
 import 'package:snacc/UserPages/Your%20Bag/bag.dart';
@@ -29,20 +30,16 @@ class _UserNavigationState extends State<UserNavigation> {
   void initState() {
     super.initState();
 
-    userFuture = getCurrentUser();
+    userFuture = getUser();
     userFuture.then((user) {
       setState(() {
         currentUser = user;
 
         routes = <Widget>[
-          UserHome(
-            user: currentUser,
-          ),
-          const Favorites(),
-          const UserBag(),
-          UserAccount(
-            user: currentUser,
-          )
+          UserHome(user: currentUser),
+          Favorites(user: currentUser),
+          UserBag(user: currentUser),
+          UserAccount(user: currentUser)
         ];
       });
     });

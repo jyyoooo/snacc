@@ -8,6 +8,8 @@ import 'package:snacc/Functions/login_functions.dart';
 import 'package:snacc/Widgets/snacc_button.dart';
 
 // Products fucntions
+
+ ValueNotifier<List<dynamic>> favoriteListNotifier = ValueNotifier([]);
 // add PRODUCT to FAVORITES
 
 void addProductToFavorite(Product product, UserModel user) async {

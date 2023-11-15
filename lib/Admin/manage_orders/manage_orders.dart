@@ -6,11 +6,10 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:snacc/Admin/manage_orders/order_details.dart';
 import 'package:snacc/Functions/order_funtions.dart';
-
 import '../../DataModels/order_model.dart';
 
 class OrdersPage extends StatefulWidget {
-  const OrdersPage({Key? key});
+  const OrdersPage();
 
   @override
   State<OrdersPage> createState() => _OrdersPageState();
@@ -45,7 +44,7 @@ class _OrdersPageState extends State<OrdersPage> {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView(
-          physics:const BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           children: const [
             ManageOrderList(),
           ],
@@ -65,129 +64,144 @@ class ManageOrderList extends StatelessWidget {
     return FutureBuilder(
         future: fetchOrders(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
-          } else if (snapshot.hasError) {
-            log('order snapshot has error');
-            return const Text('Error loading Orders');
-          } else if (snapshot.hasData) {
-            List<Order> reversedOrders = snapshot.data!.reversed.toList();
-            return ListView.builder(
-              physics: const BouncingScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: reversedOrders.length,
-              itemBuilder: (context, index) {
-                final order = reversedOrders[index];
-                return InkWell(
-                  onTap: () {
-                    log('${order.orderID}');
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => OrderDetails(order: order)));
-                  },
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15)),
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(8, 12, 16, 8),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          'Order ID: ${order.orderID}',
-                                          style: GoogleFonts.nunitoSans(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        Text(
-                                          '₹${order.orderPrice}',
-                                          style: GoogleFonts.nunitoSans(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 18,
+          if (snapshot.data == null) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            } else if (snapshot.hasError) {
+              log('order snapshot has error');
+              return const Text('Error loading Orders');
+            } else if (snapshot.hasData) {
+              List<Order> reversedOrders = snapshot.data!.reversed.toList();
+              return ListView.builder(
+                physics: const BouncingScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: reversedOrders.length,
+                itemBuilder: (context, index) {
+                  final order = reversedOrders[index];
+                  return InkWell(
+                    onTap: () {
+                      log('${order.orderID}');
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => OrderDetails(order: order)));
+                    },
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15)),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(8, 12, 16, 8),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'Order ID: ${order.orderID}',
+                                            style: GoogleFonts.nunitoSans(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                    const Gap(10),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                            '${getFormattedOrderedTime(order.orderDateTime)}',
+                                          Text(
+                                            '₹${order.orderPrice}',
                                             style: GoogleFonts.nunitoSans(
-                                                fontSize: 15)),
-                                        Text(
-                                            '${DateFormat.yMMMEd().format(order.orderDateTime!)} ',
-                                            style: GoogleFonts.nunitoSans(
-                                                fontSize: 15)),
-                                        Row(
-                                          children: [
-                                            Icon(
-                                              Icons.circle,
-                                              color: getOrderStatusColor(
-                                                  order.status!),
-                                              size: 18,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 18,
                                             ),
-                                            const Gap(3),
-                                            // FIX HERE, theres overflow issue
+                                          ),
+                                        ],
+                                      ),
+                                      const Gap(10),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                              '${getFormattedOrderedTime(order.orderDateTime)}',
+                                              style: GoogleFonts.nunitoSans(
+                                                  fontSize: 15)),
+                                          Text(
+                                              '${DateFormat.yMMMEd().format(order.orderDateTime!)} ',
+                                              style: GoogleFonts.nunitoSans(
+                                                  fontSize: 15)),
+                                          Row(
+                                            children: [
+                                              Icon(
+                                                Icons.circle,
+                                                color: getOrderStatusColor(
+                                                    order.status!),
+                                                size: 18,
+                                              ),
+                                              const Gap(3),
+                                              // FIX HERE, theres overflow issue
 
-                                            Text(getOrderStatus(order.status!),
-                                                style: GoogleFonts.nunitoSans(
-                                                    fontSize: 15,
-                                                    color: Colors.blue,
-                                                    fontWeight:
-                                                        FontWeight.bold)),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                    const Gap(8),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          '${getPaymentMethod(order.patymentMethod!)}',
-                                          style: GoogleFonts.nunitoSans(
-                                              color: Colors.blue,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        Text(
-                                          order.screenAndSeatNumber!,
-                                          style: GoogleFonts.nunitoSans(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20),
-                                        )
-                                      ],
-                                    )
-                                  ],
+                                              Text(
+                                                  getOrderStatus(order.status!),
+                                                  style: GoogleFonts.nunitoSans(
+                                                      fontSize: 15,
+                                                      color: Colors.blue,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      const Gap(8),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            '${getPaymentMethod(order.patymentMethod!)}',
+                                            style: GoogleFonts.nunitoSans(
+                                                color: Colors.blue,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(
+                                            order.screenAndSeatNumber!,
+                                            style: GoogleFonts.nunitoSans(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20),
+                                          )
+                                        ],
+                                      )
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                        ],
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                );
-              },
-            );
-          } else {
-            return const Text('No Orders');
+                  );
+                },
+              );
+            }
           }
+          return SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: SizedBox(
+              // color: Colors.lightBlue,
+              height: 640,
+              child: Center(
+                  heightFactor: 15,
+                  child: Text(
+                    'No Orders',
+                    style: GoogleFonts.nunitoSans(color: Colors.grey),
+                  )),
+            ),
+          );
         });
   }
 }

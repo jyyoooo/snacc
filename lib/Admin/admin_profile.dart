@@ -32,11 +32,11 @@ class AdminAccount extends StatelessWidget {
                   children: [
                     const Gap(10),
                     CircleAvatar(
-                      radius: 40,
+                      radius: 35,
                       backgroundColor: Colors.red[50],
                       child: const Icon(
                         Icons.person,
-                        size: 50,color: Colors.red,
+                        size: 40,color: Colors.red,
                       ),
                     ),
                     const Gap(20),

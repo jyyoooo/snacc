@@ -161,9 +161,9 @@ class TheaterSeatPickerState extends State<TheaterSeatPicker> {
           ),
           const Gap(15),
           Text(
-            seatScreenData.selectedScreenNumber != null ||
+            seatScreenData.selectedScreenNumber != null &&
                     seatScreenData.selectedSeatNumber != null
-                ? 'Your Screen: ${seatScreenData.selectedScreenNumber} Seat: ${seatScreenData.selectedSeatNumber}'
+                ? 'Your Screen: ${seatScreenData.selectedScreenNumber ?? '?'} Seat: ${seatScreenData.selectedSeatNumber}'
                 : selectedRowIndex != -1 && selectedColIndex != -1 ||
                         screenNumber == 0
                     ? 'Your Screen: $screenNumber Seat: ${String.fromCharCode('A'.codeUnitAt(0) + selectedRowIndex)}${selectedColIndex + 1}'
