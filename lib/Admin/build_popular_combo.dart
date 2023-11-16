@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:snacc/Admin/Widgets/combo_dropdown.dart';
 import 'package:snacc/Admin/Widgets/product_image_row.dart';
 import 'package:snacc/DataModels/combo_model.dart';
@@ -13,8 +14,9 @@ import 'package:snacc/Widgets/snacc_appbar.dart';
 
 class PopularCombo extends StatefulWidget {
   // final void Function(ComboModel) onComboCreated;
-  const PopularCombo({super.key,
-  // required this.onComboCreated
+  const PopularCombo({
+    super.key,
+    // required this.onComboCreated
   });
 
   @override
@@ -33,14 +35,15 @@ class _PopularComboState extends State<PopularCombo> {
   Widget build(BuildContext context) {
     return Scaffold(
       // APPBAR //
-      appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(60),
-          child: SnaccAppBar(
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-              title: const Text('Create Combo'))),
+      appBar: AppBar(
+          backgroundColor: Colors.white,
+          centerTitle: true,
+          elevation: .4,
+          title: Text(
+            'Create Combo',
+            style: GoogleFonts.nunitoSans(
+                fontWeight: FontWeight.bold, fontSize: 23),
+          )),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(15.0),
@@ -51,7 +54,6 @@ class _PopularComboState extends State<PopularCombo> {
               SnaccButton(
                 width: 70,
                 btncolor: Colors.amber,
-                textColor: Colors.white,
                 inputText: 'ADD',
                 callBack: () async {
                   if (selectedProduct != null) {
@@ -90,13 +92,13 @@ class _PopularComboState extends State<PopularCombo> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            ' ${comboName ??= 'Combo '}',
-                            style: const TextStyle(
+                            ' ${comboName ??= 'Combo Name'}',
+                            style:  GoogleFonts.nunitoSans(
                                 fontSize: 17, fontWeight: FontWeight.w500),
                           ),
                           Text(
                             '₹ ${comboPrice ??= 0.00}',
-                            style: const TextStyle(
+                            style:  GoogleFonts.nunitoSans(
                                 fontSize: 17, fontWeight: FontWeight.w500),
                           )
                         ],
@@ -108,9 +110,9 @@ class _PopularComboState extends State<PopularCombo> {
               ),
 
               // PICK COMBO IMAGE //
-              const Text(
+              Text(
                 'Select combo image',
-                style: TextStyle(fontSize: 17),
+                style: GoogleFonts.nunitoSans(fontSize: 17, color: Colors.blue),
               ),
               const SizedBox(height: 10),
               Row(
@@ -121,11 +123,12 @@ class _PopularComboState extends State<PopularCombo> {
                     width: 100,
                     child: pickedImage != null
                         ? Image.file(File(pickedImage!))
-                        : const Center(
+                        : Center(
                             child: Text(
                             'No Image selected',
                             textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.grey),
+                            style: GoogleFonts.nunitoSans(
+                                color: Colors.grey, fontSize: 15),
                           )),
                   ),
                   SnaccButton(
@@ -135,7 +138,8 @@ class _PopularComboState extends State<PopularCombo> {
                     ),
                     inputText: '',
                     callBack: () async {
-                      final String? pickedImagePath = await pickImageFromGallery();
+                      final String? pickedImagePath =
+                          await pickImageFromGallery();
                       setState(() {
                         pickedImage = pickedImagePath;
                       });
@@ -150,15 +154,14 @@ class _PopularComboState extends State<PopularCombo> {
 
               // ADD COMBO TO HIVE
               SnaccButton(
+                  textColor: Colors.white,
                   inputText: 'CREATE COMBO',
                   callBack: () async {
                     final comboCreated =
                         await createCombo(productOne, productTwo, pickedImage);
 
                     if (comboCreated == true) {
-                     setState(() {
-                       
-                     });
+                      setState(() {});
                       Fluttertoast.showToast(
                           backgroundColor: Colors.green, msg: "Combo Created!");
                     } else {

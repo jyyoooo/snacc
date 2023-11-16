@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:snacc/DataModels/product_model.dart';
 
 class ProductImageRow extends StatelessWidget {
@@ -22,16 +23,19 @@ class ProductImageRow extends StatelessWidget {
         Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
+            Text(
               'Product 1',
-              style: TextStyle(color: Colors.grey),
+              style: GoogleFonts.nunitoSans(color: Colors.grey),
             ),
             const SizedBox(
               height: 10,
             ),
 
             // PRODUCT ONE NAME
-            Text(productOne?.prodname ?? 'No Product Selected'),
+            Text(
+              productOne?.prodname ?? 'No Product Selected',
+              style: GoogleFonts.nunitoSans(),
+            ),
             const SizedBox(
               height: 10,
             ),
@@ -64,10 +68,12 @@ class ProductImageRow extends StatelessWidget {
             ),
           ],
         ),
-       const Column(
+        const Column(
           children: [
-            SizedBox(height: 20,),
-             Icon(Icons.add),
+            SizedBox(
+              height: 20,
+            ),
+            Icon(Icons.add),
           ],
         ),
 
@@ -75,7 +81,8 @@ class ProductImageRow extends StatelessWidget {
         Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text('Product 2', style: TextStyle(color: Colors.grey)),
+            Text('Product 2',
+                style: GoogleFonts.nunitoSans(color: Colors.grey)),
             const SizedBox(
               height: 10,
             ),
@@ -84,7 +91,10 @@ class ProductImageRow extends StatelessWidget {
             if (productTwo != null)
               Text(productTwo!.prodname!)
             else
-              const Text('No Product Selected'),
+              Text(
+                'No Product Selected',
+                style: GoogleFonts.nunitoSans(),
+              ),
             const SizedBox(
               height: 10,
             ),

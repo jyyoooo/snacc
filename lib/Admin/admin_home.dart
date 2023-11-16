@@ -38,15 +38,11 @@ class _AdminHomeState extends State<AdminHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // extendBody: true,
+    
       appBar: AppBar(
-        leading: const Icon(
-          Icons.transcribe,
-          color: Colors.transparent,
-        ),
         centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
+        backgroundColor: Colors.white,
+        elevation: .4,
         title: Text(
           'Welcome back, Admin',
           style: GoogleFonts.nunitoSans(
@@ -242,7 +238,7 @@ class CategoriesListState extends State<CategoriesList> {
                                   const Gap(5),
                                   Text(
                                     category.categoryName!,
-                                    style: GoogleFonts.nunitoSans(),
+                                    style: GoogleFonts.nunitoSans(fontWeight: FontWeight.w600),
                                     textAlign: TextAlign.center,
                                   ),
                                 ],
@@ -254,7 +250,7 @@ class CategoriesListState extends State<CategoriesList> {
                     : Center(
                         child: Text(
                           'No Categories found',
-                          style: GoogleFonts.nunitoSans(color: Colors.grey),
+                          style: GoogleFonts.nunitoSans(color: Colors.grey,fontSize: 17),
                         ),
                       ),
               );

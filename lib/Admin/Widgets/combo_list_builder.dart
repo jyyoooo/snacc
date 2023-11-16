@@ -76,7 +76,13 @@ class _ComboListBuilderState extends State<ComboListBuilder> {
                             SizedBox(
                               width: 130,
                               height: 130,
-                              child: Image.file(File(combo.comboImgUrl!)),
+                              child: combo.comboImgUrl != null
+                                  ? Image.file(File(combo.comboImgUrl!))
+                                  : SizedBox(
+                                      height: 130,
+                                      width: 130,
+                                      child: Image.asset(
+                                          'assets/images/no-image-available.png')),
                             ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),

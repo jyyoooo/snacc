@@ -24,7 +24,7 @@ class OrderAdapter extends TypeAdapter<Order> {
       status: fields[3] as OrderStatus?,
       patymentMethod: fields[6] as PaymentOption?,
       orderDateTime: fields[4] as DateTime?,
-      screenAndSeatNumber: fields[7] as String?
+      screenAndSeatNumber: fields[7] as String?,
     );
   }
 

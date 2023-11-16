@@ -36,20 +36,28 @@ class _AdminNavigationState extends State<AdminNavigation> {
                     selectedIndex = index;
                   });
                 },
-                backgroundColor: const Color.fromRGBO(0, 0, 0, .32),
+                backgroundColor: Color.fromARGB(39, 149, 149, 149),
                 elevation: 0,
-                unselectedItemColor: Colors.white,
+                unselectedItemColor: Colors.black54,
                 currentIndex: selectedIndex,
                 showUnselectedLabels: false,
                 showSelectedLabels: true,
                 iconSize: 24,
-                items: const [
+                items: [
                   BottomNavigationBarItem(
-                      icon: Icon(Icons.home_rounded), label: 'Home'),
+                      icon: selectedIndex == 0
+                          ? const Icon(Icons.add_home_rounded)
+                          : const Icon(Icons.add_home_outlined),
+                      label: 'Products'),
                   BottomNavigationBarItem(
-                      icon: Icon(Icons.receipt_long_rounded), label: 'Orders'),
+                      icon: selectedIndex == 1
+                          ? const Icon(Icons.receipt_rounded)
+                          : const Icon(Icons.receipt_outlined),
+                      label: 'Orders'),
                   BottomNavigationBarItem(
-                      icon: Icon(Icons.account_circle_outlined),
+                      icon: selectedIndex == 2
+                          ? const Icon(Icons.admin_panel_settings_rounded)
+                          : const Icon(Icons.admin_panel_settings_outlined),
                       label: 'Account')
                 ]),
           ),

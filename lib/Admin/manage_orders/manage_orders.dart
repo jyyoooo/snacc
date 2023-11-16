@@ -26,20 +26,9 @@ class _OrdersPageState extends State<OrdersPage> {
               GoogleFonts.nunitoSans(fontSize: 23, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        actions: [
-          TextButton.icon(
-            onPressed: () {
-              Hive.box<Order>('orders').clear();
-            },
-            icon: const Icon(Icons.warning_amber_rounded),
-            label: const Text(
-              'Ditch All Orders',
-              style: TextStyle(color: Colors.red),
-            ),
-          )
-        ],
+        backgroundColor: Colors.white,
+        elevation: .4,
+       
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -64,7 +53,7 @@ class ManageOrderList extends StatelessWidget {
     return FutureBuilder(
         future: fetchOrders(),
         builder: (context, snapshot) {
-          if (snapshot.data == null) {
+          if (snapshot.data != null) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const CircularProgressIndicator();
             } else if (snapshot.hasError) {
@@ -72,7 +61,8 @@ class ManageOrderList extends StatelessWidget {
               return const Text('Error loading Orders');
             } else if (snapshot.hasData) {
               List<Order> reversedOrders = snapshot.data!.reversed.toList();
-              return ListView.builder(
+              
+              return snapshot.data!.isNotEmpty? ListView.builder(
                 physics: const BouncingScrollPhysics(),
                 shrinkWrap: true,
                 itemCount: reversedOrders.length,
@@ -186,19 +176,23 @@ class ManageOrderList extends StatelessWidget {
                     ),
                   );
                 },
-              );
+              ):Center(
+                  heightFactor: 15,
+                  child: Text(
+                    'No Orders',
+                    style: GoogleFonts.nunitoSans(color: Colors.grey,fontSize: 17),
+                  ));
             }
           }
           return SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: SizedBox(
-              // color: Colors.lightBlue,
               height: 640,
               child: Center(
                   heightFactor: 15,
                   child: Text(
                     'No Orders',
-                    style: GoogleFonts.nunitoSans(color: Colors.grey),
+                    style: GoogleFonts.nunitoSans(color: Colors.grey,fontSize: 17),
                   )),
             ),
           );

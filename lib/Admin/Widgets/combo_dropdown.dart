@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:snacc/DataModels/category_model.dart';
 
@@ -38,9 +39,9 @@ class _ComboItemListState extends State<ComboItemList> {
         const SizedBox(
           height: 15,
         ),
-        const Text(
+        Text(
           'Choose a category to add products to a combo',
-          style: TextStyle(color: Colors.grey),
+          style: GoogleFonts.nunitoSans(color: Colors.grey),
         ),
         Padding(
           padding: const EdgeInsets.all(15.0),
@@ -57,8 +58,8 @@ class _ComboItemListState extends State<ComboItemList> {
                   // CATEGORY LIST
                   Column(
                     children: [
-                      const Text('Category',
-                          style: TextStyle(color: Colors.blue)),
+                      Text('Category',
+                          style: GoogleFonts.nunitoSans(color: Colors.blue,fontSize: 15)),
                       const SizedBox(
                         height: 10,
                       ),
@@ -72,12 +73,12 @@ class _ComboItemListState extends State<ComboItemList> {
 
                           // DROPDOWN
                           child: DropdownButton(
-                            underline:const SizedBox(),
+                            underline: const SizedBox.shrink(),
                             focusColor: Colors.lightBlue,
                             borderRadius: BorderRadius.circular(10),
-                            hint: const Text(
+                            hint: Text(
                               'select category',
-                              style: TextStyle(color: Colors.grey),
+                              style: GoogleFonts.nunitoSans(color: Colors.grey),
                             ),
                             itemHeight: 60,
                             value: selectedCategory,
@@ -102,8 +103,8 @@ class _ComboItemListState extends State<ComboItemList> {
                   // PRODUCT LIST
                   Column(
                     children: [
-                      const Text('Product',
-                          style: TextStyle(color: Colors.blue)),
+                      Text('Product',
+                          style: GoogleFonts.nunitoSans(color: Colors.blue,fontSize: 15)),
                       const SizedBox(
                         height: 10,
                       ),
@@ -114,14 +115,15 @@ class _ComboItemListState extends State<ComboItemList> {
                             color: Colors.grey[200]),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          
+
                           // DROPDOWN
                           child: DropdownButton(
-                            underline:const SizedBox(),
+                              underline: const SizedBox.shrink(),
                               borderRadius: BorderRadius.circular(10),
-                              hint: const Text(
+                              hint: Text(
                                 'select product',
-                                style: TextStyle(color: Colors.grey),
+                                style:
+                                    GoogleFonts.nunitoSans(color: Colors.grey),
                               ),
                               itemHeight: 60,
                               value: selectedProduct,

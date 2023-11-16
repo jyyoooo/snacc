@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:snacc/Admin/Widgets/edit_product.dart';
+import 'package:snacc/DataModels/category_model.dart';
 
 import 'package:snacc/Functions/category_functions.dart';
 import 'package:snacc/Functions/image_picker.dart';
@@ -28,7 +30,6 @@ class _ListProductsState extends State<ListProducts> {
   @override
   void initState() {
     super.initState();
-
     getCategoryProducts(widget.categoryID).then((products) {
       setState(() {
         productListNotifier.value = products;
@@ -40,93 +41,15 @@ class _ListProductsState extends State<ListProducts> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
+        backgroundColor: Colors.white,
+        elevation: .4,
         actions: [
           // EDIT CATEGORY
-          IconButton(
-              onPressed: () async {
-                final category = getCategoryById(widget.categoryID);
-                if (category != null) {
-                  final TextEditingController newcategorynamectrl =
-                      TextEditingController(text: category.categoryName);
-                  String? updatedImgUrl = category.imageUrl;
-                  final exisitingCategoryname = category.categoryName;
-
-                  await showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: Text(
-                            'Edit ${category.categoryName} Category',
-                            style: const TextStyle(color: Colors.blue),
-                          ),
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              SnaccTextField(
-                                controller: newcategorynamectrl,
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  SizedBox(
-                                      height: 80,
-                                      width: 80,
-                                      child: updatedImgUrl != null
-                                          ? Image.file(
-                                              File(updatedImgUrl!),
-                                              fit: BoxFit.cover,
-                                            )
-                                          : Container(
-                                              color: Colors.grey,
-                                              child: const Icon(
-                                                Icons.image,
-                                                color: Colors.blue,
-                                              ),
-                                            )),
-                                  SnaccButton(
-                                      width: 60,
-                                      icon: const Icon(Icons.photo),
-                                      btncolor: Colors.white70,
-                                      inputText: 'new image',
-                                      callBack: () async {
-                                        final String? newImageURL =
-                                            await pickImageFromGallery();
-                                        if (newImageURL != null) {
-                                          updatedImgUrl = updatedImgUrl;
-                                        }
-                                      }),
-                                ],
-                              ),
-                            ],
-                          ),
-                          actions: <Widget>[
-                            SnaccButton(
-                                inputText: 'Save',
-                                callBack: () {
-                                  category.categoryName =
-                                      newcategorynamectrl.text ??
-                                          exisitingCategoryname;
-                                  category.imageUrl = updatedImgUrl;
-                                  updatedCategory(category);
-                                  saveCategory(category);
-                                  productListNotifier.notifyListeners();
-                                })
-                          ],
-                        );
-                      });
-                }
-              },
-              icon: const Icon(
-                Icons.edit,
-                color: Colors.blue,
-              )),
+          EditCategory(
+            categoryID: widget.categoryID,
+          ),
         ],
         title: Text(
           widget.categoryName ?? 'Category',
@@ -146,6 +69,117 @@ class _ListProductsState extends State<ListProducts> {
           productformkey: productformkey,
           widget: widget,
         ),
+      ),
+    );
+  }
+}
+
+class EditCategory extends StatefulWidget {
+  final int? categoryID;
+
+  const EditCategory({
+    Key? key,
+    required this.categoryID,
+  }) : super(key: key);
+
+  @override
+  State<EditCategory> createState() => _EditCategoryState();
+}
+
+class _EditCategoryState extends State<EditCategory> {
+  String? updatedImgUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      onPressed: () async {
+        final category = getCategoryById(widget.categoryID);
+        if (category != null) {
+          final TextEditingController newCategoryNameCtrl =
+              TextEditingController(text: category.categoryName);
+          updatedImgUrl = category.imageUrl;
+
+          await showModalBottomSheet(
+            constraints: const BoxConstraints.tightForFinite(height: 500),
+            useSafeArea: true,
+            isScrollControlled: true,
+            showDragHandle: true,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            context: context,
+            builder: (context) {
+              return StatefulBuilder(
+                builder: (context, setState) {
+                  return Container(
+                    padding: EdgeInsets.all(20),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        SnaccTextField(
+                          label: 'Category name',
+                          controller: newCategoryNameCtrl,
+                        ),
+                        const SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            SizedBox(
+                              height: 80,
+                              width: 80,
+                              child: updatedImgUrl != null
+                                  ? Image.file(
+                                      File(updatedImgUrl!),
+                                      fit: BoxFit.cover,
+                                    )
+                                  : SizedBox(
+                                      child: Image.asset(
+                                          'assets/images/no-image-available.png'),
+                                    ),
+                            ),
+                            SnaccButton(
+                              width: 60,
+                              icon: const Icon(
+                                Icons.photo,
+                                color: Colors.blue,
+                              ),
+                              btncolor: Colors.white70,
+                              inputText: 'New Image',
+                              callBack: () async {
+                                updatedImgUrl = await pickImageFromGallery();
+                                setState(() {});
+                              },
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                        SnaccButton(
+                          textColor: Colors.white,
+                          inputText: 'SAVE',
+                          width: 80,
+                          callBack: () async {
+                            category.categoryName = newCategoryNameCtrl.text;
+                            category.imageUrl = updatedImgUrl;
+                            saveCategory(category);
+                            categoryListNotifier.notifyListeners();
+                            productListNotifier.value =
+                                await getCategoryProducts(widget.categoryID);
+                            productListNotifier.notifyListeners();
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              );
+            },
+          );
+        }
+      },
+      icon: const Icon(
+        Icons.edit,
+        color: Colors.blue,
       ),
     );
   }
@@ -257,7 +291,8 @@ class _ListedProductsNotifierState extends State<ListedProductsNotifier> {
                                                 children: [
                                                   Text(
                                                     product.prodname!,
-                                                    style: const TextStyle(
+                                                    style:
+                                                        GoogleFonts.nunitoSans(
                                                       fontSize: 18,
                                                     ),
                                                   ),
@@ -266,9 +301,10 @@ class _ListedProductsNotifierState extends State<ListedProductsNotifier> {
                                                   ),
                                                   Text(
                                                     '₹${product.prodprice!}',
-                                                    style: const TextStyle(
+                                                    style:
+                                                        GoogleFonts.nunitoSans(
                                                       fontWeight:
-                                                          FontWeight.w500,
+                                                          FontWeight.bold,
                                                       fontSize: 18,
                                                     ),
                                                   ),
@@ -284,7 +320,12 @@ class _ListedProductsNotifierState extends State<ListedProductsNotifier> {
                                             children: [
                                               IconButton(
                                                 onPressed: () {
-                                                  // editProduct(product);
+                                                  // editProductDialog(
+                                                  //     product,
+                                                  //     widget.categoryID!,
+                                                  //     context);
+                                                  EditProduct.show(
+                                                      context, product);
                                                 },
                                                 icon: const Icon(
                                                   Icons.edit,
@@ -316,7 +357,8 @@ class _ListedProductsNotifierState extends State<ListedProductsNotifier> {
                   heightFactor: 35,
                   child: Text(
                     'No Products found',
-                    style: GoogleFonts.nunitoSans(color: Colors.grey),
+                    style: GoogleFonts.nunitoSans(
+                        color: Colors.grey, fontSize: 17),
                   ),
                 );
         },

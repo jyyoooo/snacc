@@ -22,12 +22,15 @@ class ComboModel {
   @HiveField(5)
   bool? isFavorite;
 
+  @HiveField(6)
+  String? description;
+
   ComboModel(
       {this.comboID,
-      String? comboImgUrl,
+      this.comboImgUrl,
       this.comboItems,
       this.comboName,
       this.comboPrice,
-      this.isFavorite = false})
-      : comboImgUrl = comboImgUrl ?? 'assets/images/no-image-available.png';
+      this.isFavorite = false});
+   
 }

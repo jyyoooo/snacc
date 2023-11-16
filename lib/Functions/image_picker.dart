@@ -5,21 +5,55 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 
-Future pickImageFromGallery() async {
+// Future<String?> pickImageFromGallery() async {
+//   try {
+//     final pickedImage =
+//         await ImagePicker().pickImage(source: ImageSource.gallery);
+
+//     if (pickedImage == null) {
+//       return '';
+//     }
+
+//     log('pickedimg path: ${pickedImage.path}');
+//     return pickedImage.path;
+
+//   } on PlatformException catch (e) {
+//     Fluttertoast.showToast(
+//       msg: 'Uh-Oh! Something went wrong. Try again later.',backgroundColor: Colors.blue
+//     );
+//     log('somethings wrong: $e');
+//   }
+// }
+
+bool isPickerActive = false;
+
+Future<String?> pickImageFromGallery() async {
+  if (isPickerActive) {
+    log('Another picker is already active, wait for it to complete.');
+    return null;
+  }
+
   try {
-    final pickedImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+    isPickerActive = true;
+    log('image picker Activated');
+
+    final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
 
     if (pickedImage == null) {
-      return null;
+      return '';
     }
+
     log('pickedimg path: ${pickedImage.path}');
     return pickedImage.path;
   } on PlatformException catch (e) {
     Fluttertoast.showToast(
-      msg: 'Uh-Oh! Something went wrong. Try again later.',backgroundColor: Colors.blue
+      msg: 'Uh-Oh! Something went wrong. Try again later.', backgroundColor: Colors.blue
     );
     log('somethings wrong: $e');
+    return null;
+  } finally {
+    isPickerActive = false;
+    log('image picker deactivated');
   }
 }
 

@@ -2,8 +2,10 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:snacc/Admin/Widgets/edit_combo.dart';
 import 'package:snacc/DataModels/combo_model.dart';
 import 'package:snacc/Functions/combos_functions.dart';
 import 'package:snacc/Functions/favorites_functions.dart';
@@ -22,6 +24,7 @@ class ComboItemPage extends StatefulWidget {
 
 class _ComboItemPageState extends State<ComboItemPage> {
   bool isFavorite = false;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +39,9 @@ class _ComboItemPageState extends State<ComboItemPage> {
             actions: widget.isAdmin == true
                 ? <Widget>[
                     IconButton(
-                        onPressed: () async {},
+                        onPressed: () async {
+                          EditCombo.show(context, _formKey, widget.combo!);
+                        },
                         icon: const Icon(
                           Icons.edit,
                           color: Colors.blue,
@@ -61,14 +66,21 @@ class _ComboItemPageState extends State<ComboItemPage> {
                   ],
                   borderRadius: BorderRadius.circular(40),
                 ),
-                child: Image.file(
-                  File(widget.combo!.comboImgUrl!),
-                  scale: 2,
-                )),
+                child: widget.combo!.comboImgUrl != null
+                    ? Image.file(
+                        File(widget.combo!.comboImgUrl!),
+                        scale: 2,
+                      )
+                    : SizedBox(
+                        height: 130,
+                        width: 130,
+                        child: Image.asset(
+                            'assets/images/no-image-available.png'))),
           ),
           const SizedBox(
             height: 10,
           ),
+          widget.isAdmin == true ? const Gap(20) : const SizedBox.shrink(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -77,43 +89,46 @@ class _ComboItemPageState extends State<ComboItemPage> {
                 style: GoogleFonts.nunitoSans(
                     fontSize: 20, fontWeight: FontWeight.normal),
               ),
-              widget.isAdmin!?const SizedBox.shrink():
-              IconButton(
-                  icon: widget.combo!.isFavorite!
-                      ? const Icon(
-                          Icons.favorite_rounded,
-                          color: Colors.red,
-                        )
-                      : const Icon(
-                          Icons.favorite_outline_rounded,
-                          color: Colors.grey,
-                        ),
-                  onPressed: () async {
-                    log('${widget.combo?.isFavorite}');
-                    if (widget.combo!.isFavorite!) {
-                      await removeComboFromFavorites(widget.combo!);
-                      Fluttertoast.showToast(
-                          msg:
-                              '${widget.combo!.comboName} removed from favorites',
-                          backgroundColor: Colors.red);
-                    } else {
-                      await addComboToFavorite(widget.combo!);
-                      Fluttertoast.showToast(
-                          msg: '${widget.combo!.comboName} added to favorites',
-                          backgroundColor: Colors.amber,
-                          textColor: Colors.black);
-                    }
-                    setState(() {});
-                  })
+              widget.isAdmin!
+                  ? const SizedBox.shrink()
+                  : IconButton(
+                      icon: widget.combo!.isFavorite!
+                          ? const Icon(
+                              Icons.favorite_rounded,
+                              color: Colors.red,
+                            )
+                          : const Icon(
+                              Icons.favorite_outline_rounded,
+                              color: Colors.grey,
+                            ),
+                      onPressed: () async {
+                        log('${widget.combo?.isFavorite}');
+                        if (widget.combo!.isFavorite!) {
+                          await removeComboFromFavorites(widget.combo!);
+                          Fluttertoast.showToast(
+                              msg:
+                                  '${widget.combo!.comboName} removed from favorites',
+                              backgroundColor: Colors.red);
+                        } else {
+                          await addComboToFavorite(widget.combo!);
+                          Fluttertoast.showToast(
+                              msg:
+                                  '${widget.combo!.comboName} added to favorites',
+                              backgroundColor: Colors.amber,
+                              textColor: Colors.black);
+                        }
+                        setState(() {});
+                      })
             ],
           ),
+          widget.isAdmin == true ? const Gap(20) : const SizedBox.shrink(),
           Padding(
             padding: const EdgeInsets.fromLTRB(55, 0, 30, 0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '₹${widget.combo!.comboPrice!}',
+                  '₹${widget.combo!.comboPrice ?? 0}',
                   style: GoogleFonts.nunitoSans(
                       fontSize: 23, fontWeight: FontWeight.bold),
                 ),
@@ -122,7 +137,9 @@ class _ComboItemPageState extends State<ComboItemPage> {
                         width: 70,
                         btncolor: Colors.amber,
                         inputText: 'ADD',
-                        callBack: () {addComboToBag(widget.combo!);})
+                        callBack: () {
+                          addComboToBag(widget.combo!);
+                        })
                     : const Text(''),
               ],
             ),

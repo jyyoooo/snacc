@@ -25,11 +25,11 @@ class _SnaccFloatingButtonState extends State<SnaccFloatingButton> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 40,
+      height: 38,
       width: 170,
       child: FloatingActionButton.extended(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(13),
         ),
         backgroundColor: const Color.fromARGB(255, 84, 203, 88),
         label: Row(
@@ -42,6 +42,7 @@ class _SnaccFloatingButtonState extends State<SnaccFloatingButton> {
             Text(
               'NEW PRODUCT',
               style: GoogleFonts.nunitoSans(
+                fontSize: 13,
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),

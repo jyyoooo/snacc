@@ -41,153 +41,155 @@ class TheaterSeatPickerState extends State<TheaterSeatPicker> {
     var seatScreenData = context.read<SeatScreenData>();
     return Padding(
       padding: const EdgeInsets.all(10),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Column(
-            children: [
-              Text(
-                'Select Screen and Seat',
-                style: GoogleFonts.nunitoSans(
-                    fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  HorizontalNumberList(
-                    onScreenSelected: (screen) {
-                      setState(() {
-                        screenNumber = screen;
-                      });
-                    },
-                  ),
-                ],
-              ),
-            ],
-          ),
-          SvgPicture.asset('assets/images/theater_items/screen.svg'),
-          Text(
-            'Eyes this way',
-            style: GoogleFonts.nunitoSans(fontSize: 15, color: Colors.blue),
-          ),
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              SizedBox(
-                width: 30,
-                height: 320,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: List.generate(
-                    rowCount,
-                    (index) => Text(
-                        String.fromCharCode('A'.codeUnitAt(0) + index),
-                        style: GoogleFonts.nunitoSans(
-                            fontSize: 16, fontWeight: FontWeight.bold)),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  width: 320,
-                  height: 350,
-                  child: GridView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: colCount,
-                      mainAxisExtent: 42,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 1,
-                    ),
-                    itemBuilder: (context, index) {
-                      int rowIndex = index ~/ colCount;
-                      int colIndex = index % colCount;
-
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            if (selectedRowIndex != -1 &&
-                                selectedColIndex != -1) {
-                              seats[selectedRowIndex][selectedColIndex] =
-                                  SeatState.unselected;
-                            }
-                            seats[rowIndex][colIndex] = seats[rowIndex]
-                                        [colIndex] ==
-                                    SeatState.unselected
-                                ? SeatState.selected
-                                : SeatState.unselected;
-                            selectedRowIndex = rowIndex;
-                            selectedColIndex = colIndex;
-                          });
-                        },
-                        child: Container(
-                          child: seats[rowIndex][colIndex] ==
-                                  SeatState.unselected
-                              ? SvgPicture.asset(
-                                  'assets/images/theater_items/unselected.svg',
-                                  height: 30,
-                                  width: 30,
-                                )
-                              : SvgPicture.asset(
-                                  'assets/images/theater_items/selected.svg',
-                                  color: const Color.fromARGB(255, 82, 211, 86),
-                                  height: 30,
-                                  width: 30,
-                                ),
-                        ),
-                      );
-                    },
-                    itemCount: rowCount * colCount,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(50, 0, 25, 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: List.generate(
-                colCount,
-                (index) => Text(
-                  (index + 1).toString(),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Column(
+              children: [
+                Text(
+                  'Select Screen and Seat',
                   style: GoogleFonts.nunitoSans(
-                      fontSize: 16, fontWeight: FontWeight.bold),
+                      fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    HorizontalNumberList(
+                      onScreenSelected: (screen) {
+                        setState(() {
+                          screenNumber = screen;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            SvgPicture.asset('assets/images/theater_items/screen.svg'),
+            Text(
+              'Eyes this way',
+              style: GoogleFonts.nunitoSans(fontSize: 15, color: Colors.blue),
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: 30,
+                  height: 320,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: List.generate(
+                      rowCount,
+                      (index) => Text(
+                          String.fromCharCode('A'.codeUnitAt(0) + index),
+                          style: GoogleFonts.nunitoSans(
+                              fontSize: 16, fontWeight: FontWeight.bold)),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    width: 320,
+                    height: 350,
+                    child: GridView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: colCount,
+                        mainAxisExtent: 42,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 1,
+                      ),
+                      itemBuilder: (context, index) {
+                        int rowIndex = index ~/ colCount;
+                        int colIndex = index % colCount;
+      
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              if (selectedRowIndex != -1 &&
+                                  selectedColIndex != -1) {
+                                seats[selectedRowIndex][selectedColIndex] =
+                                    SeatState.unselected;
+                              }
+                              seats[rowIndex][colIndex] = seats[rowIndex]
+                                          [colIndex] ==
+                                      SeatState.unselected
+                                  ? SeatState.selected
+                                  : SeatState.unselected;
+                              selectedRowIndex = rowIndex;
+                              selectedColIndex = colIndex;
+                            });
+                          },
+                          child: Container(
+                            child: seats[rowIndex][colIndex] ==
+                                    SeatState.unselected
+                                ? SvgPicture.asset(
+                                    'assets/images/theater_items/unselected.svg',
+                                    height: 30,
+                                    width: 30,
+                                  )
+                                : SvgPicture.asset(
+                                    'assets/images/theater_items/selected.svg',
+                                    color: const Color.fromARGB(255, 82, 211, 86),
+                                    height: 30,
+                                    width: 30,
+                                  ),
+                          ),
+                        );
+                      },
+                      itemCount: rowCount * colCount,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(50, 0, 25, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: List.generate(
+                  colCount,
+                  (index) => Text(
+                    (index + 1).toString(),
+                    style: GoogleFonts.nunitoSans(
+                        fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
             ),
-          ),
-          const Gap(15),
-          Text(
-            seatScreenData.selectedScreenNumber != null &&
-                    seatScreenData.selectedSeatNumber != null
-                ? 'Your Screen: ${seatScreenData.selectedScreenNumber ?? '?'} Seat: ${seatScreenData.selectedSeatNumber}'
-                : selectedRowIndex != -1 && selectedColIndex != -1 ||
-                        screenNumber == 0
-                    ? 'Your Screen: $screenNumber Seat: ${String.fromCharCode('A'.codeUnitAt(0) + selectedRowIndex)}${selectedColIndex + 1}'
-                    : 'Your Seat and Screen is not selected',
-            style: GoogleFonts.nunitoSans(
-                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blue),
-          ),
-          const Gap(10),
-          SnaccButton(
-            width: 100,
-            inputText: 'DONE',
-            callBack: () {
-              if (selectedRowIndex != -1 && selectedColIndex != -1) {
-                seatNumber =
-                    '${String.fromCharCode('A'.codeUnitAt(0) + selectedRowIndex)}${selectedColIndex + 1}';
-                widget.onSeatSelected(screenNumber ?? 0, seatNumber!);
-              } else {
-                log('no screen or seat selected');
-              }
-              Navigator.pop(context);
-            },
-            textColor: Colors.white,
-          ),
-        ],
+            const Gap(15),
+            Text(
+              seatScreenData.selectedScreenNumber != null &&
+                      seatScreenData.selectedSeatNumber != null
+                  ? 'Your Screen: ${seatScreenData.selectedScreenNumber ?? '?'} Seat: ${seatScreenData.selectedSeatNumber}'
+                  : selectedRowIndex != -1 && selectedColIndex != -1 ||
+                          screenNumber == 0
+                      ? 'Your Screen: $screenNumber Seat: ${String.fromCharCode('A'.codeUnitAt(0) + selectedRowIndex)}${selectedColIndex + 1}'
+                      : 'Your Seat and Screen is not selected',
+              style: GoogleFonts.nunitoSans(
+                  fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blue),
+            ),
+            const Gap(10),
+            SnaccButton(
+              width: 100,
+              inputText: 'DONE',
+              callBack: () {
+                if (selectedRowIndex != -1 && selectedColIndex != -1) {
+                  seatNumber =
+                      '${String.fromCharCode('A'.codeUnitAt(0) + selectedRowIndex)}${selectedColIndex + 1}';
+                  widget.onSeatSelected(screenNumber ?? 0, seatNumber!);
+                } else {
+                  log('no screen or seat selected');
+                }
+                Navigator.pop(context);
+              },
+              textColor: Colors.white,
+            ),
+          ],
+        ),
       ),
     );
   }

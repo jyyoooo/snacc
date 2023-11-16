@@ -13,33 +13,31 @@ import 'package:snacc/Widgets/snacc_button.dart';
 
 class Favorites extends StatefulWidget {
   final UserModel? user;
-  const Favorites({super.key,required this.user});
+  const Favorites({super.key, required this.user});
 
   @override
   State<Favorites> createState() => _FavoritesState();
 }
 
 class _FavoritesState extends State<Favorites> {
-
   List<dynamic>? favList;
 
   @override
   void initState() {
     super.initState();
 
-      setState(() {
-
-        favList = widget.user?.favorites;
-        favoriteListNotifier.value = favList ?? [];
-        favoriteListNotifier.notifyListeners();
-      });
-      log('favorites: ${widget.user?.favorites?.toList().map((e) => e is ComboModel ? e.comboName : e is Product ? e.prodname : null)}');
-  
+    setState(() {
+      favList = widget.user?.favorites;
+      favoriteListNotifier.value = favList ?? [];
+      favoriteListNotifier.notifyListeners();
+    });
+    log('favorites: ${widget.user?.favorites?.toList().map((e) => e is ComboModel ? e.comboName : e is Product ? e.prodname : null)}');
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(backgroundColor: Colors.grey[50],
+    return Scaffold(
+      backgroundColor: Colors.grey[50],
       appBar: AppBar(
         leading: const Icon(
           Icons.favorite,
@@ -83,64 +81,63 @@ class _FavoritesState extends State<Favorites> {
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: favoriteListNotifier.value.isNotEmpty
-              ? SizedBox(
-                  // height:710,
-                  child: ValueListenableBuilder(
-                    valueListenable: favoriteListNotifier,
-                    builder: (context, favorites, child) => ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        final fav = favorites[index];
+            padding: const EdgeInsets.all(10.0),
+            child: SizedBox(
+              child: ValueListenableBuilder(
+                valueListenable: favoriteListNotifier,
+                builder: (context, favorites, child) =>
+                    favoriteListNotifier.value.isNotEmpty
+                        ? ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              final fav = favorites[index];
 
-                        if (fav is ComboModel) {
-                          return ComboListItem(
-                            isThisBag: false,
-                            combo: fav,
-                            user: widget.user!,
-                            favlist: favoriteListNotifier,
-                          );
-                        } else if (fav is Product) {
-                          return ProductListItem(
-                              isThisBag: false,
-                              product: fav,
-                              user: widget.user ??
-                                  UserModel(
-                                      username: null,
-                                      userMail: null,
-                                      userPass: null,
-                                      confirmPass: null),
-                              favlist: favoriteListNotifier);
-                        } else {
-                          return null;
-                        }
-                      },
-                      itemCount: favoriteListNotifier.value.length,
-                    ),
-                  ),
-                )
-              : Center(
-                  heightFactor: 9,
-                  child: Column(
-                    children: [
-                      Icon(
-                        Icons.favorite_rounded,
-                        size: 50,
-                        color: Colors.grey[400],
-                      ),
-                      Text(
-                        'No Favorites',
-                        style: GoogleFonts.nunitoSans(
-                            fontSize: 15,
-                            fontWeight: FontWeight.normal,
-                            color: Colors.grey),
-                      ),
-                    ],
-                  ),
-                ),
-        ),
+                              if (fav is ComboModel) {
+                                return ComboListItem(
+                                  isThisBag: false,
+                                  combo: fav,
+                                  user: widget.user!,
+                                  favlist: favoriteListNotifier,
+                                );
+                              } else if (fav is Product) {
+                                return ProductListItem(
+                                    isThisBag: false,
+                                    product: fav,
+                                    user: widget.user ??
+                                        UserModel(
+                                            username: null,
+                                            userMail: null,
+                                            userPass: null,
+                                            confirmPass: null),
+                                    favlist: favoriteListNotifier);
+                              } else {
+                                return null;
+                              }
+                            },
+                            itemCount: favoriteListNotifier.value.length,
+                          )
+                        : Center(
+                            heightFactor: 9,
+                            child: Column(
+                              children: [
+                                Icon(
+                                  Icons.favorite_rounded,
+                                  size: 50,
+                                  color: Colors.grey[400],
+                                ),
+                                Text(
+                                  'No Favorites',
+                                  style: GoogleFonts.nunitoSans(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.normal,
+                                      color: Colors.grey),
+                                ),
+                              ],
+                            ),
+                          ),
+              ),
+            )),
       ),
     );
   }
@@ -207,7 +204,8 @@ class _ComboListItemState extends State<ComboListItem> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                SizedBox(width: 180,
+                                SizedBox(
+                                  width: 180,
                                   child: Text(
                                     widget.combo.comboName!,
                                     // overflow: TextOverflow.ellipsis,

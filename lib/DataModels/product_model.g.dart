@@ -20,6 +20,7 @@ class ProductAdapter extends TypeAdapter<Product> {
       prodimgUrl: fields[1] as String?,
       prodname: fields[2] as String?,
       prodprice: fields[3] as double?,
+      description: fields[7] as String?,
       quantity: fields[4] as int?,
       isFavorite: fields[5] as bool?,
       categoryID: fields[6] as int?,
@@ -30,7 +31,7 @@ class ProductAdapter extends TypeAdapter<Product> {
   @override
   void write(BinaryWriter writer, Product obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.productID)
       ..writeByte(1)
@@ -44,7 +45,9 @@ class ProductAdapter extends TypeAdapter<Product> {
       ..writeByte(5)
       ..write(obj.isFavorite)
       ..writeByte(6)
-      ..write(obj.categoryID);
+      ..write(obj.categoryID)
+      ..writeByte(7)
+      ..write(obj.description);
   }
 
   @override

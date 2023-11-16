@@ -24,10 +24,14 @@ class Product {
   @HiveField(6)
   int? categoryID;
 
+  @HiveField(7)
+  String? description;
+
   Product(
       {required this.prodimgUrl,
       required this.prodname,
       required this.prodprice,
+      required this.description,
       this.quantity,
       this.isFavorite = false,
       this.categoryID,

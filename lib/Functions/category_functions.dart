@@ -36,38 +36,38 @@ void deleteCategory(
 }
 
 //  EDIT CATEGORY
-void editCategory(
-    widget, ValueNotifier<List<Product>> productlistNotifier) async {
-  final category = getCategoryById(widget.id);
-  if (category != null) {
-    final TextEditingController newcategorynamectrl = TextEditingController();
-    String? updatedImgUrl = category.imageUrl;
+// void editCategory(
+//     widget, ValueNotifier<List<Product>> productlistNotifier) async {
+//   final category = getCategoryById(widget.id);
+//   if (category != null) {
+//     final TextEditingController newcategorynamectrl = TextEditingController();
+//     String? updatedImgUrl = category.imageUrl;
 
-    final exisitingCategoryname = category.categoryName;
+//     final exisitingCategoryname = category.categoryName;
 
-    // SAVE BTN
-    category.categoryName = newcategorynamectrl.text ?? exisitingCategoryname;
-    category.imageUrl = updatedImgUrl;
-    updatedCategory(category);
-    saveCategory(category);
-    productlistNotifier.notifyListeners();
-  }
-}
+//     // SAVE BTN
+//     category.categoryName = newcategorynamectrl.text ?? exisitingCategoryname;
+//     category.imageUrl = updatedImgUrl;
+//     // updatedCategory(category);
+//     saveCategory(category);
+//     productlistNotifier.notifyListeners();
+//   }
+// }
 
-// UPDATE CATEGORY IN DB
-Future<void> updatedCategory(Category updatedCategory) async {
-  final categoryBox = await Hive.openBox<Category>('category');
+// // UPDATE CATEGORY IN DB
+// Future<void> updatedCategory(Category updatedCategory) async {
+//   final categoryBox = await Hive.openBox<Category>('category');
 
-  final existingCategory = categoryBox.get(updatedCategory.categoryID);
+//   final existingCategory = categoryBox.get(updatedCategory.categoryID);
 
-  if (existingCategory != null) {
-    existingCategory.categoryName = updatedCategory.categoryName;
+//   if (existingCategory != null) {
+//     existingCategory.categoryName = updatedCategory.categoryName;
 
-    existingCategory.imageUrl = updatedCategory.imageUrl;
+//     existingCategory.imageUrl = updatedCategory.imageUrl;
 
-    await categoryBox.put(updatedCategory.categoryID, existingCategory);
-  }
-}
+//     await categoryBox.put(updatedCategory.categoryID, existingCategory);
+//   }
+// }
 
 //SAVE CATEGORY
 Future<void> saveCategory(Category category) async {

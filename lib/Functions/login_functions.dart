@@ -46,7 +46,7 @@ Future<UserModel?> getCurrentUser() async {
 }
 
 splashLoginCheck(context) async {
-  final loggedUserBox = await Hive.openBox<bool>('loggedUserBox');
+  final loggedUserBox =  Hive.box<bool>('loggedUserBox');
   final loggedAdmin = await Hive.openBox<bool>('adminCheck');
 
   final isLoggedIn = loggedUserBox.get('userLoggedIn');

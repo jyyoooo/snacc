@@ -40,6 +40,7 @@ void main() async {
     Hive.registerAdapter(PaymentOptionAdapter());
     Hive.registerAdapter(OrderStatusAdapter());
   }
+  await Hive.openBox<bool>('loggedUserBox');
   await Hive.openBox<Order>('orders');
   await Hive.openBox<Category>('category');
   await Hive.openBox<UserModel>('userinfo');

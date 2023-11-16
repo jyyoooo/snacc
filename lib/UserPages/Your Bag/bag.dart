@@ -84,7 +84,7 @@ class _UserBagState extends State<UserBag> {
               // if (userBag != null && widget.user != null) {
               return Positioned(
                 height: 290,
-                bottom: 0,
+                bottom: 1,
                 left: 0,
                 right: 0,
 
@@ -94,13 +94,7 @@ class _UserBagState extends State<UserBag> {
                   userBag: userBag,
                 ),
               );
-              // } else {
-              //   log('loading...');
-              //   return const Center(
-              //       child: CircularProgressIndicator(
-              //     color: Colors.amber,
-              //   ));
-              // }
+             
             })
       ]),
     );

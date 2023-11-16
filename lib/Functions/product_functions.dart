@@ -1,11 +1,14 @@
 import 'dart:developer';
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:snacc/DataModels/category_model.dart';
 import 'package:snacc/DataModels/product_model.dart';
 import 'package:snacc/Functions/category_functions.dart';
+import 'package:snacc/Functions/image_picker.dart';
 import 'package:snacc/Widgets/snacc_button.dart';
-
+import 'package:snacc/Widgets/snacc_textfield.dart';
 
 ValueNotifier<List<Product>> productListNotifier = ValueNotifier([]);
 // ADD PRODUCT
@@ -16,6 +19,7 @@ Future<void> addProduct(
   int categoryID,
 ) async {
   final product = Product(
+    description: null,
     prodname: prodName,
     prodprice: prodPrice,
     prodimgUrl: prodImgUrl,
@@ -48,20 +52,89 @@ Future<int> addProductToCategory(Product product, int categoryID) async {
   return productID;
 }
 
-// EDIT PRODUCT
-void editProduct(Product product, int? categoryID) async {
-  final productBox = Hive.box<Product>('products');
-  await productBox.put(product.productID, product);
+// // EDIT PRODUCT
+// void editProduct(Product product, int? categoryID) async {
+//   final productBox = Hive.box<Product>('products');
+//   await productBox.put(product.productID, product);
 
-  final category = getCategoryById(categoryID);
+//   final category = getCategoryById(categoryID);
 
-  if (category != null &&
-      category.productsReference != null &&
-      !category.productsReference!.contains(product.productID)) {
-    category.productsReference!.add(product.productID!);
-    saveCategory(category);
-  }
-}
+//   if (category != null &&
+//       category.productsReference != null &&
+//       !category.productsReference!.contains(product.productID)) {
+//     category.productsReference!.add(product.productID!);
+//     saveCategory(category);
+//   }
+// }
+
+// void editProductDialog(Product product, int categoryID, context,
+//    ) async {
+//   TextEditingController newNameController =
+//       TextEditingController(text: product.prodname);
+//   TextEditingController newPriceController =
+//       TextEditingController(text: product.prodprice.toString());
+//   TextEditingController descriptionController =
+//       TextEditingController(text: product.description);
+//   String? newImage;
+
+//   await showDialog(
+//       context: context,
+//       builder: (context) {
+//         return AlertDialog.adaptive(
+//           title: Text(
+//             'Edit ${product.prodname}',
+//             style: GoogleFonts.nunitoSans(),
+//           ),
+//           content: SizedBox(
+//             height: 350,
+//             child: Column(
+//               children: [
+//                 SizedBox.square(
+//                   dimension: 80,
+//                   child: product.prodimgUrl != null
+//                       ? Image.file(File(product.prodimgUrl!))
+//                       : Image.asset('assets/images/no-image-available.png'),
+//                 ),
+//                 SnaccButton(
+//                   btncolor: Colors.white,
+//                   textColor: Colors.blue,
+//                     width: 80,
+//                     icon: const Icon(Icons.image,color: Colors.blue,),
+//                     inputText: '',
+//                     callBack: () async {
+//                       newImage = await pickImageFromGallery();
+//                     }),
+//                 SnaccTextField(
+//                   controller: newNameController,
+//                   label: 'Product Name',
+//                 ),
+//                 SnaccTextField(
+//                   controller: newPriceController,
+//                   label: 'Price',
+//                 ),
+//                 SnaccTextField(
+//                     controller: descriptionController, label: 'Description')
+//               ],
+//             ),
+//           ),
+//           actions: [
+//             SnaccButton(
+//               inputText: 'SAVE',
+//               callBack: () {
+//                 final productsBox = Hive.box<Product>('products');
+
+//                 product.prodname = newNameController.text;
+//                 product.prodprice = double.tryParse(newPriceController.text);
+//                 product.prodimgUrl = newImage ?? product.prodimgUrl;
+//                 productsBox.put(product.productID, product);
+//                 productListNotifier.notifyListeners();
+//               },
+//               textColor: Colors.white,
+//             )
+//           ],
+//         );
+//       });
+// }
 
 // DELETE PRODUCT
 deleteProduct(int? productID, int? categoryID) async {
@@ -81,7 +154,8 @@ deleteProduct(int? productID, int? categoryID) async {
 }
 
 // DELETE PRODUCT DIALOGBOX
-deleteProductDialog(Product product, int categoryID, context,ValueNotifier<List<Product>?> productListNotifier) async {
+deleteProductDialog(Product product, int categoryID, context,
+    ValueNotifier<List<Product>?> productListNotifier) async {
   await showDialog(
       context: context,
       builder: (context) {
@@ -104,7 +178,6 @@ deleteProductDialog(Product product, int categoryID, context,ValueNotifier<List<
                   Navigator.of(context).pop();
 
                   log('deleted id = ${category.categoryID}');
-                  
                 } else {
                   log('deletion error');
                 }
@@ -148,97 +221,3 @@ Future<List<Product>> getCategoryProducts(int? categoryId) async {
   return products;
 }
 
-
-  // void editProduct(Product product) async {
-  //   final TextEditingController newprodnamectrl =
-  //       TextEditingController(text: product.prodname);
-  //   final TextEditingController newprodpricectrl =
-  //       TextEditingController(text: "${product.prodprice}");
-  //   // String? newprodImgUrl;
-  //   final existingname = product.prodname;
-  //   final exisitingprice = product.prodprice;
-  //   // final productImg;
-
-  //   await showDialog(
-  //       context: context,
-  //       builder: (context) {
-  //         return StatefulBuilder(builder: (context, setState) {
-  //           return AlertDialog(
-  //             title: Text(
-  //               'Edit ${product.prodname}',
-  //               style: const TextStyle(color: Colors.blue),
-  //             ),
-  //             content: SingleChildScrollView(
-  //               child: Column(
-  //                 crossAxisAlignment: CrossAxisAlignment.start,
-  //                 mainAxisSize: MainAxisSize.min,
-  //                 children: <Widget>[
-  //                   const Text('New product name'),
-  //                   const SizedBox(
-  //                     height: 5,
-  //                   ),
-  //                   SnaccTextField(
-  //                     controller: newprodnamectrl,
-  //                   ),
-  //                   const SizedBox(
-  //                     height: 10,
-  //                   ),
-  //                   const Text('New product price'),
-  //                   const SizedBox(
-  //                     height: 5,
-  //                   ),
-  //                   SnaccTextField(
-  //                     controller: newprodpricectrl,
-  //                   ),
-  //                 ],
-  //               ),
-  //             ),
-  //             actions: <Widget>[
-  //               SnaccButton(
-  //                   inputText: 'SAVE',
-  //                   callBack: () async {
-  //                     final currentCategory =
-  //                         getCategoryById(widget.categoryID);
-  //                     product.prodname = newprodnamectrl.text ?? existingname;
-  //                     saveCategory(currentCategory!);
-  //                     product.prodprice =
-  //                         double.tryParse(newprodpricectrl.text) ??
-  //                             exisitingprice;
-  //                     productListNotifier.notifyListeners();
-  //                     Navigator.pop(context);
-  //                   })
-  //             ],
-  //           );
-  //         });
-  //       });
-  // }
-
-//   void deleteProduct(Product product) async {
-//     await showDialog(
-//         context: context,
-//         builder: (context) {
-//           return AlertDialog(
-//             icon: const Icon(Icons.delete_forever),
-//             title: const Text('Delete Product?'),
-//             actions: [
-//               SnaccButton(
-//                   btncolor: Colors.red,
-//                   inputText: 'Delete',
-//                   callBack: () {
-//                     Category? currentCategory = getCategoryById(widget.id);
-
-//                     final int productindex = currentCategory!.products!
-//                         .indexWhere((element) => element == product);
-
-//                     currentCategory.products!.removeAt(productindex);
-
-//                     saveCategory(currentCategory);
-//                     Navigator.of(context).pop();
-
-//                     productlistNotifier.notifyListeners();
-//                   })
-//             ],
-//           );
-//         });
-//   }
-// }

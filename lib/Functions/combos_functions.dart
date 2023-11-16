@@ -17,11 +17,16 @@ Future<List<DropdownMenuItem<Category>>> fetchCategories() async {
             value: category,
             child: Row(
               children: [
-                Image.file(
-                  File(category.imageUrl!),
-                  width: 35,
+                category.imageUrl != null 
+                    ? Image.file(
+                        File(category.imageUrl!),
+                        width: 35,
+                        height: 35,
+                      )
+                    : SizedBox(
                   height: 35,
-                ),
+                  width: 35,
+                  child: Image.asset('assets/images/no-image-available.png')),
                 const SizedBox(width: 8),
                 Text(category.categoryName!),
               ],
@@ -39,7 +44,10 @@ List<DropdownMenuItem<Product>> fetchProducts(Category selectedCategory) {
     final product = allProducts.firstWhere(
       (product) => product.productID == productID,
       orElse: () => Product(
-          prodname: "Product not found", prodprice: null, prodimgUrl: null),
+          description: '',
+          prodname: "Product not found",
+          prodprice: null,
+          prodimgUrl: null),
     );
     return DropdownMenuItem<Product>(
       value: product,
@@ -58,7 +66,7 @@ List<DropdownMenuItem<Product>> fetchProducts(Category selectedCategory) {
           const SizedBox(
             width: 10,
           ),
-          Text(product.prodname!),
+          SizedBox(width:80,child: Text(product.prodname!,overflow: TextOverflow.fade,)),
         ],
       ),
     );
@@ -178,9 +186,9 @@ deleteComboDialog(
 
                   Navigator.of(context).pop();
 
-                  print('deleted id = ${combo.comboID!}');
+                  log('deleted id = ${combo.comboID!}');
                 } else {
-                  print('deletion error');
+                  log('deletion error');
                 }
               },
             )
