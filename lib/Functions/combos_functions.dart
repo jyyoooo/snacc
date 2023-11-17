@@ -78,7 +78,7 @@ List<DropdownMenuItem<Product>> fetchProducts(Category selectedCategory) {
 final ValueNotifier<List<ComboModel>> comboListNotifier = ValueNotifier([]);
 
 Future<bool> createCombo(
-    Product? productOne, Product? productTwo, String? comboImage) async {
+    Product? productOne, Product? productTwo, String? comboImage,String? description) async {
   if (productOne == null || productTwo == null) {
     return false;
   }
@@ -97,7 +97,10 @@ Future<bool> createCombo(
       comboName: comboName,
       comboImgUrl: comboImage,
       comboPrice: comboPrice,
-      comboItems: comboItems);
+      comboItems: comboItems,
+      description: description
+      );
+      
 
   final id = await comboBox.add(newCombo);
   newCombo.comboID = id;
@@ -178,8 +181,10 @@ deleteComboDialog(
           // content: const Text('tap outside to cancel',style: TextStyle(color: Colors.grey),),
           actions: <Widget>[
             SnaccButton(
+              width: 90,
+              textColor: Colors.white,
               btncolor: Colors.red,
-              inputText: 'Delete',
+              inputText: 'DELETE',
               callBack: () {
                 if (combo.comboID != null) {
                   deleteCombo(combo.comboID!);

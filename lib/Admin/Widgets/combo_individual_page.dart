@@ -144,6 +144,16 @@ class _ComboItemPageState extends State<ComboItemPage> {
               ],
             ),
           ),
+          widget.combo!.description != null
+              ? Padding(
+                  padding: const EdgeInsets.fromLTRB(40, 10, 25, 10),
+                  child: Text(
+                    widget.combo!.description!,
+                    style: GoogleFonts.nunitoSans(
+                        fontSize: 17, color: Colors.grey),
+                  ),
+                )
+              : const SizedBox.shrink()
         ],
       ),
     );

@@ -11,6 +11,7 @@ import 'package:snacc/Functions/combos_functions.dart';
 import 'package:snacc/Functions/image_picker.dart';
 import 'package:snacc/Widgets/snacc_button.dart';
 import 'package:snacc/Widgets/snacc_appbar.dart';
+import 'package:snacc/Widgets/snacc_textfield.dart';
 
 class PopularCombo extends StatefulWidget {
   // final void Function(ComboModel) onComboCreated;
@@ -24,6 +25,7 @@ class PopularCombo extends StatefulWidget {
 }
 
 class _PopularComboState extends State<PopularCombo> {
+  TextEditingController description = TextEditingController();
   Product? selectedProduct;
   Product? productOne;
   Product? productTwo;
@@ -45,6 +47,7 @@ class _PopularComboState extends State<PopularCombo> {
                 fontWeight: FontWeight.bold, fontSize: 23),
           )),
       body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Column(
@@ -93,18 +96,20 @@ class _PopularComboState extends State<PopularCombo> {
                         children: [
                           Text(
                             ' ${comboName ??= 'Combo Name'}',
-                            style:  GoogleFonts.nunitoSans(
+                            style: GoogleFonts.nunitoSans(
                                 fontSize: 17, fontWeight: FontWeight.w500),
                           ),
                           Text(
                             '₹ ${comboPrice ??= 0.00}',
-                            style:  GoogleFonts.nunitoSans(
+                            style: GoogleFonts.nunitoSans(
                                 fontSize: 17, fontWeight: FontWeight.w500),
                           )
                         ],
                       ),
                     )),
               ),
+              SnaccTextField(
+                  controller: description, label: 'Combo description'),
               const SizedBox(
                 height: 20,
               ),
@@ -158,12 +163,13 @@ class _PopularComboState extends State<PopularCombo> {
                   inputText: 'CREATE COMBO',
                   callBack: () async {
                     final comboCreated =
-                        await createCombo(productOne, productTwo, pickedImage);
+                        await createCombo(productOne, productTwo, pickedImage,description.text);
 
                     if (comboCreated == true) {
                       setState(() {});
                       Fluttertoast.showToast(
                           backgroundColor: Colors.green, msg: "Combo Created!");
+                      Navigator.pop(context);
                     } else {
                       Fluttertoast.showToast(
                           backgroundColor: Colors.red,

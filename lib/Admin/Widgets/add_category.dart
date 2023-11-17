@@ -120,6 +120,7 @@ class AddCategoryModalSheetState extends State<AddCategoryModalSheet> {
                   setState(() {
                     catgoryNameCtrl.clear();
                     selectedCategoryImageUrl = null;
+                    Navigator.pop(context);
                   });
                 },
                 inputText: 'ADD CATEGORY',

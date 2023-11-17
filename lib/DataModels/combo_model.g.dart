@@ -23,13 +23,13 @@ class ComboModelAdapter extends TypeAdapter<ComboModel> {
       comboName: fields[1] as String?,
       comboPrice: fields[2] as double?,
       isFavorite: fields[5] as bool?,
-    );
+    )..description = fields[6] as String?;
   }
 
   @override
   void write(BinaryWriter writer, ComboModel obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.comboID)
       ..writeByte(1)
@@ -41,7 +41,9 @@ class ComboModelAdapter extends TypeAdapter<ComboModel> {
       ..writeByte(4)
       ..write(obj.comboItems)
       ..writeByte(5)
-      ..write(obj.isFavorite);
+      ..write(obj.isFavorite)
+      ..writeByte(6)
+      ..write(obj.description);
   }
 
   @override

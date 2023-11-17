@@ -97,6 +97,7 @@ flutter:
     - assets/images/theaterPeople.png
     - assets/images/offer1.jpeg
     - assets/images/offer2.jpg
+    - assets/images/Admin_page/ad_items.png
     - assets/images/theater_items/screen.svg
     - assets/images/theater_items/selected.svg
     - assets/images/theater_items/unselected.svg

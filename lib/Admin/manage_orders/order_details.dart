@@ -79,7 +79,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                   buildOrderStatusPicker(
                       OrderStatus.processingOrder,
                       'Processing Order',
-                      'Placed order is pending updation',
+                      'Food is being prepared',
                       const Icon(
                         Icons.circle,
                         color: Colors.yellow,
@@ -88,7 +88,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                   buildOrderStatusPicker(
                       OrderStatus.outforDelivery,
                       'Out for Delivery',
-                      'Placed order is pending updation',
+                      'Food is handed over to a delivery person',
                       const Icon(
                         Icons.circle,
                         color: Colors.lightGreen,
@@ -97,7 +97,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                   buildOrderStatusPicker(
                       OrderStatus.delivered,
                       'Delivered',
-                      'Placed order is pending updation',
+                      'Food is delivered',
                       const Icon(
                         Icons.circle,
                         color: Colors.green,
@@ -106,7 +106,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                   buildOrderStatusPicker(
                       OrderStatus.cancelled,
                       'Cancelled',
-                      'Placed order is pending updation',
+                      'Order has been cancelled',
                       const Icon(
                         Icons.circle,
                         color: Colors.red,

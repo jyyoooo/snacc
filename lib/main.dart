@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:snacc/Admin/admin_home.dart';
 import 'package:snacc/Admin/build_popular_combo.dart';
 import 'package:snacc/Admin/manage_orders/manage_orders.dart';
-// import 'package:snacc/Admin/create_popular_combo.dart';
 import 'package:snacc/DataModels/combo_model.dart';
 import 'package:snacc/DataModels/order_model.dart';
 import 'package:snacc/DataModels/user_model.dart';
@@ -23,7 +22,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
 
-  // await Firebase.initializeApp();
 
   if (!Hive.isAdapterRegistered(CategoryAdapter().typeId) &&
       !Hive.isAdapterRegistered(ProductAdapter().typeId) &&
@@ -46,14 +44,20 @@ void main() async {
   await Hive.openBox<UserModel>('userinfo');
   await Hive.openBox<ComboModel>('combos');
   await Hive.openBox<Product>('products');
+  await Hive.openBox<String>('carousel');
 
   runApp(ChangeNotifierProvider(
       create: (context) => SeatScreenData(), child: const MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

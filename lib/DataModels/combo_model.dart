@@ -31,6 +31,6 @@ class ComboModel {
       this.comboItems,
       this.comboName,
       this.comboPrice,
+      this.description,
       this.isFavorite = false});
-   
 }

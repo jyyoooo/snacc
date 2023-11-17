@@ -7,12 +7,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:snacc/Admin/Widgets/add_category.dart';
 import 'package:snacc/Admin/Widgets/carousel.dart';
+import 'package:snacc/Admin/Widgets/carousel_management.dart';
 import 'package:snacc/Admin/Widgets/combo_list_builder.dart';
 import 'package:snacc/Admin/products.dart';
 import 'package:snacc/DataModels/category_model.dart';
 import 'package:snacc/Functions/admin_functions.dart';
 import 'package:snacc/Functions/category_functions.dart';
 
+import 'Widgets/categories_list.dart';
 
 class AdminHome extends StatefulWidget {
   const AdminHome({super.key});
@@ -30,7 +32,7 @@ class _AdminHomeState extends State<AdminHome> {
     super.initState();
     final categorieslist = Hive.box<Category>('category').values.toList();
     categoryListNotifier.value = categorieslist;
-    log("catlist from init: $categorieslist");
+    log("catlist from init: ${categorieslist.map((e) => e.categoryName)}");
   }
 
   final _formKey = GlobalKey<FormState>();
@@ -38,29 +40,23 @@ class _AdminHomeState extends State<AdminHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-    
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: .4,
         title: Text(
-          'Welcome back, Admin',
+          'Welcome back Admin',
           style: GoogleFonts.nunitoSans(
               fontSize: 20, color: Colors.black87, fontWeight: FontWeight.bold),
         ),
-        actions: [
-          clearData()
-        ],
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Container(
-              decoration: BoxDecoration(
-                  color: Colors.grey[200],
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Card(
+              shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -81,16 +77,18 @@ class _AdminHomeState extends State<AdminHome> {
                 ],
               ),
             ),
-            const Gap(5),
+          ),
+          const Gap(5),
 
-            // CATEGORY LIST
-            const CategoriesList(),
+          // CATEGORY LIST
+          CategoriesList(),
 
-            const Gap(8),
+          const Gap(8),
 
-            Container(
-              decoration: BoxDecoration(
-                  color: Colors.grey[200],
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Card(
+              shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -99,21 +97,30 @@ class _AdminHomeState extends State<AdminHome> {
                       style: GoogleFonts.nunitoSans(
                           fontSize: 20, fontWeight: FontWeight.bold)),
                   IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const CarouselManagement()));
+                      },
                       icon: const Icon(
                           size: 30, color: Colors.blue, Icons.add_rounded)),
                 ],
               ),
             ),
-            const Gap(8),
+          ),
 
-            // CAROUSEL
+          // CAROUSEL
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SnaccCarousel(),
+          ),
 
-            SnaccCarousel(),
-            const Gap(8),
-            Container(
-              decoration: BoxDecoration(
-                  color: Colors.grey[200],
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Card(
+              shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -132,131 +139,16 @@ class _AdminHomeState extends State<AdminHome> {
                 ],
               ),
             ),
-            const Gap(10),
+          ),
+          const Gap(10),
 
-            const ComboListBuilder(
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: ComboListBuilder(
               isAdmin: true,
-            )
-          ]),
-        ),
-      ),
-    );
-  }
-
-
-}
-
-
-// WIDGETS
-
-
-class CategoriesList extends StatefulWidget {
-  const CategoriesList({Key? key}) : super(key: key);
-
-  @override
-  CategoriesListState createState() => CategoriesListState();
-}
-
-class CategoriesListState extends State<CategoriesList> {
-  late List<Category> categoryList; 
-
-  @override
-  void initState() {
-    super.initState();
-    categoryList = categoryListNotifier.value; 
-    log('initstate');
-  }
-
-  // @override
-  // void didUpdateWidget(CategoriesList oldWidget) {
-  //   super.didUpdateWidget(oldWidget);
-  //   if (categoryList != categoryListNotifier.value) {
-  //     setState(() {
-  //       categoryList = categoryListNotifier.value;
-  //       log('didUpdatewigt');
-  //     });
-  //   }
-  // }
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 100,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          ValueListenableBuilder(
-            valueListenable: categoryListNotifier,
-            builder: (BuildContext context, List<Category> categoryList,
-                Widget? child) {
-              return Expanded(
-                child: categoryList.isNotEmpty
-                    ? ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        physics: const BouncingScrollPhysics(),
-                        itemCount: categoryList.length,
-                        itemBuilder: (context, index) {
-                          final category = categoryList[index];
-                          return InkWell(
-                            onLongPress: () {
-                              deleteCategoryDialog(context, category);
-                            },
-                            onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => ListProducts(
-                                  categoryName: category.categoryName,
-                                  categoryID: category.categoryID,
-                                ),
-                              ));
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 8.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(50),
-                                    child: category.imageUrl == null
-                                        ? Container(
-                                            width: 70,
-                                            height: 70,
-                                            color: Colors.transparent,
-                                            child: Image.asset(
-                                              'assets/images/no-image-available.png',
-                                              height: 40,
-                                            ),
-                                          )
-                                        : Container(
-                                            width: 70,
-                                            height: 70,
-                                            color: Colors.transparent,
-                                            child: Image.file(
-                                                File(category.imageUrl!)),
-                                          ),
-                                  ),
-                                  const Gap(5),
-                                  Text(
-                                    category.categoryName!,
-                                    style: GoogleFonts.nunitoSans(fontWeight: FontWeight.w600),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      )
-                    : Center(
-                        child: Text(
-                          'No Categories found',
-                          style: GoogleFonts.nunitoSans(color: Colors.grey,fontSize: 17),
-                        ),
-                      ),
-              );
-            },
+            ),
           )
-        ],
+        ]),
       ),
     );
   }

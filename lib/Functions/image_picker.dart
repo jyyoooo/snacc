@@ -35,27 +35,30 @@ Future<String?> pickImageFromGallery() async {
 
   try {
     isPickerActive = true;
-    log('image picker Activated');
+    log('Image picker activated');
 
     final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
 
     if (pickedImage == null) {
-      return '';
+      log('No image selected');
+      return null; 
     }
 
-    log('pickedimg path: ${pickedImage.path}');
+    log('Picked image path: ${pickedImage.path}');
     return pickedImage.path;
   } on PlatformException catch (e) {
     Fluttertoast.showToast(
-      msg: 'Uh-Oh! Something went wrong. Try again later.', backgroundColor: Colors.blue
+      msg: 'Uh-Oh! Something went wrong. Try again later.',
+      backgroundColor: Colors.blue,
     );
-    log('somethings wrong: $e');
+    log('Something went wrong: $e');
     return null;
   } finally {
     isPickerActive = false;
-    log('image picker deactivated');
+    log('Image picker deactivated');
   }
 }
+
 
 
 

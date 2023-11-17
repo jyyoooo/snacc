@@ -75,7 +75,7 @@ class _ComboListBuilderState extends State<ComboListBuilder> {
                           children: [
                             SizedBox(
                               width: 130,
-                              height: 130,
+                              height: 120,
                               child: combo.comboImgUrl != null
                                   ? Image.file(File(combo.comboImgUrl!))
                                   : SizedBox(
@@ -88,10 +88,10 @@ class _ComboListBuilderState extends State<ComboListBuilder> {
                               padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                               child: Text(
                                 combo.comboName!,
-                                style: GoogleFonts.nunitoSans(
-                                    fontSize: 17, fontWeight: FontWeight.w500),
-                                textAlign: TextAlign.start,
-                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.nunitoSans(fontSize: 15,
+                                        fontWeight: FontWeight.normal),
+                                textAlign: TextAlign.center,
+                                overflow: TextOverflow.visible,
                               ),
                             ),
                             Padding(

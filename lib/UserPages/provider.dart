@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 class SeatScreenData extends ChangeNotifier {
@@ -7,6 +9,19 @@ class SeatScreenData extends ChangeNotifier {
   void updateData(String seat, int screen) {
     selectedSeatNumber = seat;
     selectedScreenNumber = screen;
+    notifyListeners();
+  }
+}
+
+
+class CarouselNotifier extends ChangeNotifier {
+  bool _carouselChanged = false;
+
+  bool get carouselChanged => _carouselChanged;
+
+  void updateCarousel() {
+    _carouselChanged = true;
+    log('carousel changed $_carouselChanged');
     notifyListeners();
   }
 }

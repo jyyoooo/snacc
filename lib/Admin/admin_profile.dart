@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:snacc/Admin/Widgets/manage_store.dart';
 import 'package:snacc/DataModels/order_model.dart';
 import 'package:snacc/Functions/login_functions.dart';
 import 'package:snacc/Widgets/snacc_appbar.dart';
@@ -66,6 +67,31 @@ class AdminAccount extends StatelessWidget {
                 const Gap(20),
                 SnaccTileButton(
                     onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const ManageStore()));
+                    },
+                    icon: Icon(
+                      Icons.storefront_outlined,
+                      color: Colors.blue[800],
+                    ),
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Manage Store',
+                          style: GoogleFonts.nunitoSans(),
+                        ),
+                        const Gap(5),
+                        Icon(
+                          Icons.warning_rounded,
+                          color: Colors.amber[600],
+                        )
+                      ],
+                    )),
+                SnaccTileButton(
+                    onPressed: () {
                       logOutAdmin(context);
                     },
                     icon: const Icon(
@@ -76,27 +102,6 @@ class AdminAccount extends StatelessWidget {
                       'Logout Admin',
                       style: GoogleFonts.nunitoSans(color: Colors.red),
                     )),
-                SnaccTileButton(
-                    onPressed: () {
-                      Hive.box<Order>('orders').clear();
-                    },
-                    icon: const Icon(
-                      Icons.delete_sweep,
-                      color: Colors.red,
-                    ),
-                    title: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Delete All Orders',
-                          style: GoogleFonts.nunitoSans(color: Colors.red),
-                        ),
-                        const Gap(5),
-                        Icon(
-                          Icons.warning_rounded,
-                          color: Colors.amber[600],
-                        )
-                      ],
-                    ))
               ],
             ),
             // const Gap(400),
