@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
+import 'package:provider/provider.dart';
 import 'package:snacc/Admin/Widgets/add_category.dart';
 import 'package:snacc/Admin/Widgets/carousel.dart';
 import 'package:snacc/Admin/Widgets/carousel_management.dart';
@@ -13,6 +14,7 @@ import 'package:snacc/Admin/products.dart';
 import 'package:snacc/DataModels/category_model.dart';
 import 'package:snacc/Functions/admin_functions.dart';
 import 'package:snacc/Functions/category_functions.dart';
+import 'package:snacc/UserPages/provider.dart';
 
 import 'Widgets/categories_list.dart';
 
@@ -32,13 +34,15 @@ class _AdminHomeState extends State<AdminHome> {
     super.initState();
     final categorieslist = Hive.box<Category>('category').values.toList();
     categoryListNotifier.value = categorieslist;
-    log("catlist from init: ${categorieslist.map((e) => e.categoryName)}");
+    log("current categories: ${categorieslist.map((e) => e.categoryName)}");
   }
 
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<CarouselNotifier>(context);
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -112,9 +116,16 @@ class _AdminHomeState extends State<AdminHome> {
           ),
 
           // CAROUSEL
+
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: SnaccCarousel(),
+            child: Consumer<CarouselNotifier>(
+              builder: (context, carouselNotifier, child) {
+                return SnaccCarousel(
+                  carouselImages: Hive.box<String>('carousel').values.toList(),
+                );
+              },
+            ),
           ),
 
           Padding(

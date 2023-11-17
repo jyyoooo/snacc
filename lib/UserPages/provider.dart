@@ -20,8 +20,8 @@ class CarouselNotifier extends ChangeNotifier {
   bool get carouselChanged => _carouselChanged;
 
   void updateCarousel() {
+    log('CarouselNotifier: Updating carousel');
     _carouselChanged = true;
-    log('carousel changed $_carouselChanged');
     notifyListeners();
   }
 }

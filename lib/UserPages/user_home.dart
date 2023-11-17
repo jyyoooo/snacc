@@ -33,6 +33,7 @@ class _UserHomeState extends State<UserHome> {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<CarouselNotifier>(context);
     return Scaffold(
       extendBody: true,
       appBar: AppBar(
@@ -136,7 +137,14 @@ class _UserHomeState extends State<UserHome> {
                   style: GoogleFonts.nunitoSans(
                       fontSize: 23, fontWeight: FontWeight.bold)),
               const Gap(5),
-              SnaccCarousel(),
+              Consumer<CarouselNotifier>(
+                builder: (context, carouselNotifier, child) {
+                  return SnaccCarousel(
+                    carouselImages:
+                        Hive.box<String>('carousel').values.toList(),
+                  );
+                },
+              ),
               const SizedBox(
                 height: 8,
               ),

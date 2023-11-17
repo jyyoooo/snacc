@@ -122,6 +122,7 @@ class _CarouselManagementState extends State<CarouselManagement> {
                         fontSize: 20, fontWeight: FontWeight.bold)),
               ],
             ),
+            const Gap(5),
             Text(
               'Ascpect ratio of 18:6 is recommended for offer card',
               style: GoogleFonts.nunitoSans(color: Colors.blue),
@@ -164,7 +165,10 @@ class _CarouselManagementState extends State<CarouselManagement> {
               inputText: '',
               callBack: () async {
                 _selectedImage = await pickImageFromGallery();
-                setState(() {});
+                setState(() {
+                  Provider.of<CarouselNotifier>(context, listen: false)
+                      .updateCarousel();
+                });
               },
             ),
             const SizedBox(height: 20),
@@ -176,8 +180,11 @@ class _CarouselManagementState extends State<CarouselManagement> {
                 if (_selectedImage != null) {
                   final carouselBox = Hive.box<String>('carousel');
                   carouselBox.add(_selectedImage!);
-                  _loadCarouselImages(); // Reload the images after adding a new one
-                  setState(() {});
+                  _loadCarouselImages();
+                  setState(() {
+                    Provider.of<CarouselNotifier>(context, listen: false)
+                        .updateCarousel();
+                  });
                 }
               },
             ),
@@ -213,7 +220,10 @@ class _CarouselManagementState extends State<CarouselManagement> {
                         final carouselBox = Hive.box<String>('carousel');
                         carouselBox.deleteAt(index);
                         _loadCarouselImages();
-                        setState(() {});
+                        setState(() {
+                          Provider.of<CarouselNotifier>(context, listen: false)
+                              .updateCarousel();
+                        });
                         Navigator.pop(context);
                         Fluttertoast.showToast(
                             msg: 'Image deleted',
@@ -222,8 +232,5 @@ class _CarouselManagementState extends State<CarouselManagement> {
                 ],
               ));
     }
-    
   }
 }
-
-// Provider.of<CarouselNotifier>(context, listen: false).updateCarousel();

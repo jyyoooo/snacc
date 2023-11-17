@@ -22,7 +22,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
 
-
   if (!Hive.isAdapterRegistered(CategoryAdapter().typeId) &&
       !Hive.isAdapterRegistered(ProductAdapter().typeId) &&
       !Hive.isAdapterRegistered(UserModelAdapter().typeId) &&
@@ -46,8 +45,15 @@ void main() async {
   await Hive.openBox<Product>('products');
   await Hive.openBox<String>('carousel');
 
-  runApp(ChangeNotifierProvider(
-      create: (context) => SeatScreenData(), child: const MyApp()));
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => SeatScreenData()),
+        ChangeNotifierProvider(create: (context) => CarouselNotifier()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
