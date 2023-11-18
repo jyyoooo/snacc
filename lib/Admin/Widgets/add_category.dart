@@ -14,7 +14,7 @@ class AddCategoryModalSheet extends StatefulWidget {
 
   static void show(BuildContext context, GlobalKey<FormState> formKey) {
     showModalBottomSheet(
-      constraints: const BoxConstraints.tightForFinite(height: 650),
+      constraints: const BoxConstraints.expand(),
       useSafeArea: true,
       isScrollControlled: true,
       showDragHandle: true,

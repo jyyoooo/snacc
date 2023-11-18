@@ -8,13 +8,11 @@ import '../../DataModels/order_model.dart';
 
 class TrackOrders extends StatelessWidget {
   final int userID;
-  const TrackOrders({super.key, required this.userID});
+
+  const TrackOrders({Key? key, required this.userID}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
-    int? ordersLength;
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -28,51 +26,58 @@ class TrackOrders extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Text(
-              '${ordersLength ?? 0} Active orders',
-              style: GoogleFonts.nunitoSans(),
-            ),
-            const Gap(10),
-            FutureBuilder(
-                future: fetchUserOrders(userID),
-                builder: (context, snapshot) {
-                  ordersLength = snapshot.data?.length;
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
-                  } else if (snapshot.hasError) {
-                    log('order snapshot has error');
-                    return const Text('Error loading Orders');
-                  } else if (snapshot.hasData) {
-                    List<Order> userOrders = snapshot.data!.reversed.toList();
-                    return ListView.builder(
-                      physics: const BouncingScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: userOrders.length,
-                      itemBuilder: (context, index) {
-                        final order = userOrders[index];
+        child: FutureBuilder(
+          future: fetchUserOrders(userID),
+          builder: (context, AsyncSnapshot<List<Order>> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return const Center(child: Text('Error loading Orders'));
+            } else if (snapshot.hasData) {
+              List<Order> userOrders = snapshot.data!.reversed.toList();
+              int ordersLength = userOrders.length;
 
-                        if (order.status == OrderStatus.cancelled) {
-                          return const SizedBox.shrink();
-                        } else {
-                          return OrderItem(order: order);
-                        }
-                      },
-                    );
-                  } else {
-                    return const Text('No Orders');
-                  }
-                }),
-          ],
+              return Column(
+                children: [
+                  Text(
+                    '$ordersLength Active orders',
+                    style: GoogleFonts.nunitoSans(),
+                  ),
+                  const Gap(10),
+                  Expanded(
+                    child: userOrders.isNotEmpty
+                        ? ListView.builder(
+                            physics: const BouncingScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: userOrders.length,
+                            itemBuilder: (context, index) {
+                              final order = userOrders[index];
+
+                              if (order.status == OrderStatus.cancelled) {
+                                return const SizedBox.shrink();
+                              } else {
+                                return OrderItem(order: order);
+                              }
+                            },
+                          )
+                        : Center(
+                            child: Text(
+                            'No Orders',
+                            style: GoogleFonts.nunitoSans(
+                                color: Colors.grey, fontSize: 15),
+                          )),
+                  ),
+                ],
+              );
+            } else {
+              return const Center(child: Text('No Orders'));
+            }
+          },
         ),
       ),
     );
   }
 }
-
-
-
 
 class OrderItem extends StatelessWidget {
   const OrderItem({
@@ -88,64 +93,50 @@ class OrderItem extends StatelessWidget {
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => TrackSnacc(
-                  order: order,isHistory: false,
+                  order: order,
+                  isHistory: false,
                 )));
       },
       child: Card(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         child: Padding(
-          padding:
-              const EdgeInsets.fromLTRB(8, 12, 16, 8),
+          padding: const EdgeInsets.fromLTRB(8, 12, 16, 8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                mainAxisAlignment:
-                    MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const SizedBox(width: 10),
                   Expanded(
                     child: Column(
-                      crossAxisAlignment:
-                          CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
-                          mainAxisAlignment:
-                              MainAxisAlignment
-                                  .spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Column(
-                              crossAxisAlignment:
-                                  CrossAxisAlignment
-                                      .start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   'Order ID: ${order.orderID}',
-                                  style: GoogleFonts
-                                      .nunitoSans(
-                                          fontSize: 18,
-                                          fontWeight:
-                                              FontWeight
-                                                  .bold),
+                                  style: GoogleFonts.nunitoSans(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
                                 ),
-                                
                                 const Gap(10),
                                 Text(
                                     '${getFormattedOrderedTime(order.orderDateTime)}')
                               ],
                             ),
                             Column(
-                              crossAxisAlignment:
-                                  CrossAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text(
                                   '₹${order.orderPrice}',
-                                  style: GoogleFonts
-                                      .nunitoSans(
+                                  style: GoogleFonts.nunitoSans(
                                     color: Colors.black,
-                                    fontWeight:
-                                        FontWeight.w500,
+                                    fontWeight: FontWeight.w500,
                                     fontSize: 18,
                                   ),
                                 ),
@@ -162,17 +153,12 @@ class OrderItem extends StatelessWidget {
                                     const Gap(10),
                                     Text(
                                       'See Status',
-                                      style: GoogleFonts
-                                          .nunitoSans(
-                                              color: Colors
-                                                  .blue,
-                                              fontWeight:
-                                                  FontWeight
-                                                      .normal),
+                                      style: GoogleFonts.nunitoSans(
+                                          color: Colors.blue,
+                                          fontWeight: FontWeight.normal),
                                     ),
                                     const Icon(
-                                      Icons
-                                          .keyboard_arrow_right_rounded,
+                                      Icons.keyboard_arrow_right_rounded,
                                       color: Colors.blue,
                                     ),
                                   ],

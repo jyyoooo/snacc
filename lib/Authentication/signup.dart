@@ -79,16 +79,25 @@ class _SignUpState extends State<SignUp> {
                       label: 'Password',
                       controller: passctrl,
                       validationMessage: 'Enter your password',
+                       showText: false,
+
                     ),
                     SnaccTextField(
                       obscureText: true,
                       label: 'Confrim password',
                       controller: confirmctrl,
                       validationMessage: 'Confirm your password',
+                      showText: false,
                     ),
                     const Gap(20),
                     Center(
                         child: SnaccButton(
+                      btncolor: Colors.amber,
+                      textColor: Colors.black,
+                      inputText: 'REGISTER',
+                      btnRadius: 15,
+                      width: 250,
+                      height: 45,
                       callBack: () async {
                         bool userCheck = false;
                         final String username = namectrl.text.trim();
@@ -127,8 +136,6 @@ class _SignUpState extends State<SignUp> {
                           log('oops signup failed');
                         }
                       },
-                      textColor: Colors.white,
-                      inputText: 'REGISTER',
                     )),
                     const Gap(30),
                     GestureDetector(

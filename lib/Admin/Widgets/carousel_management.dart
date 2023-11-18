@@ -184,7 +184,10 @@ class _CarouselManagementState extends State<CarouselManagement> {
                   setState(() {
                     Provider.of<CarouselNotifier>(context, listen: false)
                         .updateCarousel();
+                        Fluttertoast.showToast(msg: 'Carousel image added',backgroundColor: Colors.blue);
                   });
+                }else{
+                  Fluttertoast.showToast(msg: 'Pick an image first',backgroundColor: Colors.blue);
                 }
               },
             ),
@@ -226,8 +229,8 @@ class _CarouselManagementState extends State<CarouselManagement> {
                         });
                         Navigator.pop(context);
                         Fluttertoast.showToast(
-                            msg: 'Image deleted',
-                            backgroundColor: Colors.amber);
+                            msg: 'Carousel image deleted',
+                            backgroundColor: Colors.red);
                       })
                 ],
               ));

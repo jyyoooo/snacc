@@ -56,6 +56,7 @@ class _UserListProductsState extends State<UserListProducts> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -68,16 +69,16 @@ class _UserListProductsState extends State<UserListProducts> {
         physics: const BouncingScrollPhysics(),
         child: Padding(
           padding: const EdgeInsets.all(10.0),
-          child: productListNotifier.value!.isNotEmpty &&
+          child: productListNotifier.value.isNotEmpty &&
                   productListNotifier.value != null
               ? ValueListenableBuilder(
                   valueListenable: productListNotifier,
                   builder: (context, productlist, child) => ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: productListNotifier.value?.length,
+                    itemCount: productListNotifier.value.length,
                     itemBuilder: (context, index) {
-                      final product = productlist?[index];
+                      final product = productlist[index];
 
                       return GestureDetector(
                         onTap: () {
@@ -225,7 +226,7 @@ class _UserListProductsState extends State<UserListProducts> {
                   heightFactor: 40,
                   child: Text(
                     'No Products found',
-                    style: TextStyle(color: Colors.grey),
+                    style: TextStyle(color: Colors.grey, fontSize: 15),
                   )),
         ),
       ),

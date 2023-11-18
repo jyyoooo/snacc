@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:snacc/Admin/admin_profile.dart';
 import 'package:snacc/DataModels/user_model.dart';
 import 'package:snacc/Functions/favorites_functions.dart';
-import 'package:snacc/Functions/login_functions.dart';
 import 'dart:ui';
 import 'package:snacc/UserPages/Your%20Bag/bag.dart';
 import 'package:snacc/UserPages/favorites.dart';
@@ -30,6 +28,7 @@ class _UserNavigationState extends State<UserNavigation> {
   void initState() {
     super.initState();
 
+    selectedIndex = 0;
     userFuture = getUser();
     userFuture.then((user) {
       setState(() {
@@ -55,7 +54,7 @@ class _UserNavigationState extends State<UserNavigation> {
             if (snapshot.connectionState == ConnectionState.done) {
               return routes[selectedIndex];
             }
-            return const CircularProgressIndicator();
+            return const Center(child: CircularProgressIndicator());
           }),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
@@ -69,39 +68,38 @@ class _UserNavigationState extends State<UserNavigation> {
                     selectedIndex = index;
                   });
                 },
-                // backgroundColor: Colors.grey,
-                elevation: .0,
+                elevation: 0,
                 unselectedItemColor: Colors.black54,
                 selectedItemColor: Colors.amber,
                 currentIndex: selectedIndex,
                 showUnselectedLabels: false,
                 showSelectedLabels: true,
                 iconSize: 24,
-                items: [
+                items: const [
                   BottomNavigationBarItem(
-                      backgroundColor: const Color.fromARGB(30, 112, 112, 112),
-                      icon: selectedIndex == 0
-                          ? const Icon(Icons.home_rounded)
-                          : const Icon(Icons.home_outlined),
+                      tooltip: 'Home',
+                      backgroundColor: Color.fromARGB(30, 112, 112, 112),
+                      icon: Icon(Icons.home_outlined),
+                      activeIcon: Icon(Icons.home_rounded),
                       label: 'Home'),
                   BottomNavigationBarItem(
-                      backgroundColor: const Color.fromARGB(30, 112, 112, 112),
-                      icon: selectedIndex == 1
-                          ? const Icon(Icons.favorite_rounded)
-                          : const Icon(Icons.favorite_border_rounded),
+                      tooltip: 'Favorites',
+                      backgroundColor: Color.fromARGB(30, 112, 112, 112),
+                      icon: Icon(Icons.favorite_border_rounded),
+                      activeIcon: Icon(Icons.favorite_rounded),
                       label: 'Favorite'),
                   BottomNavigationBarItem(
-                      backgroundColor: const Color.fromARGB(30, 112, 112, 112),
-                      icon: selectedIndex == 2
-                          ? const Icon(Icons.shopping_bag_rounded)
-                          : const Icon(Icons.shopping_bag_outlined),
+                      tooltip: 'Your Bag',
+                      backgroundColor: Color.fromARGB(30, 112, 112, 112),
+                      icon: Icon(Icons.shopping_bag_outlined),
+                      activeIcon: Icon(Icons.shopping_bag_rounded),
                       label: 'Bag'),
                   BottomNavigationBarItem(
-                      backgroundColor: const Color.fromARGB(30, 112, 112, 112),
-                      icon: selectedIndex == 3
-                          ? const Icon(Icons.account_circle_rounded)
-                          : const Icon(Icons.account_circle_outlined),
-                      label: 'Account')
+                      tooltip: 'Your Profile',
+                      backgroundColor: Color.fromARGB(30, 112, 112, 112),
+                      icon: Icon(Icons.account_circle_outlined),
+                      activeIcon: Icon(Icons.account_circle_rounded),
+                      label: 'Profile')
                 ]),
           ),
         ),

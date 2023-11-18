@@ -56,7 +56,7 @@ class _FavoritesState extends State<Favorites> {
                     'Remove All',
                     style: GoogleFonts.nunitoSans(
                         color: Colors.red,
-                        fontSize: 15,
+                        fontSize: 14,
                         fontWeight: FontWeight.w400),
                   ))
               : TextButton(
@@ -65,7 +65,7 @@ class _FavoritesState extends State<Favorites> {
                     'Remove All',
                     style: GoogleFonts.nunitoSans(
                         color: Colors.grey,
-                        fontSize: 15,
+                        fontSize: 14,
                         fontWeight: FontWeight.w400),
                   ))
         ],
@@ -238,8 +238,8 @@ class _ComboListItemState extends State<ComboListItem> {
                                         ? removeItemFromBag(widget.index!)
                                         : removeComboFromFavorites(
                                             widget.combo);
-                                    widget.favlist.notifyListeners();
                                     setState(() {});
+                                    widget.favlist.notifyListeners();
                                   },
                                   icon: const Icon(
                                     Icons.close_rounded,
@@ -381,8 +381,8 @@ class _ProductListItemState extends State<ProductListItem> {
                                             widget.product,
                                             widget.user,
                                             widget.favlist);
-                                    widget.favlist.notifyListeners();
                                     setState(() {});
+                                    widget.favlist.notifyListeners();
                                   },
                                   icon: const Icon(
                                     Icons.close_rounded,

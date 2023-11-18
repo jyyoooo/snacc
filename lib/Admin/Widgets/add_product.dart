@@ -23,7 +23,7 @@ class AddProductModalSheet extends StatefulWidget {
       int categoryID, productListNotifier) {
     showModalBottomSheet(
         backgroundColor: Colors.white,
-        constraints: BoxConstraints.loose(const Size.fromHeight(700)),
+        constraints: const BoxConstraints.expand(),
         useSafeArea: true,
         isScrollControlled: true,
         showDragHandle: true,
@@ -128,14 +128,15 @@ class AddProductModalSheetState extends State<AddProductModalSheet> {
                 widget.productListNotifier.notifyListeners();
                 Fluttertoast.showToast(
                     msg: '$productName added', backgroundColor: Colors.amber);
+                Navigator.pop(context);
               } else {
                 Fluttertoast.showToast(
                     msg: 'Oops, Fields are empty!',
                     backgroundColor: Colors.red);
               }
-
               productnamectrl.clear();
               productpricectrl.clear();
+              selectedProductImgUrl = null;
             },
             inputText: 'ADD PRODUCT',
           )

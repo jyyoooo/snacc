@@ -71,20 +71,27 @@ class Login extends StatelessWidget {
                           label: 'Enter your password',
                           controller: passCtrl,
                           validationMessage: 'You must enter your password',
+                          showText: false,
                         ),
                       ],
                     ),
                   ),
-            
+
                   const SizedBox(
                     height: 15,
                   ),
                   Center(
                       child: SnaccButton(
+                    inputText: 'LOGIN',
+                    btncolor: Colors.amber,
+                    textColor: Colors.black,
+                    btnRadius: 15,
+                    width: 250,
+                    height: 45,
                     callBack: () {
                       final String username = mailCtrl.text.trim();
                       final String password = passCtrl.text.trim();
-            
+
                       if (username.isEmpty || password.isEmpty) {
                         formKey.currentState!.validate();
                         log('fields empty');
@@ -92,8 +99,6 @@ class Login extends StatelessWidget {
                         performLogin(context, username, password);
                       }
                     },
-                    textColor: Colors.white,
-                    inputText: 'LOGIN',
                   )),
                   const SizedBox(
                     height: 30,

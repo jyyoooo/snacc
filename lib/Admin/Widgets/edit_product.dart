@@ -22,7 +22,7 @@ class EditProduct extends StatefulWidget {
   static void show(BuildContext context, Product product) {
     showModalBottomSheet(
       showDragHandle: true,
-      constraints: const BoxConstraints.tightForFinite(height: 700),
+      constraints: const BoxConstraints.expand(),
       useSafeArea: true,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(

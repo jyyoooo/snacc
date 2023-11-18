@@ -9,11 +9,15 @@ class SnaccButton extends StatelessWidget {
   final VoidCallback? callBack;
   final Color? btncolor;
   final Widget? icon;
+  final double btnRadius;
+  final double shadow;
 
   const SnaccButton({
     Key? key,
     this.width = 160.0,
     this.height = 33.0,
+    this.btnRadius = 10.0,
+    this.shadow = 1.0,
     required this.inputText,
     required this.callBack,
     this.textColor,
@@ -28,9 +32,9 @@ class SnaccButton extends StatelessWidget {
       child: ConstrainedBox(
         constraints: BoxConstraints.tightFor(width: width, height: height),
         child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
+          style: ElevatedButton.styleFrom(elevation: shadow,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(btnRadius),
             ),
             backgroundColor: btncolor ?? const Color.fromARGB(255, 82, 211, 86),
           ),

@@ -77,7 +77,7 @@ class _ComboListBuilderState extends State<ComboListBuilder> {
                               width: 130,
                               height: 120,
                               child: combo.comboImgUrl != null
-                                  ? Image.file(File(combo.comboImgUrl!))
+                                  ? Image.file(File(combo.comboImgUrl!),fit: BoxFit.cover,)
                                   : SizedBox(
                                       height: 130,
                                       width: 130,

@@ -85,35 +85,35 @@ class _PaymentsPageState extends State<PaymentsPage> {
                   const Icon(Icons.currency_rupee,
                       color: Colors.teal, weight: 20),
                   const BorderRadius.vertical(
-                      top: Radius.circular(15), bottom: Radius.zero)),
+                      top: Radius.circular(15), bottom: Radius.circular(15))),
               const Divider(
                 height: .5,
               ),
-              buildPaymentCard(
-                  PaymentOption.card,
-                  'Debit/Credit Card',
-                  '(coming soon)',
-                  const Icon(Icons.credit_card_rounded, color: Colors.black87),
-                  BorderRadius.zero),
-              const Divider(
-                height: .5,
-              ),
-              buildPaymentCard(
-                  PaymentOption.payPal,
-                  'PayPal',
-                  '(coming soon)',
-                  Icon(Icons.paypal, color: Colors.blue[800]),
-                  BorderRadius.zero),
-              const Divider(
-                height: .5,
-              ),
-              buildPaymentCard(
-                  PaymentOption.upi,
-                  'UPI',
-                  '(coming soon)',
-                  const Icon(Icons.monetization_on, color: Colors.orange),
-                  const BorderRadius.vertical(
-                      top: Radius.zero, bottom: Radius.circular(15))),
+              // buildPaymentCard(
+              //     PaymentOption.card,
+              //     'Debit/Credit Card',
+              //     '(coming soon)',
+              //     const Icon(Icons.credit_card_rounded, color: Colors.black87),
+              //     BorderRadius.zero),
+              // const Divider(
+              //   height: .5,
+              // ),
+              // buildPaymentCard(
+              //     PaymentOption.payPal,
+              //     'PayPal',
+              //     '(coming soon)',
+              //     Icon(Icons.paypal, color: Colors.blue[800]),
+              //     BorderRadius.zero),
+              // const Divider(
+              //   height: .5,
+              // ),
+              // buildPaymentCard(
+              //     PaymentOption.upi,
+              //     'UPI',
+              //     '(coming soon)',
+              //     const Icon(Icons.monetization_on, color: Colors.orange),
+              //     const BorderRadius.vertical(
+              //         top: Radius.zero, bottom: Radius.circular(15))),
               const Gap(25),
               Text('Your snacc will be delivered to:',
                   style: GoogleFonts.nunitoSans(color: Colors.grey)),

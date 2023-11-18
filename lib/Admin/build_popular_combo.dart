@@ -127,7 +127,10 @@ class _PopularComboState extends State<PopularCombo> {
                     height: 100,
                     width: 100,
                     child: pickedImage != null
-                        ? Image.file(File(pickedImage!))
+                        ? Image.file(
+                            File(pickedImage!),
+                            fit: BoxFit.cover,
+                          )
                         : Center(
                             child: Text(
                             'No Image selected',
@@ -162,8 +165,8 @@ class _PopularComboState extends State<PopularCombo> {
                   textColor: Colors.white,
                   inputText: 'CREATE COMBO',
                   callBack: () async {
-                    final comboCreated =
-                        await createCombo(productOne, productTwo, pickedImage,description.text);
+                    final comboCreated = await createCombo(
+                        productOne, productTwo, pickedImage, description.text);
 
                     if (comboCreated == true) {
                       setState(() {});

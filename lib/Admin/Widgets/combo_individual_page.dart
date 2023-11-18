@@ -69,7 +69,7 @@ class _ComboItemPageState extends State<ComboItemPage> {
                 child: widget.combo!.comboImgUrl != null
                     ? Image.file(
                         File(widget.combo!.comboImgUrl!),
-                        scale: 2,
+                        scale: 2,fit: BoxFit.cover,
                       )
                     : SizedBox(
                         height: 130,

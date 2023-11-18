@@ -9,7 +9,7 @@ import 'package:snacc/Widgets/snacc_button.dart';
 
 // Products fucntions
 
- ValueNotifier<List<dynamic>> favoriteListNotifier = ValueNotifier([]);
+ ValueNotifier<List<dynamic>> favoriteListNotifier = ValueNotifier<List<dynamic>>([]);
 // add PRODUCT to FAVORITES
 
 void addProductToFavorite(Product product, UserModel user) async {
@@ -96,15 +96,17 @@ Future<dynamic> removeAllFavoriteShowDialog(context, List favList) {
       builder: (context) {
         return AlertDialog(
           title: const Text('Are you sure?'),
-          content: const Text('All your favorite snaccs will be deleted'),
+          content: const Text('Remove all your favorites?'),
           actions: [
             SnaccButton(
+              width: 100,
+              textColor: Colors.white,
                 btncolor: Colors.red,
                 callBack: () {
                   removeAllFavorites(favList);
                   Navigator.pop(context);
                 },
-                inputText: 'Yes')
+                inputText: 'REMOVE')
           ],
         );
       });

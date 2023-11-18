@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:io';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -10,12 +9,8 @@ import 'package:snacc/Admin/Widgets/add_category.dart';
 import 'package:snacc/Admin/Widgets/carousel.dart';
 import 'package:snacc/Admin/Widgets/carousel_management.dart';
 import 'package:snacc/Admin/Widgets/combo_list_builder.dart';
-import 'package:snacc/Admin/products.dart';
 import 'package:snacc/DataModels/category_model.dart';
-import 'package:snacc/Functions/admin_functions.dart';
-import 'package:snacc/Functions/category_functions.dart';
 import 'package:snacc/UserPages/provider.dart';
-
 import 'Widgets/categories_list.dart';
 
 class AdminHome extends StatefulWidget {
@@ -55,111 +50,106 @@ class _AdminHomeState extends State<AdminHome> {
         ),
       ),
       body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
         physics: const BouncingScrollPhysics(),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('    Catergories',
-                      style: GoogleFonts.nunitoSans(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey[800])),
-                  // ADD NEW CATEGORY
-                  IconButton(
-                    onPressed: () {
-                      AddCategoryModalSheet.show(context, _formKey);
-                    },
-                    icon: const Icon(
-                        size: 30, color: Colors.blue, Icons.add_rounded),
-                  )
-                ],
-              ),
-            ),
-          ),
-          const Gap(5),
-
-          // CATEGORY LIST
-          CategoriesList(),
-
-          const Gap(8),
-
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('    Offers Section',
-                      style: GoogleFonts.nunitoSans(
-                          fontSize: 20, fontWeight: FontWeight.bold)),
-                  IconButton(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SizedBox(
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Card(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('    Catergories',
+                        style: GoogleFonts.nunitoSans(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey[800])),
+                    // ADD NEW CATEGORY
+                    IconButton(
                       onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const CarouselManagement()));
+                        AddCategoryModalSheet.show(context, _formKey);
                       },
                       icon: const Icon(
-                          size: 30, color: Colors.blue, Icons.add_rounded)),
-                ],
+                          size: 30, color: Colors.blue, Icons.add_rounded),
+                    )
+                  ],
+                ),
               ),
-            ),
-          ),
+              const Gap(5),
 
-          // CAROUSEL
+              // CATEGORY LIST
+              SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: CategoriesList()),
 
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Consumer<CarouselNotifier>(
-              builder: (context, carouselNotifier, child) {
-                return SnaccCarousel(
-                  carouselImages: Hive.box<String>('carousel').values.toList(),
-                );
-              },
-            ),
-          ),
+              // const Gap(8),
 
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('    Popular Combos',
-                      style: GoogleFonts.nunitoSans(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey[800])),
-                  IconButton(
-                      onPressed: () {
-                        Navigator.of(context).pushNamed('/popularcombo');
-                      },
-                      icon: const Icon(
-                          size: 30, color: Colors.blue, Icons.add_rounded))
-                ],
+              Card(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('    Offers Section',
+                        style: GoogleFonts.nunitoSans(
+                            fontSize: 20, fontWeight: FontWeight.bold)),
+                    IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const CarouselManagement()));
+                        },
+                        icon: const Icon(
+                            size: 30, color: Colors.blue, Icons.add_rounded)),
+                  ],
+                ),
               ),
-            ),
-          ),
-          const Gap(10),
 
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: ComboListBuilder(
-              isAdmin: true,
-            ),
-          )
-        ]),
+              // CAROUSEL
+
+              Consumer<CarouselNotifier>(
+                builder: (context, carouselNotifier, child) {
+                  return SnaccCarousel(
+                    carouselImages:
+                        Hive.box<String>('carousel').values.toList(),
+                  );
+                },
+              ),
+
+              Card(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('    Popular Combos',
+                        style: GoogleFonts.nunitoSans(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey[800])),
+                    IconButton(
+                        onPressed: () {
+                          Navigator.of(context).pushNamed('/popularcombo');
+                        },
+                        icon: const Icon(
+                            size: 30, color: Colors.blue, Icons.add_rounded))
+                  ],
+                ),
+              ),
+              const Gap(10),
+
+              const ComboListBuilder(
+                isAdmin: true,
+              )
+            ]),
+          ),
+        ),
       ),
     );
   }

@@ -19,6 +19,13 @@ List<Widget> routes = <Widget>[
 ];
 
 class _AdminNavigationState extends State<AdminNavigation> {
+
+  @override
+  void initState(){
+    super.initState();
+    selectedIndex = 0;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

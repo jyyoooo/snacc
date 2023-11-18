@@ -1,23 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-class SnaccTextField extends StatelessWidget {
+class SnaccTextField extends StatefulWidget {
   final TextEditingController? controller;
   final String? Function(String?)? validator;
   final String label;
   final String? validationMessage;
   final bool obscureText;
-  const SnaccTextField(
-      {super.key,
-      this.controller,
-      this.validator,
-      this.label = 'no labels given',
-      this.validationMessage,
-      this.obscureText = false});
+  final bool? showText;
+
+  const SnaccTextField({
+    Key? key,
+    this.controller,
+    this.validator,
+    this.label = 'no labels given',
+    this.validationMessage,
+    this.obscureText = false,
+    this.showText = true,
+  }) : super(key: key);
+
+  @override
+  _SnaccTextFieldState createState() => _SnaccTextFieldState();
+}
+
+class _SnaccTextFieldState extends State<SnaccTextField> {
+  bool isObscure = true;
 
   @override
   Widget build(BuildContext context) {
-    // const String defaultMessage = 'Enter details';
     return Material(
       child: Container(
         color: Colors.white,
@@ -26,14 +36,30 @@ class SnaccTextField extends StatelessWidget {
           children: [
             const Gap(13),
             TextFormField(
-              obscureText: obscureText,
+              controller: widget.controller,
+              obscureText: widget.obscureText && isObscure,
               autovalidateMode: AutovalidateMode.onUserInteraction,
               decoration: InputDecoration(
+                suffixIcon: widget.showText == false
+                    ? IconButton(
+                        icon: Icon(
+                          isObscure ? Icons.visibility_off : Icons.visibility,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            isObscure = !isObscure;
+                          });
+                        },
+                        iconSize: 20,
+                        color: Colors.black26,
+                      )
+                    : null,
                 floatingLabelStyle: const TextStyle(
-                    backgroundColor: Colors.white38,
-                    color: Colors.black54,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 20),
+                  backgroundColor: Colors.white38,
+                  color: Colors.black54,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 20,
+                ),
                 labelStyle: const TextStyle(color: Colors.black54),
                 contentPadding:
                     const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
@@ -43,13 +69,12 @@ class SnaccTextField extends StatelessWidget {
                   borderSide: BorderSide.none,
                   borderRadius: BorderRadius.circular(15),
                 ),
-                labelText: label,
+                labelText: widget.label,
               ),
-              controller: controller,
               style: const TextStyle(fontSize: 16),
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return validationMessage;
+                  return widget.validationMessage;
                 }
                 return null;
               },

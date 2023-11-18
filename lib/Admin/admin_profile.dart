@@ -6,6 +6,7 @@ import 'package:snacc/Admin/Widgets/manage_store.dart';
 import 'package:snacc/DataModels/order_model.dart';
 import 'package:snacc/Functions/login_functions.dart';
 import 'package:snacc/Widgets/snacc_appbar.dart';
+import 'package:snacc/Widgets/snacc_button.dart';
 import 'package:snacc/Widgets/snacc_tile_button.dart';
 
 class AdminAccount extends StatelessWidget {
@@ -92,7 +93,23 @@ class AdminAccount extends StatelessWidget {
                     )),
                 SnaccTileButton(
                     onPressed: () {
-                      logOutAdmin(context);
+                      showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                                title: Text(
+                                  'Logout of Admin?',
+                                  style: GoogleFonts.nunitoSans(fontWeight: FontWeight.bold),
+                                ),
+                                actions: [
+                                  SnaccButton(width: 100,
+                                      btncolor: Colors.red,
+                                      textColor: Colors.white,
+                                      inputText: 'LOGOUT',
+                                      callBack: () {
+                                        logOutAdmin(context);
+                                      })
+                                ],
+                              ));
                     },
                     icon: const Icon(
                       Icons.logout_rounded,

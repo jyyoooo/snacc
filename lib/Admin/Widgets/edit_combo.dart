@@ -21,7 +21,7 @@ class EditCombo extends StatefulWidget {
   static void show(
       BuildContext context, GlobalKey<FormState> formKey, ComboModel combo) {
     showModalBottomSheet(
-      constraints: const BoxConstraints.tightForFinite(height: 700),
+      constraints: const BoxConstraints.expand(),
       useSafeArea: true,
       isScrollControlled: true,
       showDragHandle: true,
