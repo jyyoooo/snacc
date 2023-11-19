@@ -180,7 +180,7 @@ class ManageOrderList extends StatelessWidget {
                   heightFactor: 15,
                   child: Text(
                     'No Orders',
-                    style: GoogleFonts.nunitoSans(color: Colors.grey,fontSize: 17),
+                    style: GoogleFonts.nunitoSans(color: Colors.grey,fontSize: 15),
                   ));
             }
           }

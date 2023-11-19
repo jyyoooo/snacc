@@ -33,8 +33,8 @@ class _AmountCardState extends State<AmountCard> {
           } else {
             total = snapshot.data;
             double? sGst = total! * 18 / 100;
-            double? cGst = total! * 18 / 100;
-            double? addedTotal = total! + sGst + cGst;
+            double? convenienceFee = total! * 10 / 100;
+            double? addedTotal = total! + sGst + convenienceFee;
             final grandTotal = addedTotal.floorToDouble();
             log('grand total: $grandTotal');
 
@@ -45,16 +45,13 @@ class _AmountCardState extends State<AmountCard> {
                 child: BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
                   child: Container(
-                    color: const Color.fromARGB(100, 236, 236, 236),
+                    color:const Color.fromARGB(59, 203, 203, 203),
                     width: double.maxFinite,
                     height: 210,
                     child: Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: Column(
                         children: [
-                          const SizedBox(
-                            height: 10,
-                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -103,16 +100,13 @@ class _AmountCardState extends State<AmountCard> {
                                     color: Colors.grey),
                               ),
                               Text(
-                                '₹${cGst}0',
+                                '₹${convenienceFee}0',
                                 style: GoogleFonts.nunitoSans(
                                     fontSize: 14,
                                     fontWeight: FontWeight.normal,
                                     color: Colors.grey),
                               )
                             ],
-                          ),
-                          const SizedBox(
-                            height: 8,
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -134,10 +128,9 @@ class _AmountCardState extends State<AmountCard> {
                               )
                             ],
                           ),
-                          const SizedBox(
-                            height: 10,
-                          ),
+                         
                           SnaccButton(
+                            width: 120,
                               textColor: Colors.black,
                               btncolor: Colors.amber,
                               inputText: "PAYMENT",
@@ -148,8 +141,10 @@ class _AmountCardState extends State<AmountCard> {
                                             user: widget.user,
                                             amountPayable: addedTotal,
                                           )));
-                                }else{
-                                  Fluttertoast.showToast(msg: 'No Snaccs to checkout',backgroundColor: Colors.lightBlue);
+                                } else {
+                                  Fluttertoast.showToast(
+                                      msg: 'No Snaccs to checkout',
+                                      backgroundColor: Colors.lightBlue);
                                 }
                               })
                         ],

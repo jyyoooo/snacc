@@ -132,10 +132,10 @@ class _ComboListBuilderState extends State<ComboListBuilder> {
                     );
                   })
               : Center(
-                  heightFactor: 12,
+                  heightFactor: MediaQuery.of(context).size.width*.01,
                   child: Text(
                     'No Combos found',
-                    style: GoogleFonts.nunitoSans(color: Colors.grey),
+                    style: GoogleFonts.nunitoSans(color: Colors.grey,fontSize: 15),
                   ));
         });
   }

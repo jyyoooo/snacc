@@ -23,6 +23,8 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     TextEditingController namectrl = TextEditingController();
     TextEditingController mailctrl = TextEditingController();
     TextEditingController passctrl = TextEditingController();
@@ -31,20 +33,20 @@ class _SignUpState extends State<SignUp> {
 
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
-        body: Container(
+        body: SizedBox(
           height: double.infinity,
           // color: Colors.white,
           child: Padding(
             padding: const EdgeInsets.all(15.0),
             child: Form(
               key: formKey,
-              child: SingleChildScrollView(
+              child: ListView(
                 physics: const BouncingScrollPhysics(),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                // Column(
+                //   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Gap(30),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -59,7 +61,7 @@ class _SignUpState extends State<SignUp> {
                         child: Text(
                       'Welcome to Snacc\n Let\'s sign you up!',
                       style: GoogleFonts.nunitoSans(
-                          fontSize: 28,
+                          fontSize: screenHeight * .035,
                           fontWeight: FontWeight.bold,
                           color: Colors.black87),
                     )),
@@ -79,8 +81,7 @@ class _SignUpState extends State<SignUp> {
                       label: 'Password',
                       controller: passctrl,
                       validationMessage: 'Enter your password',
-                       showText: false,
-
+                      showText: false,
                     ),
                     SnaccTextField(
                       obscureText: true,
@@ -150,10 +151,11 @@ class _SignUpState extends State<SignUp> {
                           const Gap(20),
                           Text('Already have an account?',
                               style: GoogleFonts.nunitoSans(
-                                  fontSize: 14, color: Colors.black54)),
+                                  fontSize: screenHeight < 700 ? 12 : 14,
+                                  color: Colors.black54)),
                           Text(' Log In',
                               style: GoogleFonts.nunitoSans(
-                                  fontSize: 14,
+                                  fontSize: screenHeight < 700 ? 12 : 14,
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold))
                         ],
@@ -165,7 +167,7 @@ class _SignUpState extends State<SignUp> {
             ),
           ),
         ),
-      ),
-    );
+      );
+    // );
   }
 }

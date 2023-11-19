@@ -38,10 +38,13 @@ class TheaterSeatPickerState extends State<TheaterSeatPicker> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
     var seatScreenData = context.read<SeatScreenData>();
     return Padding(
       padding: const EdgeInsets.all(10),
       child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -50,7 +53,8 @@ class TheaterSeatPickerState extends State<TheaterSeatPicker> {
                 Text(
                   'Select Screen and Seat',
                   style: GoogleFonts.nunitoSans(
-                      fontSize: 20, fontWeight: FontWeight.bold),
+                      fontSize: screenHeight > 700 ? 20 : 18,
+                      fontWeight: FontWeight.bold),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -66,12 +70,15 @@ class TheaterSeatPickerState extends State<TheaterSeatPicker> {
                 ),
               ],
             ),
-            SvgPicture.asset('assets/images/theater_items/screen.svg'),
+            SvgPicture.asset(
+              'assets/images/theater_items/screen.svg',
+              width: screenHeight > 700 ? 300 : 200,
+            ),
             Text(
               'Eyes this way',
-              style: GoogleFonts.nunitoSans(fontSize: 15, color: Colors.blue),
+              style: GoogleFonts.nunitoSans(fontSize:  screenHeight > 700 ? 15 : 13, color: Colors.blue),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: screenHeight > 700 ? 20 : 0),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -83,19 +90,20 @@ class TheaterSeatPickerState extends State<TheaterSeatPicker> {
                     children: List.generate(
                       rowCount,
                       (index) => Text(
-                          String.fromCharCode('A'.codeUnitAt(0) + index),
-                          style: GoogleFonts.nunitoSans(
-                              fontSize: 16, fontWeight: FontWeight.bold)),
+                        String.fromCharCode('A'.codeUnitAt(0) + index),
+                        style: GoogleFonts.nunitoSans(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: SizedBox(
-                    width: 320,
-                    height: 350,
+                    width: screenWidth * 0.8,
+                    height: screenHeight > 700 ? 340 : 340,
                     child: GridView.builder(
-                      physics: const BouncingScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: colCount,
                         mainAxisExtent: 42,
@@ -105,7 +113,7 @@ class TheaterSeatPickerState extends State<TheaterSeatPicker> {
                       itemBuilder: (context, index) {
                         int rowIndex = index ~/ colCount;
                         int colIndex = index % colCount;
-      
+
                         return GestureDetector(
                           onTap: () {
                             setState(() {
@@ -115,8 +123,8 @@ class TheaterSeatPickerState extends State<TheaterSeatPicker> {
                                     SeatState.unselected;
                               }
                               seats[rowIndex][colIndex] = seats[rowIndex]
-                                          [colIndex] ==
-                                      SeatState.unselected
+                                  [colIndex] ==
+                                  SeatState.unselected
                                   ? SeatState.selected
                                   : SeatState.unselected;
                               selectedRowIndex = rowIndex;
@@ -127,16 +135,16 @@ class TheaterSeatPickerState extends State<TheaterSeatPicker> {
                             child: seats[rowIndex][colIndex] ==
                                     SeatState.unselected
                                 ? SvgPicture.asset(
-                                    'assets/images/theater_items/unselected.svg',
-                                    height: 30,
-                                    width: 30,
-                                  )
+                              'assets/images/theater_items/unselected.svg',
+                              height: screenHeight * 0.06,
+                              width: screenHeight * 0.06,
+                            )
                                 : SvgPicture.asset(
-                                    'assets/images/theater_items/selected.svg',
-                                    color: const Color.fromARGB(255, 82, 211, 86),
-                                    height: 30,
-                                    width: 30,
-                                  ),
+                              'assets/images/theater_items/selected.svg',
+                              color: const Color.fromARGB(255, 82, 211, 86),
+                              height: screenHeight * 0.06,
+                              width: screenHeight * 0.06,
+                            ),
                           ),
                         );
                       },
@@ -152,7 +160,7 @@ class TheaterSeatPickerState extends State<TheaterSeatPicker> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: List.generate(
                   colCount,
-                  (index) => Text(
+                      (index) => Text(
                     (index + 1).toString(),
                     style: GoogleFonts.nunitoSans(
                         fontSize: 16, fontWeight: FontWeight.bold),
@@ -163,14 +171,16 @@ class TheaterSeatPickerState extends State<TheaterSeatPicker> {
             const Gap(15),
             Text(
               seatScreenData.selectedScreenNumber != null &&
-                      seatScreenData.selectedSeatNumber != null
-                  ? 'Your Screen: ${seatScreenData.selectedScreenNumber ?? '?'} Seat: ${seatScreenData.selectedSeatNumber}'
+                  seatScreenData.selectedSeatNumber != null
+                  ? 'Your Screen: ${seatScreenData.selectedScreenNumber} Seat: ${seatScreenData.selectedSeatNumber}'
                   : selectedRowIndex != -1 && selectedColIndex != -1 ||
-                          screenNumber == 0
-                      ? 'Your Screen: $screenNumber Seat: ${String.fromCharCode('A'.codeUnitAt(0) + selectedRowIndex)}${selectedColIndex + 1}'
-                      : 'Your Seat and Screen is not selected',
+                  screenNumber == 0
+                  ? 'Your Screen: $screenNumber Seat: ${String.fromCharCode('A'.codeUnitAt(0) + selectedRowIndex)}${selectedColIndex + 1}'
+                  : 'Your Seat and Screen is not selected',
               style: GoogleFonts.nunitoSans(
-                  fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blue),
+                  fontSize: screenHeight > 700 ? 20 : 17,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue),
             ),
             const Gap(10),
             SnaccButton(
@@ -179,7 +189,7 @@ class TheaterSeatPickerState extends State<TheaterSeatPicker> {
               callBack: () {
                 if (selectedRowIndex != -1 && selectedColIndex != -1) {
                   seatNumber =
-                      '${String.fromCharCode('A'.codeUnitAt(0) + selectedRowIndex)}${selectedColIndex + 1}';
+                  '${String.fromCharCode('A'.codeUnitAt(0) + selectedRowIndex)}${selectedColIndex + 1}';
                   widget.onSeatSelected(screenNumber ?? 0, seatNumber!);
                 } else {
                   log('no screen or seat selected');
@@ -194,7 +204,6 @@ class TheaterSeatPickerState extends State<TheaterSeatPicker> {
     );
   }
 }
-
 class HorizontalNumberList extends StatefulWidget {
   void Function(int selectedNumber) onScreenSelected;
 
@@ -209,8 +218,9 @@ class HorizontalNumberListState extends State<HorizontalNumberList> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
     return SizedBox(
-      height: 60,
+      height: screenHeight > 700 ? 60 : 50,
       width: 100,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
@@ -227,18 +237,18 @@ class HorizontalNumberListState extends State<HorizontalNumberList> {
             },
             child: Container(
               margin: const EdgeInsets.all(8),
-              padding: const EdgeInsets.all(12),
+              padding: EdgeInsets.all(screenHeight > 700 ? 12 : 8),
               decoration: BoxDecoration(
                 color: selectedNumber == number
                     ? const Color.fromARGB(255, 82, 211, 86)
                     : Colors.grey[300],
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
                 '$number',
                 style: GoogleFonts.nunitoSans(
                   color: selectedNumber == number ? Colors.white : Colors.black,
-                  fontSize: 16,
+                  fontSize: screenHeight > 700 ? 16 : 14,
                   fontWeight: FontWeight.bold,
                 ),
               ),

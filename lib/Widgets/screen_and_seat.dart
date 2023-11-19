@@ -29,7 +29,7 @@ class _ScreenAndSeatState extends State<ScreenAndSeat> {
         onTap: () {
           showModalBottomSheet(
             backgroundColor: Colors.grey[100],
-            constraints: const BoxConstraints.tightForFinite(height: 740),
+            constraints: const BoxConstraints.expand(),
             useSafeArea: true,
             isScrollControlled: true,
             showDragHandle: true,

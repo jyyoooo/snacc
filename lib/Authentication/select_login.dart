@@ -5,70 +5,97 @@ import 'package:snacc/Authentication/signup.dart';
 import 'package:snacc/Widgets/snacc_button.dart';
 
 class SelectLogin extends StatelessWidget {
-  const SelectLogin({super.key});
+  const SelectLogin({Key? key});
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return SafeArea(
-        child: Scaffold(
-      backgroundColor: Colors.white,
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        color: Colors.white,
-        child: Center(
-          child: Column(
-            children: [
-              SizedBox(
-                width: 300,
-                height: 200,
-                child: Image.asset("assets/images/Snacc.png"),
-              ),
-              SizedBox(
-                width: 300,
-                height: 300,
-                child: Image.asset("assets/images/indofeb25 1.png"),
-              ),
-              Text(
-                textAlign: TextAlign.center,
-                'Skip the Line, Enjoy the Show\nBook Your Theater Snacks in a Snap!',
-                style: GoogleFonts.nunitoSans(
-                    fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  SnaccButton(
-                    btnRadius: 15,
-                    textColor: Colors.black,
-                    width: 250,
-                    height: 45,
-                    btncolor: Colors.amber,
-                    inputText: 'SIGNUP',
-                    callBack: () {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (BuildContext context) => const SignUp()));
-                    },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: Container(
+          height: MediaQuery.of(context).size.height,
+          width: screenWidth,
+          color: Colors.white,
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Hero(
+                  tag: 'snacc_logo',
+                  child: SizedBox(
+                    width: screenWidth * .3,
+                    height: screenHeight * .25,
+                    child: Image.asset(
+                      "assets/images/Snacc.png",
+                      scale: 1,
+                      fit: BoxFit.contain,
+                    ),
                   ),
-                  SnaccButton(
+                ),
+                Hero(tag: 'snaccHeroImg',
+                  child: SizedBox(
+                    width: screenWidth * .5,
+                    height: screenHeight * .3,
+                    child: Image.asset(
+                      "assets/images/indofeb25 1.png",
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
+                Text(
+                  'Skip the Line, Enjoy the Show\nBook Your Theater Snacks in a Snap!',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.nunitoSans(
+                    fontSize: screenWidth < 600 ? 17 : 19,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(
+                  height: screenHeight * .1,
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    SnaccButton(
+                      btnRadius: 15,
+                      textColor: Colors.black,
+                      width: screenWidth * 0.6,
+                      height: 45,
+                      btncolor: Colors.amber,
+                      inputText: 'GET STARTED',
+                      callBack: () {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => const SignUp(),
+                          ),
+                        );
+                      },
+                    ),
+                    SnaccButton(
                       btnRadius: 15,
                       btncolor: Colors.grey[50],
-                      width: 250,
+                      width: screenWidth * 0.6,
                       height: 45,
                       textColor: Colors.blue,
                       inputText: 'LOGIN',
                       callBack: () {
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            builder: (BuildContext context) => const Login()));
-                      })
-                ],
-              )
-            ],
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const Login(),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),
-    ));
+    );
   }
 }

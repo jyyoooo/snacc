@@ -83,7 +83,7 @@ class CategoriesList extends StatelessWidget {
                   child: Text(
                     'No Categories found',
                     style: GoogleFonts.nunitoSans(
-                        color: Colors.grey, fontSize: 17),
+                        color: Colors.grey, fontSize: 15),
                   ),
                 );
         },

@@ -80,7 +80,7 @@ class _UserBagState extends State<UserBag> {
             builder: (context, userBag, child) {
               // if (userBag != null && widget.user != null) {
               return Positioned(
-                height: 290,
+                height: 277,
                 bottom: 1,
                 left: 0,
                 right: 0,

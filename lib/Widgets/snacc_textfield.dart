@@ -35,7 +35,8 @@ class _SnaccTextFieldState extends State<SnaccTextField> {
         child: Column(
           children: [
             const Gap(13),
-            TextFormField(
+            TextFormField( 
+              textCapitalization: TextCapitalization.characters,
               controller: widget.controller,
               obscureText: widget.obscureText && isObscure,
               autovalidateMode: AutovalidateMode.onUserInteraction,

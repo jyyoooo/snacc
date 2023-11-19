@@ -131,4 +131,5 @@ class AddCategoryModalSheetState extends State<AddCategoryModalSheet> {
       ),
     );
   }
+  
 }
