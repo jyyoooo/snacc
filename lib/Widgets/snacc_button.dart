@@ -27,6 +27,7 @@ class SnaccButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final smallScreen = MediaQuery.of(context).size.height<700;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ConstrainedBox(
@@ -47,7 +48,7 @@ class SnaccButton extends StatelessWidget {
                   inputText,
                   style: GoogleFonts.nunitoSans(
                       color: textColor ?? Colors.black87,
-                      fontSize: 14,
+                      fontSize: smallScreen?12:14,
                       fontWeight: FontWeight.bold),
                 ),
               ),

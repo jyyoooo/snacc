@@ -57,10 +57,15 @@ class ProductImageRow extends StatelessWidget {
 
               //IMAGE DATA
               child: productOne?.prodimgUrl != null && productOne != null
-                  ? Image.file(
-                      File(productOne!.prodimgUrl!),
-                      height: 60,
-                    )
+                  ? productOne!.prodimgUrl!.contains('assets/')
+                      ? Image.asset(
+                          productOne!.prodimgUrl!,
+                          height: 60,
+                        )
+                      : Image.file(
+                          File(productOne!.prodimgUrl!),
+                          height: 60,
+                        )
                   : SizedBox(
                       child: Image.asset('assets/images/no-image-available.png',
                           height: 60),
@@ -120,10 +125,15 @@ class ProductImageRow extends StatelessWidget {
                       child: Image.asset('assets/images/no-image-available.png',
                           height: 60),
                     )
-                  : Image.file(
-                      File(productTwo!.prodimgUrl!),
-                      height: 60,
-                    ),
+                  : productTwo!.prodimgUrl!.contains('assets/')
+                      ? Image.asset(
+                          productTwo!.prodimgUrl!,
+                          height: 60,
+                        )
+                      : Image.file(
+                          File(productTwo!.prodimgUrl!),
+                          height: 60,
+                        ),
             )
           ],
         ),

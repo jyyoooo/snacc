@@ -36,7 +36,7 @@ class _AdminNavigationState extends State<AdminNavigation> {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(30),
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+            filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
             child: BottomNavigationBar(
                 onTap: (index) {
                   setState(() {
@@ -46,6 +46,7 @@ class _AdminNavigationState extends State<AdminNavigation> {
                 backgroundColor: Color.fromARGB(39, 149, 149, 149),
                 elevation: 0,
                 unselectedItemColor: Colors.black54,
+                selectedItemColor: Colors.blue,
                 currentIndex: selectedIndex,
                 showUnselectedLabels: false,
                 showSelectedLabels: true,

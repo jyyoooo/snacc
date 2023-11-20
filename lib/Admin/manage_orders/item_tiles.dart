@@ -36,10 +36,12 @@ class ComboTile extends StatelessWidget {
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
                                 child: combo.comboImgUrl != null
-                                    ? Image.file(
-                                        File(combo.comboImgUrl!),
-                                        fit: BoxFit.cover,
-                                      )
+                                    ? combo.comboImgUrl!.contains('assets/')
+                                        ? Image.asset(combo.comboImgUrl!)
+                                        : Image.file(
+                                            File(combo.comboImgUrl!),
+                                            fit: BoxFit.cover,
+                                          )
                                     : Image.asset(
                                         'assets/images/no-image-available.png'),
                               ),
@@ -52,10 +54,10 @@ class ComboTile extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 SizedBox(
-                                  width: 180,
+                                  width: 190,
                                   child: Text(
                                     combo.comboName!,
-                                    overflow: TextOverflow.ellipsis,
+                                    overflow: TextOverflow.visible,
                                     style: GoogleFonts.nunitoSans(
                                       fontSize: 17,
                                     ),
@@ -136,10 +138,12 @@ class ProductTIle extends StatelessWidget {
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
                                 child: product.prodimgUrl != null
-                                    ? Image.file(
-                                        File(product.prodimgUrl!),
-                                        fit: BoxFit.cover,
-                                      )
+                                    ? product.prodimgUrl!.contains('assets/')
+                                        ? Image.asset(product.prodimgUrl!)
+                                        : Image.file(
+                                            File(product.prodimgUrl!),
+                                            fit: BoxFit.cover,
+                                          )
                                     : Image.asset(
                                         'assets/images/no-image-available.png'),
                               ),
@@ -152,10 +156,10 @@ class ProductTIle extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 SizedBox(
-                                  width: 180,
+                                  width: 250,
                                   child: Text(
                                     product.prodname!,
-                                    overflow: TextOverflow.ellipsis,
+                                    overflow: TextOverflow.visible,
                                     style: GoogleFonts.nunitoSans(
                                       fontSize: 17,
                                     ),

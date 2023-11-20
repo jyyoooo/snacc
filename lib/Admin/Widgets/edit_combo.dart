@@ -78,18 +78,22 @@ class EditComboState extends State<EditCombo> {
                     width: 100,
                     child: (selectedComboImage != null &&
                             selectedComboImage!.isNotEmpty)
-                        ? Image.file(
-                            File(selectedComboImage!),
-                            fit: BoxFit.cover,
-                            scale: 5,
-                          )
-                        : (widget.combo.comboImgUrl != null &&
-                                widget.combo.comboImgUrl!.isNotEmpty)
-                            ? Image.file(
-                                File(widget.combo.comboImgUrl!),
+                        ? selectedComboImage!.contains('assets/')
+                            ? Image.asset(selectedComboImage!)
+                            : Image.file(
+                                File(selectedComboImage!),
                                 fit: BoxFit.cover,
                                 scale: 5,
                               )
+                        : (widget.combo.comboImgUrl != null &&
+                                widget.combo.comboImgUrl!.isNotEmpty)
+                            ? widget.combo.comboImgUrl!.contains('assets/')
+                                ? Image.asset(widget.combo.comboImgUrl!)
+                                : Image.file(
+                                    File(widget.combo.comboImgUrl!),
+                                    fit: BoxFit.cover,
+                                    scale: 5,
+                                  )
                             : Container(
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(15),

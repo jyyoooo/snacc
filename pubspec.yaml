@@ -2,7 +2,7 @@ name: snacc
 description: A new Flutter project.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.1.0 <4.0.0'
+  sdk: ">=3.1.0 <4.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -30,7 +30,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -51,7 +50,7 @@ dependencies:
   flutter_svg: ^2.0.9
   provider: ^6.1.0
   lints: ^2.1.1
-  
+  persistent_bottom_nav_bar: ^5.0.2
 
 dev_dependencies:
   flutter_test:
@@ -69,7 +68,6 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -77,32 +75,57 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets\images\indofeb25 1.png
-    - assets\images\Snacc.png
-    - assets\images\Category_items\1.png
-    - assets\images\Category_items\2.png
-    - assets\images\Category_items\3.png
-    - assets\images\Category_items\4.png
-    - assets\images\Category_items\5.png
-    - assets\images\Category_items\6.png
-    - assets\images\Category_items\7.png
-    - assets\images\Admin_page\ad_items.png
-    - assets\popular_combos\Popcorn and cola.png
-    - assets\popular_combos\sandwich cola.png
-    - assets\burgers\image 10-1.png
-    - assets\burgers\image 10-2.png
-    - assets\burgers\image 10-3.png
-    - assets\burgers\image 10-4.png
-    - assets\burgers\image 10.png
+    - assets/images/indofeb25 1.png
     - assets/images/no-image-available.png
     - assets/images/theaterPeople.png
-    - assets/images/offer1.jpeg
-    - assets/images/offer2.jpg
-    - assets/images/Admin_page/ad_items.png
     - assets/images/theater_items/screen.svg
     - assets/images/theater_items/selected.svg
     - assets/images/theater_items/unselected.svg
-   
+
+    - assets/images/Admin_page/halloween_ad.jpg
+    - assets/images/Admin_page/offer1.jpeg
+    - assets/images/Admin_page/pocorn_soda_ad.png
+
+    - assets/images/Category_items/burger.png
+    - assets/images/Category_items/caffiene.png
+    - assets/images/Category_items/icecream.png
+    - assets/images/Category_items/juice.png
+    - assets/images/Category_items/popcorn.png
+    - assets/images/Category_items/soda.png
+    - assets/images/Category_items/ssandwich.png
+
+    - assets/juices/avocado.png
+    - assets/juices/cherry.png
+    - assets/juices/pineapple.png
+    - assets/juices/strawberry.png
+
+    - assets/popcorns/cheesepop.png
+    - assets/popcorns/chocopop.png
+    - assets/popcorns/onionpop.png
+    - assets/popcorns/sourpop.png
+    
+    - assets/burgers/big_fatty_burger.png
+    - assets/burgers/cheese_ham_onion.png
+    - assets/burgers/loade_veg_burger.png
+    - assets/burgers/mushroom_burger.png
+
+    - assets/popular_combos/burgir cola.png
+    - assets/popular_combos/Popcorn and cola.png
+    - assets/popular_combos/sandwich cola.png
+
+    - assets/sanwiches/bacon mix.png
+    - assets/sanwiches/cheesewich.png
+    - assets/sanwiches/doublebacon.png
+    - assets/sanwiches/veggiewich.png
+    
+    - assets/sodas/7up.png
+    - assets/sodas/cokezero.png
+    - assets/sodas/dietcoke.png
+    - assets/sodas/ogcoke.png
+    - assets/sodas/pepsi.png
+    
+    
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

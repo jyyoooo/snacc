@@ -41,7 +41,6 @@ class SnaccCarouselState extends State<SnaccCarousel> {
   @override
   Widget build(BuildContext context) {
     final carouselNotifier = Provider.of<CarouselNotifier>(context);
-    
 
     return Center(
       child: SingleChildScrollView(
@@ -57,10 +56,12 @@ class SnaccCarouselState extends State<SnaccCarousel> {
                           final imagePath = carouselImages[index];
                           return ClipRRect(
                             borderRadius: BorderRadius.circular(15),
-                            child: Image.file(
-                              File(imagePath),
-                              fit: BoxFit.cover,
-                            ),
+                            child: imagePath.contains('asset')
+                                ? Image.asset(imagePath,fit: BoxFit.cover,)
+                                : Image.file(
+                                    File(imagePath),
+                                    fit: BoxFit.cover,
+                                  ),
                           );
                         },
                         options: CarouselOptions(
@@ -88,8 +89,8 @@ class SnaccCarouselState extends State<SnaccCarousel> {
                                 ),
                                 Text(
                                   'No data',
-                                  style: GoogleFonts.nunitoSans(fontSize: 15,
-                                      color: Colors.grey),
+                                  style: GoogleFonts.nunitoSans(
+                                      fontSize: 15, color: Colors.grey),
                                 )
                               ],
                             ),
@@ -120,7 +121,8 @@ class SnaccCarouselState extends State<SnaccCarousel> {
                             ),
                             Text(
                               'No data',
-                              style: GoogleFonts.nunitoSans(color: Colors.grey,fontSize: 15),
+                              style: GoogleFonts.nunitoSans(
+                                  color: Colors.grey, fontSize: 15),
                             )
                           ],
                         ),

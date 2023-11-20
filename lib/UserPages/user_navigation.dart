@@ -64,16 +64,18 @@ class _UserNavigationState extends State<UserNavigation> {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(30),
             child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+              filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
               child: BottomNavigationBar(
+                  elevation: 0,
                   onTap: (index) {
                     setState(() {
                       selectedIndex = index;
                     });
                   },
-                  elevation: 0,
+                  backgroundColor: Colors.transparent,
+                  enableFeedback: false,
                   unselectedItemColor: Colors.black54,
-                  selectedItemColor: Colors.amber,
+                  selectedItemColor: Colors.blue,
                   currentIndex: selectedIndex,
                   showUnselectedLabels: false,
                   showSelectedLabels: true,
@@ -81,7 +83,7 @@ class _UserNavigationState extends State<UserNavigation> {
                   items: const [
                     BottomNavigationBarItem(
                         tooltip: 'Home',
-                        backgroundColor: Color.fromARGB(30, 112, 112, 112),
+                        backgroundColor: Color.fromARGB(30, 78, 78, 78),
                         icon: Icon(Icons.home_outlined),
                         activeIcon: Icon(Icons.home_rounded),
                         label: 'Home'),

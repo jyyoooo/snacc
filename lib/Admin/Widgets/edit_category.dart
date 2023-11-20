@@ -28,6 +28,7 @@ class _EditCategoryState extends State<EditCategory> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
     return IconButton(
       onPressed: () async {
         final category = getCategoryById(widget.categoryID);
@@ -58,13 +59,13 @@ class _EditCategoryState extends State<EditCategory> {
                           style: GoogleFonts.nunitoSans(
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
-                        const Gap(10),
+                         Gap(screenHeight*.01),
                         Text(
                           'Select new image for the category',
                           style: GoogleFonts.nunitoSans(
                               color: Colors.blue, fontSize: 15),
                         ),
-                        const Gap(15),
+                        Gap(screenHeight*.030),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
@@ -72,16 +73,18 @@ class _EditCategoryState extends State<EditCategory> {
                               height: 80,
                               width: 80,
                               child: updatedImgUrl != null
-                                  ? Image.file(
-                                      File(updatedImgUrl!),
-                                      fit: BoxFit.cover,
-                                    )
+                                  ? updatedImgUrl!.contains('assets/')
+                                      ? Image.asset(updatedImgUrl!)
+                                      : Image.file(
+                                          File(updatedImgUrl!),
+                                          fit: BoxFit.cover,
+                                        )
                                   : SizedBox(
                                       child: Image.asset(
                                           'assets/images/no-image-available.png'),
                                     ),
                             ),
-                            const Gap(10),
+                            Gap(screenHeight*.025),
                             SnaccButton(
                               width: 60,
                               icon: const Icon(
@@ -97,10 +100,17 @@ class _EditCategoryState extends State<EditCategory> {
                             ),
                           ],
                         ),
-                        SnaccTextField(
+                        Gap(screenHeight*.030),
+                        Column(crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('    Enter new category name',style: GoogleFonts.nunitoSans(fontSize: 17)),
+                            SnaccTextField(
                           label: 'Category name',
                           controller: newCategoryNameCtrl,
                         ),
+                          ],
+                        ),
+                        
                         const Gap(20),
                         SnaccButton(
                           textColor: Colors.white,

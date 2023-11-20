@@ -85,10 +85,10 @@ class _CarouselManagementState extends State<CarouselManagement> {
                         },
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(15),
-                          child: Image.file(
-                            File(imagePath),
-                            fit: BoxFit.cover,
-                          ),
+                          child: imagePath.contains('assets/')
+                              ? Image.asset(imagePath, fit: BoxFit.cover)
+                              : Image.file(File(imagePath),
+                                  fit: BoxFit.cover),
                         ),
                       );
                     } else {
@@ -184,10 +184,13 @@ class _CarouselManagementState extends State<CarouselManagement> {
                   setState(() {
                     Provider.of<CarouselNotifier>(context, listen: false)
                         .updateCarousel();
-                        Fluttertoast.showToast(msg: 'Carousel image added',backgroundColor: Colors.blue);
+                    Fluttertoast.showToast(
+                        msg: 'Carousel image added',
+                        backgroundColor: Colors.blue);
                   });
-                }else{
-                  Fluttertoast.showToast(msg: 'Pick an image first',backgroundColor: Colors.blue);
+                } else {
+                  Fluttertoast.showToast(
+                      msg: 'Pick an image first', backgroundColor: Colors.blue);
                 }
               },
             ),

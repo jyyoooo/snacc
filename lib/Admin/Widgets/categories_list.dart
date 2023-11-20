@@ -57,7 +57,13 @@ class CategoriesList extends StatelessWidget {
                                         height: 40,
                                       ),
                                     )
-                                  : Container(
+                                  :category.imageUrl!.contains('asset')?Container(
+                                      width: 70,
+                                      height: 70,
+                                      color: Colors.transparent,
+                                      child: Image.asset(
+                                          category.imageUrl!),
+                                    ) :Container(
                                       width: 70,
                                       height: 70,
                                       color: Colors.transparent,

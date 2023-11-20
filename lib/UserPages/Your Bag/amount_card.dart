@@ -39,7 +39,7 @@ class _AmountCardState extends State<AmountCard> {
             log('grand total: $grandTotal');
 
             return Padding(
-              padding: const EdgeInsets.fromLTRB(10, 0, 10, 80),
+              padding: const EdgeInsets.fromLTRB(10, 0, 10, 1),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(35),
                 child: BackdropFilter(
@@ -47,7 +47,7 @@ class _AmountCardState extends State<AmountCard> {
                   child: Container(
                     color:const Color.fromARGB(59, 203, 203, 203),
                     width: double.maxFinite,
-                    height: 210,
+                    height: 200,
                     child: Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: Column(

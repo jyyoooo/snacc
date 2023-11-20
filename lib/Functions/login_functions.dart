@@ -153,9 +153,13 @@ Future<bool> addUser(username, mailid, password, confirm, context) async {
 
   if (!userExist) {
     if (password == confirm) {
+
+
       final id = await userBox.add(user);
       user.userID = id;
       await userBox.put(id, user);
+
+      
       log('${user.username}s ID: ${user.userID}');
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           backgroundColor: Colors.green,

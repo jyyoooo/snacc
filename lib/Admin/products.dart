@@ -75,8 +75,6 @@ class _ListProductsState extends State<ListProducts> {
   }
 }
 
-
-
 // PRODUCTS LIST WIDGET
 
 class ListedProductsNotifier extends StatefulWidget {
@@ -164,11 +162,15 @@ class _ListedProductsNotifierState extends State<ListedProductsNotifier> {
                                                       ? Image.asset(
                                                           'assets/images/no-image-available.png',
                                                         )
-                                                      : Image.file(
-                                                          File(product
-                                                              .prodimgUrl!),
-                                                          fit: BoxFit.cover,
-                                                        ),
+                                                      : product.prodimgUrl!
+                                                              .contains('asset')
+                                                          ? Image.asset(product
+                                                              .prodimgUrl!)
+                                                          : Image.file(
+                                                              File(product
+                                                                  .prodimgUrl!),
+                                                              fit: BoxFit.cover,
+                                                            ),
                                                 ),
                                               ),
                                               const SizedBox.square(

@@ -191,10 +191,13 @@ class _ComboListItemState extends State<ComboListItem> {
                               width: 50,
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
-                                child: Image.file(
-                                  File(widget.combo.comboImgUrl!),
-                                  fit: BoxFit.cover,
-                                ),
+                                child: widget.combo.comboImgUrl!
+                                        .contains('assets/')
+                                    ? Image.asset(widget.combo.comboImgUrl!)
+                                    : Image.file(
+                                        File(widget.combo.comboImgUrl!),
+                                        fit: BoxFit.cover,
+                                      ),
                               ),
                             ),
                             const SizedBox(
@@ -332,10 +335,14 @@ class _ProductListItemState extends State<ProductListItem> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
                                   child: widget.product.prodimgUrl != null
-                                      ? Image.file(
-                                          File(widget.product.prodimgUrl!),
-                                          fit: BoxFit.cover,
-                                        )
+                                      ? widget.product.prodimgUrl!
+                                              .contains('assets/')
+                                          ? Image.asset(
+                                              widget.product.prodimgUrl!)
+                                          : Image.file(
+                                              File(widget.product.prodimgUrl!),
+                                              fit: BoxFit.cover,
+                                            )
                                       : Image.asset(
                                           'assets/images/no-image-available.png'),
                                 ),

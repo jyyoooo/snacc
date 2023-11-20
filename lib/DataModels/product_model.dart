@@ -36,5 +36,4 @@ class Product {
       this.isFavorite = false,
       this.categoryID,
       this.productID});
-      
 }

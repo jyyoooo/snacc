@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:snacc/Functions/order_funtions.dart';
-import 'package:snacc/UserPages/user_navigation.dart';
 import 'package:snacc/UserPages/user_profile/track_order.dart';
-import 'package:snacc/UserPages/user_profile/user_profile.dart';
 import 'package:snacc/Widgets/snacc_button.dart';
-import 'package:snacc/Widgets/snacc_track.dart';
 
 class OrderSuccess extends StatelessWidget {
   final int userID;
@@ -14,6 +10,7 @@ class OrderSuccess extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -30,13 +27,13 @@ class OrderSuccess extends StatelessWidget {
         ),
         child: Column(
           children: [
-            const Gap(80),
+            Gap(screenHeight * .2),
             Center(
                 child: Image.asset(
               'assets/images/Snacc.png',
               scale: 1.5,
             )),
-            const Gap(30),
+            Gap(screenHeight * .02),
             Center(
                 child: Image.asset(
               'assets/images/theaterPeople.png',
@@ -48,7 +45,7 @@ class OrderSuccess extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
                     color: Colors.green)),
-            const Gap(10),
+            Gap(screenHeight * .01),
             Text(
                 'Sit back, Relax and Enjoy your Movie \nwhile we prepare your Snacc',
                 textAlign: TextAlign.center,
@@ -56,17 +53,18 @@ class OrderSuccess extends StatelessWidget {
                   fontWeight: FontWeight.normal,
                   fontSize: 18,
                 )),
-                const Gap(40),
+            Gap(screenHeight * .1),
             SnaccButton(
               inputText: 'TRACK ORDER',
               callBack: () async {
-                final thisOrder = await getThisOrderToTack();
-                
+                // final thisOrder = await getThisOrderToTack();
 
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => TrackOrders(userID: userID,)));
+                        builder: (context) => TrackOrders(
+                              userID: userID,
+                            )));
               },
               textColor: Colors.white,
             )

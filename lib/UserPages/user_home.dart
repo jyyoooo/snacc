@@ -117,8 +117,8 @@ class UserCategoriesHorizontalList extends StatelessWidget {
       height: 100,
       child: ValueListenableBuilder(
         valueListenable: categoryListNotifier,
-        builder: (BuildContext context, List<Category> categorylist,
-            Widget? child) {
+        builder:
+            (BuildContext context, List<Category> categorylist, Widget? child) {
           return categorylist.isNotEmpty
               ? ListView.builder(
                   scrollDirection: Axis.horizontal,
@@ -129,8 +129,7 @@ class UserCategoriesHorizontalList extends StatelessWidget {
                     return GestureDetector(
                       onTap: () {
                         log('');
-                        Navigator.of(context)
-                            .push((MaterialPageRoute(
+                        Navigator.of(context).push((MaterialPageRoute(
                           builder: (context) => UserListProducts(
                             user: widget.user,
                             categoryName: category.categoryName,
@@ -142,22 +141,36 @@ class UserCategoriesHorizontalList extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.only(right: 8.0),
                         child: Column(
-                          mainAxisAlignment:
-                              MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             ClipRRect(
-                                borderRadius:
-                                    BorderRadius.circular(50),
-                                child: Container(
-                                  width: 70,
-                                  height: 70,
-                                  color: Colors.transparent,
-                                  child: category.imageUrl != null
-                                      ? Image.file(
-                                          File(category.imageUrl!))
-                                      : Image.asset(
-                                          'assets/images/no-image-available.png'),
-                                )),
+                              borderRadius: BorderRadius.circular(50),
+                              child: category.imageUrl == null
+                                  ? Container(
+                                      width: 70,
+                                      height: 70,
+                                      color: Colors.transparent,
+                                      child: Image.asset(
+                                        'assets/images/no-image-available.png',
+                                        height: 40,
+                                      ),
+                                    )
+                                  : category.imageUrl!.contains('assets/')
+                                      ? Container(
+                                          width: 70,
+                                          height: 70,
+                                          color: Colors.transparent,
+                                          child:
+                                              Image.asset(category.imageUrl!),
+                                        )
+                                      : Container(
+                                          width: 70,
+                                          height: 70,
+                                          color: Colors.transparent,
+                                          child: Image.file(
+                                              File(category.imageUrl!)),
+                                        ),
+                            ),
                             const SizedBox(height: 5),
                             Text(
                               category.categoryName!,
@@ -176,7 +189,8 @@ class UserCategoriesHorizontalList extends StatelessWidget {
               : Center(
                   child: Text(
                   'No Cateogries found',
-                  style: GoogleFonts.nunitoSans(color: Colors.grey,fontSize: 15),
+                  style:
+                      GoogleFonts.nunitoSans(color: Colors.grey, fontSize: 15),
                 ));
         },
       ),

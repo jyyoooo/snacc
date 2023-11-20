@@ -74,7 +74,9 @@ class _EditProductState extends State<EditProduct> {
                     ? Image.file(File(newImage!))
                     : (widget.product.prodimgUrl != null &&
                             widget.product.prodimgUrl!.isNotEmpty)
-                        ? Image.file(File(widget.product.prodimgUrl!))
+                        ? widget.product.prodimgUrl!.contains('assets/')
+                            ? Image.asset(widget.product.prodimgUrl!)
+                            : Image.file(File(widget.product.prodimgUrl!))
                         : Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15),

@@ -3,12 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:snacc/DataModels/category_model.dart';
-import 'package:snacc/DataModels/product_model.dart';
+import 'package:gap/gap.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:snacc/DataModels/user_model.dart';
-import 'package:snacc/Functions/category_functions.dart';
 import 'package:snacc/Functions/favorites_functions.dart';
 import 'package:snacc/Functions/product_functions.dart';
 import 'package:snacc/Functions/user_bag_function.dart';
@@ -56,13 +53,12 @@ class _UserListProductsState extends State<UserListProducts> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Text(
           widget.categoryName ?? 'Category',
-          style: const TextStyle(fontSize: 20),
+          style:  GoogleFonts.nunitoSans(fontSize: 22,fontWeight: FontWeight.bold),
         ),
       ),
       body: SingleChildScrollView(
@@ -70,7 +66,7 @@ class _UserListProductsState extends State<UserListProducts> {
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: productListNotifier.value.isNotEmpty &&
-                  productListNotifier.value != null
+                  productListNotifier.value.isNotEmpty
               ? ValueListenableBuilder(
                   valueListenable: productListNotifier,
                   builder: (context, productlist, child) => ListView.builder(
@@ -113,14 +109,19 @@ class _UserListProductsState extends State<UserListProducts> {
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             10),
-                                                    child: product
-                                                                ?.prodimgUrl !=
+                                                    child: product.prodimgUrl !=
                                                             null
-                                                        ? Image.file(
-                                                            File(product!
-                                                                .prodimgUrl!),
-                                                            fit: BoxFit.cover,
-                                                          )
+                                                        ? product.prodimgUrl!
+                                                                .contains(
+                                                                    'assets/')
+                                                            ? Image.asset(product
+                                                                .prodimgUrl!)
+                                                            : Image.file(
+                                                                File(product
+                                                                    .prodimgUrl!),
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                              )
                                                         : Image.asset(
                                                             'assets/images/no-image-available.png'),
                                                   ),
@@ -136,12 +137,13 @@ class _UserListProductsState extends State<UserListProducts> {
                                                           .spaceBetween,
                                                   children: [
                                                     Text(
-                                                      '${product?.prodname!}',
-                                                      style: const TextStyle(
-                                                          fontSize: 18),
+                                                      product.prodname!,
+                                                      style:  GoogleFonts.nunitoSans(
+                                                          fontSize: 17),
                                                     ),
+                                                    const Gap(10),
                                                     Text(
-                                                        '₹${product?.prodprice!}',
+                                                        '₹${product.prodprice!}',
                                                         style: const TextStyle(
                                                             fontWeight:
                                                                 FontWeight.w500,
@@ -155,7 +157,7 @@ class _UserListProductsState extends State<UserListProducts> {
                                                   CrossAxisAlignment.end,
                                               children: [
                                                 IconButton(
-                                                  icon: product!.isFavorite!
+                                                  icon: product.isFavorite!
                                                       ? const Icon(
                                                           Icons
                                                               .favorite_rounded,

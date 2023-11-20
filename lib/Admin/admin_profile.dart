@@ -20,6 +20,7 @@ class AdminAccount extends StatelessWidget {
         child: Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
+        leading: const SizedBox.shrink(),
         elevation: .4,
         centerTitle: true,
         backgroundColor: Colors.white,

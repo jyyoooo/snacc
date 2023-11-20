@@ -39,7 +39,7 @@ class _AdminHomeState extends State<AdminHome> {
     Provider.of<CarouselNotifier>(context);
 
     return Scaffold(
-      appBar: AppBar(
+      appBar: AppBar(leading: const SizedBox.shrink(),
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: .4,
@@ -63,7 +63,7 @@ class _AdminHomeState extends State<AdminHome> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('    Catergories',
+                    Text('    Create Catergories',
                         style: GoogleFonts.nunitoSans(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -94,7 +94,7 @@ class _AdminHomeState extends State<AdminHome> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('    Offers Section',
+                    Text('    Add Offers',
                         style: GoogleFonts.nunitoSans(
                             fontSize: 20, fontWeight: FontWeight.bold)),
                     IconButton(
@@ -128,7 +128,7 @@ class _AdminHomeState extends State<AdminHome> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('    Popular Combos',
+                    Text('    Create Combos',
                         style: GoogleFonts.nunitoSans(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,

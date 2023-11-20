@@ -17,16 +17,23 @@ Future<List<DropdownMenuItem<Category>>> fetchCategories() async {
             value: category,
             child: Row(
               children: [
-                category.imageUrl != null 
-                    ? Image.file(
-                        File(category.imageUrl!),
-                        width: 35,
-                        height: 35,
-                      )
+                category.imageUrl != null
+                    ? category.imageUrl!.contains('assets/')
+                        ? Image.asset(
+                            category.imageUrl!,
+                            width: 35,
+                            height: 35,
+                          )
+                        : Image.file(
+                            File(category.imageUrl!),
+                            width: 35,
+                            height: 35,
+                          )
                     : SizedBox(
-                  height: 35,
-                  width: 35,
-                  child: Image.asset('assets/images/no-image-available.png')),
+                        height: 35,
+                        width: 35,
+                        child: Image.asset(
+                            'assets/images/no-image-available.png')),
                 const SizedBox(width: 8),
                 Text(category.categoryName!),
               ],
@@ -54,11 +61,17 @@ List<DropdownMenuItem<Product>> fetchProducts(Category selectedCategory) {
       child: Row(
         children: [
           product.prodimgUrl != null
-              ? Image.file(
-                  File(product.prodimgUrl!),
-                  width: 35,
-                  height: 35,
-                )
+              ? product.prodimgUrl!.contains('assets/')
+                  ? Image.asset(
+                      product.prodimgUrl!,
+                      width: 35,
+                      height: 35,
+                    )
+                  : Image.file(
+                      File(product.prodimgUrl!),
+                      width: 35,
+                      height: 35,
+                    )
               : SizedBox(
                   height: 35,
                   width: 35,
@@ -66,7 +79,12 @@ List<DropdownMenuItem<Product>> fetchProducts(Category selectedCategory) {
           const SizedBox(
             width: 10,
           ),
-          SizedBox(width:80,child: Text(product.prodname!,overflow: TextOverflow.fade,)),
+          SizedBox(
+              width: 80,
+              child: Text(
+                product.prodname!,
+                overflow: TextOverflow.fade,
+              )),
         ],
       ),
     );
@@ -77,8 +95,8 @@ List<DropdownMenuItem<Product>> fetchProducts(Category selectedCategory) {
 
 final ValueNotifier<List<ComboModel>> comboListNotifier = ValueNotifier([]);
 
-Future<bool> createCombo(
-    Product? productOne, Product? productTwo, String? comboImage,String? description) async {
+Future<bool> createCombo(Product? productOne, Product? productTwo,
+    String? comboImage, String? description) async {
   if (productOne == null || productTwo == null) {
     return false;
   }
@@ -98,9 +116,7 @@ Future<bool> createCombo(
       comboImgUrl: comboImage,
       comboPrice: comboPrice,
       comboItems: comboItems,
-      description: description
-      );
-      
+      description: description);
 
   final id = await comboBox.add(newCombo);
   newCombo.comboID = id;

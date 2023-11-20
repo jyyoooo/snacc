@@ -8,6 +8,7 @@ class SnaccTextField extends StatefulWidget {
   final String? validationMessage;
   final bool obscureText;
   final bool? showText;
+  final TextCapitalization? textCapitalization;
 
   const SnaccTextField({
     Key? key,
@@ -17,6 +18,7 @@ class SnaccTextField extends StatefulWidget {
     this.validationMessage,
     this.obscureText = false,
     this.showText = true,
+    this.textCapitalization = TextCapitalization.none
   }) : super(key: key);
 
   @override
@@ -36,7 +38,7 @@ class _SnaccTextFieldState extends State<SnaccTextField> {
           children: [
             const Gap(13),
             TextFormField( 
-              textCapitalization: TextCapitalization.characters,
+              textCapitalization: widget.textCapitalization!,
               controller: widget.controller,
               obscureText: widget.obscureText && isObscure,
               autovalidateMode: AutovalidateMode.onUserInteraction,

@@ -17,6 +17,9 @@ import 'package:snacc/UserPages/Your%20Bag/payment.dart';
 import 'package:snacc/UserPages/provider.dart';
 import 'package:snacc/UserPages/user_home.dart';
 import 'package:snacc/UserPages/user_navigation.dart';
+import 'package:snacc/UserPages/user_productspage.dart';
+
+import 'Functions/populate_initial_data.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,6 +47,8 @@ void main() async {
   await Hive.openBox<ComboModel>('combos');
   await Hive.openBox<Product>('products');
   await Hive.openBox<String>('carousel');
+
+  await populateInitialData();
 
   runApp(
     MultiProvider(
@@ -74,7 +79,9 @@ class _MyAppState extends State<MyApp> {
         '/selectLogin': (context) => const SelectLogin(),
         '/userNavigation': (context) => const UserNavigation(),
         '/login': (context) => const Login(),
-        '/popularcombo': (context) => const PopularCombo()
+        '/popularcombo': (context) => const PopularCombo(),
+        
+
       },
     );
   }

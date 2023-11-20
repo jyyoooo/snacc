@@ -23,7 +23,7 @@ class _UserBagState extends State<UserBag> {
   void initState() {
     super.initState();
     setState(() {
-      if (widget.user!.userBag != null) {
+      if (widget.user?.userBag != null) {
         userBagNotifier.value = widget.user!.userBag!;
         userBagNotifier.notifyListeners();
       }
@@ -80,7 +80,7 @@ class _UserBagState extends State<UserBag> {
             builder: (context, userBag, child) {
               // if (userBag != null && widget.user != null) {
               return Positioned(
-                height: 277,
+                height: 262,
                 bottom: 1,
                 left: 0,
                 right: 0,

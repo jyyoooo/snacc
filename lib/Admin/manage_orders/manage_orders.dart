@@ -20,6 +20,7 @@ class _OrdersPageState extends State<OrdersPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: const SizedBox.shrink(),
         title: Text(
           'Orders',
           style:
@@ -28,7 +29,6 @@ class _OrdersPageState extends State<OrdersPage> {
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: .4,
-       
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -50,6 +50,7 @@ class ManageOrderList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
     return FutureBuilder(
         future: fetchOrders(),
         builder: (context, snapshot) {
@@ -61,127 +62,144 @@ class ManageOrderList extends StatelessWidget {
               return const Text('Error loading Orders');
             } else if (snapshot.hasData) {
               List<Order> reversedOrders = snapshot.data!.reversed.toList();
-              
-              return snapshot.data!.isNotEmpty? ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: reversedOrders.length,
-                itemBuilder: (context, index) {
-                  final order = reversedOrders[index];
-                  return InkWell(
-                    onTap: () {
-                      log('${order.orderID}');
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => OrderDetails(order: order)));
-                    },
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)),
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(8, 12, 16, 8),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            'Order ID: ${order.orderID}',
-                                            style: GoogleFonts.nunitoSans(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          Text(
-                                            '₹${order.orderPrice}',
-                                            style: GoogleFonts.nunitoSans(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 18,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const Gap(10),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                              '${getFormattedOrderedTime(order.orderDateTime)}',
-                                              style: GoogleFonts.nunitoSans(
-                                                  fontSize: 15)),
-                                          Text(
-                                              '${DateFormat.yMMMEd().format(order.orderDateTime!)} ',
-                                              style: GoogleFonts.nunitoSans(
-                                                  fontSize: 15)),
-                                          Row(
-                                            children: [
-                                              Icon(
-                                                Icons.circle,
-                                                color: getOrderStatusColor(
-                                                    order.status!),
-                                                size: 18,
-                                              ),
-                                              const Gap(3),
-                                              // FIX HERE, theres overflow issue
 
-                                              Text(
-                                                  getOrderStatus(order.status!),
+              return snapshot.data!.isNotEmpty
+                  ? ListView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: reversedOrders.length,
+                      itemBuilder: (context, index) {
+                        final order = reversedOrders[index];
+                        return InkWell(
+                          onTap: () {
+                            log('${order.orderID}');
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    OrderDetails(order: order)));
+                          },
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15)),
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(8, 12, 16, 8),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      const SizedBox(width: 10),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  'Order ID: ${order.orderID}',
                                                   style: GoogleFonts.nunitoSans(
-                                                      fontSize: 15,
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                Text(
+                                                  '₹${order.orderPrice}',
+                                                  style: GoogleFonts.nunitoSans(
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 18,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            const Gap(10),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                    '${getFormattedOrderedTime(order.orderDateTime)}',
+                                                    style:
+                                                        GoogleFonts.nunitoSans(
+                                                            fontSize: screenHeight>700?15:13)),
+                                                Text(
+                                                    '${DateFormat.yMMMEd().format(order.orderDateTime!)} ',
+                                                    style:
+                                                        GoogleFonts.nunitoSans(
+                                                            fontSize: screenHeight>700?15:13)),
+                                                Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.circle,
+                                                      color:
+                                                          getOrderStatusColor(
+                                                              order.status!),
+                                                      size: screenHeight>700?15:13,
+                                                    ),
+                                                    const Gap(3),
+                                                    // FIX HERE, theres overflow issue
+
+                                                    Text(
+                                                        getOrderStatus(
+                                                            order.status!),
+                                                        style: GoogleFonts
+                                                            .nunitoSans(
+                                                                fontSize: screenHeight>700?15:13,
+                                                                color:
+                                                                    Colors.blue,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                            const Gap(8),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  '${getPaymentMethod(order.patymentMethod!)}',
+                                                  style: GoogleFonts.nunitoSans(
                                                       color: Colors.blue,
                                                       fontWeight:
-                                                          FontWeight.bold)),
-                                            ],
-                                          ),
-                                        ],
+                                                          FontWeight.bold),
+                                                ),
+                                                Text(
+                                                  order.screenAndSeatNumber!,
+                                                  style: GoogleFonts.nunitoSans(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 20),
+                                                )
+                                              ],
+                                            )
+                                          ],
+                                        ),
                                       ),
-                                      const Gap(8),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            '${getPaymentMethod(order.patymentMethod!)}',
-                                            style: GoogleFonts.nunitoSans(
-                                                color: Colors.blue,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          Text(
-                                            order.screenAndSeatNumber!,
-                                            style: GoogleFonts.nunitoSans(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 20),
-                                          )
-                                        ],
-                                      )
                                     ],
                                   ),
-                                ),
-                              ],
+                                  const SizedBox(height: 10),
+                                ],
+                              ),
                             ),
-                            const SizedBox(height: 10),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ):Center(
-                  heightFactor: 15,
-                  child: Text(
-                    'No Orders',
-                    style: GoogleFonts.nunitoSans(color: Colors.grey,fontSize: 15),
-                  ));
+                          ),
+                        );
+                      },
+                    )
+                  : Center(
+                      heightFactor: 15,
+                      child: Text(
+                        'No Orders',
+                        style: GoogleFonts.nunitoSans(
+                            color: Colors.grey, fontSize: 15),
+                      ));
             }
           }
           return SingleChildScrollView(
@@ -192,7 +210,8 @@ class ManageOrderList extends StatelessWidget {
                   heightFactor: 15,
                   child: Text(
                     'No Orders',
-                    style: GoogleFonts.nunitoSans(color: Colors.grey,fontSize: 17),
+                    style: GoogleFonts.nunitoSans(
+                        color: Colors.grey, fontSize: 17),
                   )),
             ),
           );

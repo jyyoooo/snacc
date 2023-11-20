@@ -161,12 +161,14 @@ class PurchaseHistory extends StatelessWidget {
                               );
                             },
                           )
-                        : Center(
-                            child: Text(
-                            'No Orders',
-                            style: GoogleFonts.nunitoSans(
-                                color: Colors.grey, fontSize: 15),
-                          ));
+                        : Expanded(
+                          child: Center(
+                              child: Text(
+                              'No Orders',
+                              style: GoogleFonts.nunitoSans(
+                                  color: Colors.grey, fontSize: 15),
+                            )),
+                        );
                   } else {
                     return const Text('No Orders');
                   }
