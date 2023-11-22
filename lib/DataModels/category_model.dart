@@ -32,13 +32,13 @@ class Category {
 ValueNotifier<List<Category>> categoryListNotifier = ValueNotifier([]);
 
 void addCategory(Category category) async {
+  // OPEN BOX
   final categoryBox = Hive.box<Category>('category');
+  // GET ID FROM HIVE ON ADD AND ASSIGN IT TI A VARIABLE
   final id = await categoryBox.add(category);
-
-  log('category id from hive = $id');
-
+  // ASSIGN THE ID FROM HIVE TO THE OBJECT'S ID FIELD
   category.categoryID = id;
-
+  // UPDATE THE OBJECT IN THE BOX
   await categoryBox.put(id, category);
 
   log('category id = ${category.categoryID}');

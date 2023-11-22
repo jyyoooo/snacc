@@ -129,7 +129,7 @@ class _ComboListBuilderState extends State<ComboListBuilder> {
                                         ),
                                         SnaccButton(
                                             btncolor: Colors.amber,
-                                            width: 70,
+                                            width: 85,
                                             inputText: 'ADD',
                                             callBack: () {
                                               addComboToBag(combo);

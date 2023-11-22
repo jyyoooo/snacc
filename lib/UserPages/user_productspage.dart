@@ -195,7 +195,7 @@ class _UserListProductsState extends State<UserListProducts> {
                                                   },
                                                 ),
                                                 SnaccButton(
-                                                  width: 70,
+                                                  width: 85,
                                                   inputText: 'ADD',
                                                   callBack: () {
                                                     addProductToBag(product);

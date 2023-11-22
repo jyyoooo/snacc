@@ -1,5 +1,8 @@
 {
     "dart.flutterHotReloadOnSave": "all",
     "cmake.sourceDirectory": "C:/Users/jyyoooo/snacc/linux/flutter",
-    "java.configuration.updateBuildConfiguration": "automatic"
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "debug.javascript.autoAttachFilter": "smart",
+    "java.import.gradle.offline.enabled": true,
+    "java.jdt.ls.androidSupport.enabled": "on"
 }

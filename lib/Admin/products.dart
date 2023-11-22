@@ -2,15 +2,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:snacc/Admin/Widgets/edit_product.dart';
-import 'package:snacc/DataModels/category_model.dart';
-
-import 'package:snacc/Functions/category_functions.dart';
-import 'package:snacc/Functions/image_picker.dart';
 import 'package:snacc/Functions/product_functions.dart';
-import 'package:snacc/Widgets/snacc_button.dart';
 import 'package:snacc/Widgets/snacc_floating_button.dart';
-import 'package:snacc/Widgets/snacc_textfield.dart';
-
 import '../DataModels/product_model.dart';
 import 'Widgets/edit_category.dart';
 

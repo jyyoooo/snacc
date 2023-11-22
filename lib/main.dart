@@ -1,9 +1,6 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:snacc/Admin/admin_home.dart';
 import 'package:snacc/Admin/build_popular_combo.dart';
-import 'package:snacc/Admin/manage_orders/manage_orders.dart';
 import 'package:snacc/DataModels/combo_model.dart';
 import 'package:snacc/DataModels/order_model.dart';
 import 'package:snacc/DataModels/user_model.dart';
@@ -15,9 +12,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:snacc/Authentication/splash_page.dart';
 import 'package:snacc/UserPages/Your%20Bag/payment.dart';
 import 'package:snacc/UserPages/provider.dart';
-import 'package:snacc/UserPages/user_home.dart';
 import 'package:snacc/UserPages/user_navigation.dart';
-import 'package:snacc/UserPages/user_productspage.dart';
+
 
 import 'Functions/populate_initial_data.dart';
 

@@ -139,7 +139,7 @@ class _ComboItemPageState extends State<ComboItemPage> {
                   ),
                   widget.isAdmin == false
                       ? SnaccButton(
-                          width: 70,
+                          width: 85,
                           btncolor: Colors.amber,
                           inputText: 'ADD',
                           callBack: () {

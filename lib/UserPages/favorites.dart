@@ -208,7 +208,7 @@ class _ComboListItemState extends State<ComboListItem> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 SizedBox(
-                                  width: 180,
+                                  width: 170,
                                   child: Text(
                                     widget.combo.comboName!,
                                     // overflow: TextOverflow.ellipsis,
@@ -231,7 +231,7 @@ class _ComboListItemState extends State<ComboListItem> {
                           ],
                         ),
                         SizedBox(
-                          width: 89,
+                          width: 100,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
@@ -256,7 +256,7 @@ class _ComboListItemState extends State<ComboListItem> {
                                           fontWeight: FontWeight.bold),
                                     )
                                   : SnaccButton(
-                                      width: 70,
+                                      width: 85,
                                       inputText: 'ADD',
                                       callBack: () {
                                         addComboToBag(widget.combo);
@@ -356,7 +356,7 @@ class _ProductListItemState extends State<ProductListItem> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   SizedBox(
-                                    width: 188,
+                                    width: 173,
                                     child: Text(
                                       widget.product.prodname!,
                                       style: GoogleFonts.nunitoSans(
@@ -403,7 +403,7 @@ class _ProductListItemState extends State<ProductListItem> {
                                           fontWeight: FontWeight.bold),
                                     )
                                   : SnaccButton(
-                                      width: 70,
+                                      width: 85,
                                       inputText: 'ADD',
                                       callBack: () {
                                         addProductToBag(widget.product);
