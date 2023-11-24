@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:snacc/DataModels/user_model.dart';
 import 'package:snacc/Functions/user_bag_function.dart';
@@ -45,108 +46,28 @@ class _AmountCardState extends State<AmountCard> {
                 child: BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
                   child: Container(
-                    color:const Color.fromARGB(59, 203, 203, 203),
+                    color: Colors.grey[100],
                     width: double.maxFinite,
                     height: 200,
                     child: Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: Column(
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Total',
-                                style: GoogleFonts.nunitoSans(
-                                    fontSize: 17, fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                '₹${total ??= 0}0',
-                                style: GoogleFonts.nunitoSans(
-                                    fontSize: 17, fontWeight: FontWeight.bold),
-                              )
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                '+ SGST 18%',
-                                style: GoogleFonts.nunitoSans(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.normal,
-                                    color: Colors.grey),
-                              ),
-                              Text(
-                                '₹${sGst}0',
-                                style: GoogleFonts.nunitoSans(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.normal,
-                                    color: Colors.grey),
-                              )
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Convenience fee',
-                                style: GoogleFonts.nunitoSans(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.normal,
-                                    color: Colors.grey),
-                              ),
-                              Text(
-                                '₹${convenienceFee}0',
-                                style: GoogleFonts.nunitoSans(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.normal,
-                                    color: Colors.grey),
-                              )
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Grand Total',
-                                style: GoogleFonts.nunitoSans(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(
-                                // width: 50,height: 27,
-                                child: Text(
-                                  '₹${grandTotal}0',
-                                  overflow: TextOverflow.clip,
-                                  style: GoogleFonts.nunitoSans(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              )
-                            ],
-                          ),
-                         
-                          SnaccButton(
-                            width: 120,
-                              textColor: Colors.black,
-                              btncolor: Colors.amber,
-                              inputText: "PAYMENT",
-                              callBack: () {
-                                if (grandTotal != 0) {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => PaymentsPage(
-                                            user: widget.user,
-                                            amountPayable: addedTotal,
-                                          )));
-                                } else {
-                                  Fluttertoast.showToast(
-                                      msg: 'No Snaccs to checkout',
-                                      backgroundColor: Colors.lightBlue);
-                                }
-                              })
+                          // TOTAL ROW
+                          totalRow(),
+                          const Gap(5),
+
+                          // GST ROW
+                          gstRow(sGst),
+
+                          // FEE ROW
+                          convinienceFeeRow(convenienceFee),
+
+                          // GRAND TOTAL ROW
+                          grandTotalRow(grandTotal),
+
+                          // PAYEMENT BUTTON
+                          paymentButton(grandTotal, context, addedTotal)
                         ],
                       ),
                     ),
@@ -154,6 +75,103 @@ class _AmountCardState extends State<AmountCard> {
                 ),
               ),
             );
+          }
+        });
+  }
+
+  Row totalRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          'Total',
+          style:
+              GoogleFonts.nunitoSans(fontSize: 17, fontWeight: FontWeight.bold),
+        ),
+        Text(
+          '₹${total ??= 0}0',
+          style:
+              GoogleFonts.nunitoSans(fontSize: 17, fontWeight: FontWeight.bold),
+        )
+      ],
+    );
+  }
+
+  Row gstRow(double sGst) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          '+ SGST 18%',
+          style: GoogleFonts.nunitoSans(
+              fontSize: 14, fontWeight: FontWeight.normal, color: Colors.grey),
+        ),
+        Text(
+          '₹${sGst}0',
+          style: GoogleFonts.nunitoSans(
+              fontSize: 14, fontWeight: FontWeight.normal, color: Colors.grey),
+        )
+      ],
+    );
+  }
+
+  Row convinienceFeeRow(double convenienceFee) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          'Convenience fee',
+          style: GoogleFonts.nunitoSans(
+              fontSize: 14, fontWeight: FontWeight.normal, color: Colors.grey),
+        ),
+        Text(
+          '₹${convenienceFee}0',
+          style: GoogleFonts.nunitoSans(
+              fontSize: 14, fontWeight: FontWeight.normal, color: Colors.grey),
+        )
+      ],
+    );
+  }
+
+  Row grandTotalRow(double grandTotal) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          'Grand Total',
+          style:
+              GoogleFonts.nunitoSans(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(
+          child: Text(
+            '₹${grandTotal}0',
+            overflow: TextOverflow.clip,
+            style: GoogleFonts.nunitoSans(
+                fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        )
+      ],
+    );
+  }
+
+  SnaccButton paymentButton(
+      double grandTotal, BuildContext context, double addedTotal) {
+    return SnaccButton(
+        width: 120,
+        textColor: Colors.black,
+        btncolor: Colors.amber,
+        inputText: "PAYMENT",
+        callBack: () {
+          if (grandTotal != 0) {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => PaymentsPage(
+                      user: widget.user,
+                      amountPayable: addedTotal,
+                    )));
+          } else {
+            Fluttertoast.showToast(
+                msg: 'No Snaccs to checkout',
+                backgroundColor: Colors.lightBlue);
           }
         });
   }

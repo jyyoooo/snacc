@@ -1,7 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -29,7 +28,6 @@ class UserListProducts extends StatefulWidget {
 }
 
 class _UserListProductsState extends State<UserListProducts> {
-  // bool isFavorited = false;
   TextEditingController productnamectrl = TextEditingController();
   TextEditingController productpricectrl = TextEditingController();
   final productformkey = GlobalKey<FormState>();
@@ -52,184 +50,206 @@ class _UserListProductsState extends State<UserListProducts> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Text(
-          widget.categoryName ?? 'Category',
-          style:  GoogleFonts.nunitoSans(fontSize: 22,fontWeight: FontWeight.bold),
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.grey[50],
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          title: Text(
+            widget.categoryName ?? 'Category',
+            style: GoogleFonts.nunitoSans(
+                fontSize: 22, fontWeight: FontWeight.bold),
+          ),
         ),
-      ),
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: productListNotifier.value.isNotEmpty &&
-                  productListNotifier.value.isNotEmpty
-              ? ValueListenableBuilder(
-                  valueListenable: productListNotifier,
-                  builder: (context, productlist, child) => ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: productListNotifier.value.length,
-                    itemBuilder: (context, index) {
-                      final product = productlist[index];
+        body: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: productListNotifier.value.isNotEmpty &&
+                    productListNotifier.value.isNotEmpty
+                ? ValueListenableBuilder(
+                    valueListenable: productListNotifier,
+                    builder: (context, productlist, child) => SizedBox(
+                      height: MediaQuery.of(context).size.height,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: productListNotifier.value.length,
+                        itemBuilder: (context, index) {
+                          final product = productlist[index];
 
-                      return GestureDetector(
-                        onTap: () {
-                          log('${product.isFavorite}');
-                        },
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15)),
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(15, 10, 15, 0),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Column(
+                          return GestureDetector(
+                            onTap: () {
+                              log('${product.isFavorite}');
+                            },
+                            child: Card(
+                              color: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15)),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        15, 10, 15, 0),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                        Column(
                                           children: [
                                             Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.start,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
-                                                SizedBox(
-                                                  height: 70,
-                                                  width: 70,
-                                                  child: ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                    child: product.prodimgUrl !=
-                                                            null
-                                                        ? product.prodimgUrl!
-                                                                .contains(
-                                                                    'assets/')
-                                                            ? Image.asset(product
-                                                                .prodimgUrl!)
-                                                            : Image.file(
-                                                                File(product
-                                                                    .prodimgUrl!),
-                                                                fit: BoxFit
-                                                                    .cover,
-                                                              )
-                                                        : Image.asset(
-                                                            'assets/images/no-image-available.png'),
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                  width: 10,
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    SizedBox(
+                                                      height: 70,
+                                                      width: 70,
+                                                      child: ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                        child: product
+                                                                    .prodimgUrl !=
+                                                                null
+                                                            ? product
+                                                                    .prodimgUrl!
+                                                                    .contains(
+                                                                        'assets/')
+                                                                ? Image.asset(
+                                                                    product
+                                                                        .prodimgUrl!)
+                                                                : Image.file(
+                                                                    File(product
+                                                                        .prodimgUrl!),
+                                                                    fit: BoxFit
+                                                                        .cover,
+                                                                  )
+                                                            : Image.asset(
+                                                                'assets/images/no-image-available.png'),
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Text(
+                                                          product.prodname!,
+                                                          style: GoogleFonts
+                                                              .nunitoSans(
+                                                                  fontSize: 17),
+                                                        ),
+                                                        const Gap(10),
+                                                        Text(
+                                                            '₹${product.prodprice!}',
+                                                            style: const TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                                fontSize: 18)),
+                                                      ],
+                                                    ),
+                                                  ],
                                                 ),
                                                 Column(
                                                   crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
+                                                      CrossAxisAlignment.end,
                                                   children: [
-                                                    Text(
-                                                      product.prodname!,
-                                                      style:  GoogleFonts.nunitoSans(
-                                                          fontSize: 17),
+                                                    IconButton(
+                                                      icon: product.isFavorite!
+                                                          ? const Icon(
+                                                              Icons
+                                                                  .favorite_rounded,
+                                                              color: Colors.red)
+                                                          : const Icon(
+                                                              Icons
+                                                                  .favorite_outline_rounded,
+                                                              color:
+                                                                  Colors.grey),
+                                                      onPressed: () {
+                                                        setState(() {
+                                                          if (product
+                                                              .isFavorite!) {
+                                                            removeProductFromFavorites(
+                                                                product,
+                                                                widget.user!);
+                                                            Fluttertoast
+                                                                .showToast(
+                                                              msg:
+                                                                  '${product.prodname} removed from Favorites',
+                                                              backgroundColor:
+                                                                  Colors.red,
+                                                            );
+                                                          } else {
+                                                            addProductToFavorite(
+                                                                product,
+                                                                widget.user!);
+                                                            Fluttertoast
+                                                                .showToast(
+                                                              msg:
+                                                                  '${product.prodname} added to Favorites',
+                                                              backgroundColor:
+                                                                  Colors.amber,
+                                                              textColor: Colors
+                                                                  .black87,
+                                                            );
+                                                          }
+                                                        });
+                                                      },
                                                     ),
-                                                    const Gap(10),
-                                                    Text(
-                                                        '₹${product.prodprice!}',
-                                                        style: const TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            fontSize: 18)),
+                                                    SnaccButton(
+                                                      width: 85,
+                                                      inputText: 'ADD',
+                                                      callBack: () {
+                                                        addProductToBag(
+                                                            product);
+                                                      },
+                                                      btncolor: Colors.amber,
+                                                    ),
                                                   ],
-                                                ),
+                                                )
                                               ],
                                             ),
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
-                                              children: [
-                                                IconButton(
-                                                  icon: product.isFavorite!
-                                                      ? const Icon(
-                                                          Icons
-                                                              .favorite_rounded,
-                                                          color: Colors.red)
-                                                      : const Icon(
-                                                          Icons
-                                                              .favorite_outline_rounded,
-                                                          color: Colors.grey),
-                                                  onPressed: () {
-                                                    setState(() {
-                                                      if (product.isFavorite!) {
-                                                        removeProductFromFavorites(
-                                                            product,
-                                                            widget.user!);
-                                                        Fluttertoast.showToast(
-                                                          msg:
-                                                              '${product.prodname} removed from Favorites',
-                                                          backgroundColor:
-                                                              Colors.red,
-                                                        );
-                                                      } else {
-                                                        addProductToFavorite(
-                                                            product,
-                                                            widget.user!);
-                                                        Fluttertoast.showToast(
-                                                          msg:
-                                                              '${product.prodname} added to Favorites',
-                                                          backgroundColor:
-                                                              Colors.amber,
-                                                          textColor:
-                                                              Colors.black87,
-                                                        );
-                                                      }
-                                                    });
-                                                  },
-                                                ),
-                                                SnaccButton(
-                                                  width: 85,
-                                                  inputText: 'ADD',
-                                                  callBack: () {
-                                                    addProductToBag(product);
-                                                  },
-                                                  btncolor: Colors.amber,
-                                                ),
-                                              ],
-                                            )
                                           ],
                                         ),
+                                        const SizedBox(
+                                          height: 5,
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        )
                                       ],
                                     ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    )
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                )
-              : const Center(
-                  heightFactor: 40,
-                  child: Text(
-                    'No Products found',
-                    style: TextStyle(color: Colors.grey, fontSize: 15),
-                  )),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  )
+                : const Center(
+                    heightFactor: 40,
+                    child: Text(
+                      'No Products found',
+                      style: TextStyle(color: Colors.grey, fontSize: 15),
+                    )),
+          ),
         ),
       ),
     );

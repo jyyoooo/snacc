@@ -42,7 +42,7 @@ class _BagListBuilderState extends State<BagListBuilder> {
                           physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
                             final item = items[index];
-        
+
                             if (item is ComboModel) {
                               return ComboListItem(
                                 index: index,
@@ -64,15 +64,18 @@ class _BagListBuilderState extends State<BagListBuilder> {
                           },
                           itemCount: userBagNotifier.value.length,
                         )
-                      : Center(
-                          child: Text(
-                            'Bag is empty',
-                            style: GoogleFonts.nunitoSans(
-                                color: Colors.grey, fontSize: 17),
-                          ),
-                        ),
+                      : emptyBagMessage(),
             ),
           ),
         ));
+  }
+
+  Center emptyBagMessage() {
+    return Center(
+      child: Text(
+        'Bag is empty',
+        style: GoogleFonts.nunitoSans(color: Colors.grey, fontSize: 17),
+      ),
+    );
   }
 }

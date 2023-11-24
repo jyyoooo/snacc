@@ -34,68 +34,123 @@ class _UserHomeState extends State<UserHome> {
   @override
   Widget build(BuildContext context) {
     Provider.of<CarouselNotifier>(context);
+
     return Scaffold(
       extendBody: true,
       appBar: AppBar(
         toolbarHeight: 95,
+
+        // SELECT SCREEN AND SEAT
         title: const ScreenAndSeat(),
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.red.withOpacity(1),
         elevation: 0,
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Padding(
           padding: const EdgeInsets.all(10.0),
-          child: SizedBox(
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Categories',
-                    style: GoogleFonts.nunitoSans(
-                        fontSize: 23, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-              const Gap(5),
-              UserCategoriesHorizontalList(widget: widget),
-              const Gap(5),
-              Text('Offers For You',
-                  style: GoogleFonts.nunitoSans(
-                      fontSize: 23, fontWeight: FontWeight.bold)),
-              const Gap(5),
-              Consumer<CarouselNotifier>(
-                builder: (context, carouselNotifier, child) {
-                  return SnaccCarousel(
-                    carouselImages:
-                        Hive.box<String>('carousel').values.toList(),
-                  );
-                },
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Popular Combos',
-                      style: GoogleFonts.nunitoSans(
-                          fontSize: 23, fontWeight: FontWeight.bold)),
-                ],
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              const ComboListBuilder(
-                isAdmin: false,
-              )
-            ]),
-          ),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            //  TITLE
+            const CategoriesTitle(),
+            const Gap(5),
+
+            // HORIZONTAL LIST OF CATEGORIES
+            UserCategoriesHorizontalList(widget: widget),
+            const Gap(5),
+
+            //  TITLE
+            const OffersTitle(),
+            const Gap(5),
+
+            //  CAROUSEL
+            const CarouselSection(),
+            const Gap(8),
+
+            //  TITLE
+            const ComboTitle(),
+            const Gap(8),
+
+            // COMBO GRID
+            const ComboListBuilder(
+              isAdmin: false,
+            )
+          ]),
         ),
       ),
+    );
+  }
+}
+
+
+
+// WIDGETS
+
+class ComboTitle extends StatelessWidget {
+  const ComboTitle({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text('Popular Combos',
+            style: GoogleFonts.nunitoSans(
+                fontSize: 23, fontWeight: FontWeight.bold)),
+      ],
+    );
+  }
+}
+
+class CarouselSection extends StatelessWidget {
+  const CarouselSection({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<CarouselNotifier>(
+      builder: (context, carouselNotifier, child) {
+        return SnaccCarousel(
+          carouselImages: Hive.box<String>('carousel').values.toList(),
+        );
+      },
+    );
+  }
+}
+
+class OffersTitle extends StatelessWidget {
+  const OffersTitle({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text('Offers For You',
+        style:
+            GoogleFonts.nunitoSans(fontSize: 23, fontWeight: FontWeight.bold));
+  }
+}
+
+class CategoriesTitle extends StatelessWidget {
+  const CategoriesTitle({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          'Categories',
+          style:
+              GoogleFonts.nunitoSans(fontSize: 23, fontWeight: FontWeight.bold),
+        ),
+      ],
     );
   }
 }

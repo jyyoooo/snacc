@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:snacc/DataModels/combo_model.dart';
 import 'package:snacc/DataModels/product_model.dart';
@@ -9,7 +10,8 @@ import 'package:snacc/Widgets/snacc_button.dart';
 
 // Products fucntions
 
- ValueNotifier<List<dynamic>> favoriteListNotifier = ValueNotifier<List<dynamic>>([]);
+ValueNotifier<List<dynamic>> favoriteListNotifier =
+    ValueNotifier<List<dynamic>>([]);
 // add PRODUCT to FAVORITES
 
 void addProductToFavorite(Product product, UserModel user) async {
@@ -67,8 +69,8 @@ removeAllFavorites(List favList) async {
         item.isFavorite = false;
         Hive.box<ComboModel>('combos').put(item.comboID, item);
       }
-    }else if(item is Product){
-      if(item.isFavorite!){
+    } else if (item is Product) {
+      if (item.isFavorite!) {
         item.isFavorite = false;
         Hive.box<Product>('products').put(item.productID, item);
       }
@@ -87,7 +89,6 @@ Future<UserModel> getUser() async {
   return user;
 }
 
-
 // remove all dialog
 
 Future<dynamic> removeAllFavoriteShowDialog(context, List favList) {
@@ -95,18 +96,21 @@ Future<dynamic> removeAllFavoriteShowDialog(context, List favList) {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Are you sure?'),
-          content: const Text('Remove all your favorites?'),
+          backgroundColor: Colors.white,
+          title: Text(
+            'Remove all your Favorites?',
+            style: GoogleFonts.nunitoSans(fontWeight: FontWeight.bold,fontSize: 20),
+          ),
           actions: [
             SnaccButton(
-              width: 100,
-              textColor: Colors.white,
+                width: 110,
+                textColor: Colors.white,
                 btncolor: Colors.red,
                 callBack: () {
                   removeAllFavorites(favList);
                   Navigator.pop(context);
                 },
-                inputText: 'REMOVE')
+                inputText: 'Remove')
           ],
         );
       });

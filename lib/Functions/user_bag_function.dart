@@ -6,7 +6,6 @@ import 'package:snacc/DataModels/combo_model.dart';
 import 'package:snacc/DataModels/product_model.dart';
 import 'package:snacc/DataModels/user_model.dart';
 import 'package:snacc/Functions/favorites_functions.dart';
-import 'package:snacc/Widgets/snacc_button.dart';
 
 
 ValueNotifier<List<dynamic>> userBagNotifier = ValueNotifier([]);

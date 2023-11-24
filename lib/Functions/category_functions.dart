@@ -1,9 +1,7 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:snacc/DataModels/category_model.dart';
-import 'package:snacc/DataModels/product_model.dart';
 import 'package:snacc/Widgets/snacc_button.dart';
 
 // ADD CATEGORY
@@ -18,6 +16,7 @@ Future<void> addbtn(name, String? selectedImgUrl) async {
   final categorieslist = Hive.box<Category>('category').values.toList();
   categoryListNotifier.value = categorieslist;
   categoryListNotifier.notifyListeners();
+  
 }
 
 // DELETE CATEGORY

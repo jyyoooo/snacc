@@ -128,7 +128,7 @@ class _ComboListBuilderState extends State<ComboListBuilder> {
                                               fontWeight: FontWeight.bold),
                                         ),
                                         SnaccButton(
-                                            btncolor: Colors.amber,
+                                            btncolor: Colors.amber[400],
                                             width: 85,
                                             inputText: 'ADD',
                                             callBack: () {

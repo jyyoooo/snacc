@@ -35,34 +35,33 @@ class _ListProductsState extends State<ListProducts> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: Colors.white,
+
+      // APPBAR
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: .4,
+        backgroundColor: Colors.transparent,
+        elevation: .1,
         actions: [
           // EDIT CATEGORY
           EditCategory(
             categoryID: widget.categoryID,
           ),
         ],
+        titleTextStyle: GoogleFonts.nunitoSans(
+            fontSize: 23, fontWeight: FontWeight.bold, color: Colors.black),
         title: Text(
           widget.categoryName ?? 'Category',
-          style:
-              GoogleFonts.nunitoSans(fontSize: 23, fontWeight: FontWeight.bold),
         ),
       ),
 
       // PRODUCTS LIST
       body: ListedProductsNotifier(categoryID: widget.categoryID),
 
-      // NEW PRODUCT FLOATING BUTTON
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 25.0),
-        child: SnaccFloatingButton(
-          productListNotifier: productListNotifier,
-          productformkey: productformkey,
-          widget: widget,
-        ),
+      // ADD NEW PRODUCT FLOATING BUTTON
+      floatingActionButton: SnaccFloatingButton(
+        productListNotifier: productListNotifier,
+        productformkey: productformkey,
+        widget: widget,
       ),
     );
   }
@@ -112,6 +111,7 @@ class _ListedProductsNotifierState extends State<ListedProductsNotifier> {
                   itemBuilder: (context, index) {
                     final product = productlist?[index];
                     return Card(
+                      color: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),

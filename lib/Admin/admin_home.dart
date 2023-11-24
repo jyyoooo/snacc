@@ -39,7 +39,8 @@ class _AdminHomeState extends State<AdminHome> {
     Provider.of<CarouselNotifier>(context);
 
     return Scaffold(
-      appBar: AppBar(leading: const SizedBox.shrink(),
+      appBar: AppBar(
+        leading: const SizedBox.shrink(),
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: .4,
@@ -57,28 +58,7 @@ class _AdminHomeState extends State<AdminHome> {
           child: SizedBox(
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Card(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('    Create Catergories',
-                        style: GoogleFonts.nunitoSans(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey[800])),
-                    // ADD NEW CATEGORY
-                    IconButton(
-                      onPressed: () {
-                        AddCategoryModalSheet.show(context, _formKey);
-                      },
-                      icon: const Icon(
-                          size: 30, color: Colors.blue, Icons.add_rounded),
-                    )
-                  ],
-                ),
-              ),
+              CategoryCard(formKey: _formKey),
               const Gap(5),
 
               // CATEGORY LIST
@@ -150,6 +130,39 @@ class _AdminHomeState extends State<AdminHome> {
             ]),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class CategoryCard extends StatelessWidget {
+  const CategoryCard({
+    super.key,
+    required GlobalKey<FormState> formKey,
+  }) : _formKey = formKey;
+
+  final GlobalKey<FormState> _formKey;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text('    Create Catergories',
+              style: GoogleFonts.nunitoSans(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey[800])),
+          // ADD NEW CATEGORY
+          IconButton(
+            onPressed: () {
+              AddCategoryModalSheet.show(context, _formKey);
+            },
+            icon: const Icon(size: 30, color: Colors.blue, Icons.add_rounded),
+          )
+        ],
       ),
     );
   }

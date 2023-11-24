@@ -38,6 +38,7 @@ class _EditCategoryState extends State<EditCategory> {
           updatedImgUrl = category.imageUrl;
 
           await showModalBottomSheet(
+            backgroundColor: Colors.white,
             constraints: const BoxConstraints.expand(),
             useSafeArea: true,
             isScrollControlled: true,
@@ -86,7 +87,8 @@ class _EditCategoryState extends State<EditCategory> {
                             ),
                             Gap(screenHeight*.025),
                             SnaccButton(
-                              width: 60,
+                              width: 70,
+                              height: 35,
                               icon: const Icon(
                                 Icons.photo,
                                 color: Colors.blue,
@@ -104,6 +106,7 @@ class _EditCategoryState extends State<EditCategory> {
                         Column(crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('    Enter new category name',style: GoogleFonts.nunitoSans(fontSize: 17)),
+                            const Gap(15),
                             SnaccTextField(
                           label: 'Category name',
                           controller: newCategoryNameCtrl,
@@ -115,7 +118,8 @@ class _EditCategoryState extends State<EditCategory> {
                         SnaccButton(
                           textColor: Colors.white,
                           inputText: 'SAVE',
-                          width: 80,
+                          width: 100,
+                          height: 35,
                           callBack: () async {
                             category.categoryName = newCategoryNameCtrl.text;
                             category.imageUrl = updatedImgUrl;

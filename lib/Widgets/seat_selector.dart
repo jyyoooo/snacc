@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:snacc/UserPages/provider.dart';
 import 'package:snacc/Widgets/snacc_button.dart';
+import 'package:snacc/Widgets/snaccbar.dart';
 
 enum SeatState { unselected, selected }
 
@@ -192,6 +193,7 @@ class TheaterSeatPickerState extends State<TheaterSeatPicker> {
                   '${String.fromCharCode('A'.codeUnitAt(0) + selectedRowIndex)}${selectedColIndex + 1}';
                   widget.onSeatSelected(screenNumber ?? 0, seatNumber!);
                 } else {
+                  showSnaccBar(context, 'Screen and Seat is not selected', Colors.blue);
                   log('no screen or seat selected');
                 }
                 Navigator.pop(context);

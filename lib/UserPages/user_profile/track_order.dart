@@ -13,66 +13,68 @@ class TrackOrders extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          'Track Your Order',
-          style:
-              GoogleFonts.nunitoSans(fontWeight: FontWeight.bold, fontSize: 23),
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            'Track Your Order',
+            style:
+                GoogleFonts.nunitoSans(fontWeight: FontWeight.bold, fontSize: 23),
+          ),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
         ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: FutureBuilder(
-          future: fetchUserOrders(userID),
-          builder: (context, AsyncSnapshot<List<Order>> snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return const Center(child: Text('Error loading Orders'));
-            } else if (snapshot.hasData) {
-              List<Order> userOrders = snapshot.data!.reversed.toList();
-              int ordersLength = userOrders.length;
-
-              return Column(
-                children: [
-                  Text(
-                    '$ordersLength Active orders',
-                    style: GoogleFonts.nunitoSans(),
-                  ),
-                  const Gap(10),
-                  Expanded(
-                    child: userOrders.isNotEmpty
-                        ? ListView.builder(
-                            physics: const BouncingScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: userOrders.length,
-                            itemBuilder: (context, index) {
-                              final order = userOrders[index];
-
-                              if (order.status == OrderStatus.cancelled) {
-                                return const SizedBox.shrink();
-                              } else {
-                                return OrderItem(order: order);
-                              }
-                            },
-                          )
-                        : Center(
-                            child: Text(
-                            'No Orders',
-                            style: GoogleFonts.nunitoSans(
-                                color: Colors.grey, fontSize: 15),
-                          )),
-                  ),
-                ],
-              );
-            } else {
-              return const Center(child: Text('No Orders'));
-            }
-          },
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: FutureBuilder(
+            future: fetchUserOrders(userID),
+            builder: (context, AsyncSnapshot<List<Order>> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return const Center(child: Text('Error loading Orders'));
+              } else if (snapshot.hasData) {
+                List<Order> userOrders = snapshot.data!.reversed.toList();
+                int ordersLength = userOrders.length;
+      
+                return Column(
+                  children: [
+                    Text(
+                      '$ordersLength Active orders',
+                      style: GoogleFonts.nunitoSans(),
+                    ),
+                    const Gap(10),
+                    Expanded(
+                      child: userOrders.isNotEmpty
+                          ? ListView.builder(
+                              physics: const BouncingScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: userOrders.length,
+                              itemBuilder: (context, index) {
+                                final order = userOrders[index];
+      
+                                if (order.status == OrderStatus.cancelled) {
+                                  return const SizedBox.shrink();
+                                } else {
+                                  return OrderItem(order: order);
+                                }
+                              },
+                            )
+                          : Center(
+                              child: Text(
+                              'No Orders',
+                              style: GoogleFonts.nunitoSans(
+                                  color: Colors.grey, fontSize: 15),
+                            )),
+                    ),
+                  ],
+                );
+              } else {
+                return const Center(child: Text('No Orders'));
+              }
+            },
+          ),
         ),
       ),
     );

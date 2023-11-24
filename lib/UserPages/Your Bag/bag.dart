@@ -38,68 +38,90 @@ class _UserBagState extends State<UserBag> {
         elevation: 0,
         backgroundColor: Colors.white,
         centerTitle: true,
-        title: Text('Your Bag',
-            style: GoogleFonts.nunitoSans(
-                fontSize: 23, fontWeight: FontWeight.bold)),
+        title: yourBagTitle(),
         actions: [
           userBagNotifier.value.isNotEmpty
-              ? TextButton(
-                  onPressed: () {
-                    removeAllItemsInBag(context);
-                  },
-                  child: Text(
-                    'Remove All',
-                    style:
-                        GoogleFonts.nunitoSans(color: Colors.red, fontSize: 14),
-                  ))
-              : TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    'Remove All',
-                    style: GoogleFonts.nunitoSans(
-                        color: Colors.grey, fontSize: 14),
-                  ))
+              ? removeAllBagItems(context)
+              : removeAllDummy()
         ],
       ),
       body: Stack(children: <Widget>[
         Positioned(
           height: MediaQuery.of(context).size.height - 300,
           width: MediaQuery.of(context).size.width,
+
           // BAG LIST
           child: userBagNotifier.value.isNotEmpty
               ? BagListBuilder(user: widget.user)
-              : Center(
-                  child: Text(
-                  'Bag is empty',
-                  style:
-                      GoogleFonts.nunitoSans(color: Colors.grey, fontSize: 15),
-                )),
+              : emptyBagMessage(),
         ),
-        ValueListenableBuilder<List<dynamic>?>(
-            valueListenable: userBagNotifier,
-            builder: (context, userBag, child) {
-              // if (userBag != null && widget.user != null) {
-              return Positioned(
-                height: 262,
-                bottom: 1,
-                left: 0,
-                right: 0,
 
-                // AMOUNT CARD
-                child: AmountCard(
-                  user: widget.user!,
-                  userBag: userBag,
-                ),
-              );
-            })
+        // AMOUNT CARD
+        showAmountCard()
       ]),
     );
   }
 
-  Future<dynamic> removeAllItemsInBag(BuildContext context) {
+
+
+  // WIDGETS
+
+  ValueListenableBuilder<List<dynamic>?> showAmountCard() {
+    return ValueListenableBuilder<List<dynamic>?>(
+        valueListenable: userBagNotifier,
+        builder: (context, userBag, child) {
+          return Positioned(
+            height: 262,
+            bottom: 1,
+            left: 0,
+            right: 0,
+            child: AmountCard(
+              user: widget.user!,
+              userBag: userBag,
+            ),
+          );
+        });
+  }
+
+  Center emptyBagMessage() {
+    return Center(
+        child: Text(
+      'Bag is empty',
+      style: GoogleFonts.nunitoSans(color: Colors.grey, fontSize: 15),
+    ));
+  }
+
+  TextButton removeAllDummy() {
+    return TextButton(
+        onPressed: () {},
+        child: Text(
+          'Remove All',
+          style: GoogleFonts.nunitoSans(color: Colors.grey, fontSize: 14),
+        ));
+  }
+
+  TextButton removeAllBagItems(BuildContext context) {
+    return TextButton(
+        onPressed: () {
+          removeAllItemsInBagDialog(context);
+        },
+        child: Text(
+          'Remove All',
+          style: GoogleFonts.nunitoSans(color: Colors.red, fontSize: 14),
+        ));
+  }
+
+  Text yourBagTitle() {
+    return Text('Your Bag',
+        style:
+            GoogleFonts.nunitoSans(fontSize: 23, fontWeight: FontWeight.bold));
+  }
+
+  Future<dynamic> removeAllItemsInBagDialog(BuildContext context) {
     return showDialog(
         context: context,
         builder: (context) => AlertDialog(
+              backgroundColor: Colors.white,
               title: Text(
                 'Remove all items in your Bag?',
                 style: GoogleFonts.nunitoSans(
@@ -109,8 +131,8 @@ class _UserBagState extends State<UserBag> {
                 SnaccButton(
                     textColor: Colors.white,
                     btncolor: Colors.red,
-                    width: 100,
-                    inputText: 'REMOVE',
+                    width: 110,
+                    inputText: 'Remove',
                     callBack: () {
                       widget.user!.userBag?.clear();
                       Hive.box<UserModel>('userinfo')

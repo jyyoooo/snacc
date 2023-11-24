@@ -1,21 +1,13 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:snacc/Admin/admin_home.dart';
-import 'package:snacc/Admin/admin_navigation.dart';
-import 'package:snacc/DataModels/category_model.dart';
-import 'package:snacc/DataModels/combo_model.dart';
-// import 'package:snacc/DataModels/signup_model.dart';
-import 'package:snacc/DataModels/user_model.dart';
 import 'package:snacc/Functions/login_functions.dart';
 import 'package:snacc/Authentication/signup.dart';
 import 'package:snacc/Widgets/snacc_button.dart';
 import 'package:snacc/Widgets/snacc_textfield.dart';
-import 'package:snacc/UserPages/user_profile/user_profile.dart';
-import 'package:snacc/UserPages/user_navigation.dart';
+import 'package:snacc/Widgets/snaccbar.dart';
+
 
 class Login extends StatelessWidget {
   const Login({super.key});
@@ -61,17 +53,22 @@ class Login extends StatelessWidget {
                     key: formKey,
                     child: Column(
                       children: [
-                        SnaccTextField(
-                          label: 'Enter your username',
-                          controller: mailCtrl,
-                          validationMessage: 'You must enter your username',
+                        FocusScope(
+                          child: SnaccTextField(
+                            label: 'Enter your username',
+                            controller: mailCtrl,
+                            validationMessage: 'You must enter your username',
+                          ),
                         ),
-                        SnaccTextField(
-                          obscureText: true,
-                          label: 'Enter your password',
-                          controller: passCtrl,
-                          validationMessage: 'You must enter your password',
-                          showText: false,
+                        const Gap(8),
+                        FocusScope(
+                          child: SnaccTextField(
+                            obscureText: true,
+                            label: 'Enter your password',
+                            controller: passCtrl,
+                            validationMessage: 'You must enter your password',
+                            showText: false,
+                          ),
                         ),
                       ],
                     ),
@@ -88,7 +85,7 @@ class Login extends StatelessWidget {
                     btnRadius: 15,
                     width: 250,
                     height: 45,
-                    callBack: () {
+                    callBack: ()async {
                       final String username = mailCtrl.text.trim();
                       final String password = passCtrl.text.trim();
 
@@ -96,7 +93,11 @@ class Login extends StatelessWidget {
                         formKey.currentState!.validate();
                         log('fields empty');
                       } else {
-                        performLogin(context, username, password);
+                      final isValidUser = await performLogin(context, username, password);
+                      if(isValidUser){
+                        FocusScope.of(context).requestFocus(FocusNode());
+                        showSnaccBar(context, 'Logged in as $username', Colors.green);
+                      }
                       }
                     },
                   )),

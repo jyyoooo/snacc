@@ -7,9 +7,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:snacc/DataModels/user_model.dart';
 import 'package:snacc/Functions/order_funtions.dart';
+import 'package:snacc/Functions/user_bag_function.dart';
 import 'package:snacc/UserPages/Your%20Bag/order_sucess.dart';
 import 'package:snacc/UserPages/provider.dart';
 import 'package:snacc/Widgets/snacc_button.dart';
+import 'package:snacc/Widgets/snaccbar.dart';
 
 class PaymentsPage extends StatefulWidget {
   final UserModel? user;
@@ -49,25 +51,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
               const Gap(60),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Total Payable:',
-                      style: GoogleFonts.nunitoSans(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 23,
-                      ),
-                    ),
-                    Text(
-                      '₹$flooredAmount',
-                      style: GoogleFonts.nunitoSans(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 23,
-                      ),
-                    ),
-                  ],
-                ),
+                child: showTotalPayable(flooredAmount),
               ),
               const Gap(35),
               Text(
@@ -78,17 +62,12 @@ class _PaymentsPageState extends State<PaymentsPage> {
                 ),
               ),
               const Gap(10),
-              buildPaymentCard(
-                  PaymentOption.cod,
-                  'Cash On Delivery',
-                  '',
-                  const Icon(Icons.currency_rupee,
-                      color: Colors.teal, weight: 20),
-                  const BorderRadius.vertical(
-                      top: Radius.circular(15), bottom: Radius.circular(15))),
-              const Divider(
-                height: .5,
-              ),
+
+              // COD
+              cashOnDeliveryMethod(),
+
+              // FUTURE FEATURES
+              // const Divider(height: .5),
               // buildPaymentCard(
               //     PaymentOption.card,
               //     'Debit/Credit Card',
@@ -118,98 +97,138 @@ class _PaymentsPageState extends State<PaymentsPage> {
               Text('Your snacc will be delivered to:',
                   style: GoogleFonts.nunitoSans(color: Colors.grey)),
               const Gap(5),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('Screen ',
-                      style: GoogleFonts.nunitoSans(
-                          fontWeight: FontWeight.bold, fontSize: 17)),
-                  Text(
-                      '${seatScreenData.selectedScreenNumber ?? 'not selected'}',
-                      style: GoogleFonts.nunitoSans(
-                        color: seatScreenData.selectedScreenNumber != null
-                            ? Colors.blue
-                            : Colors.red,
-                        fontSize: seatScreenData.selectedScreenNumber != null
-                            ? 20
-                            : 15,
-                        fontWeight: seatScreenData.selectedScreenNumber != null
-                            ? FontWeight.bold
-                            : FontWeight.normal,
-                      )),
-                  const Gap(5),
-                  Text('Seat',
-                      style: GoogleFonts.nunitoSans(
-                          fontWeight: FontWeight.bold, fontSize: 17)),
-                  Text(
-                      ' ${seatScreenData.selectedSeatNumber ?? 'not selected'}',
-                      style: GoogleFonts.nunitoSans(
-                        color: seatScreenData.selectedSeatNumber != null
-                            ? Colors.blue
-                            : Colors.red,
-                        fontSize:
-                            seatScreenData.selectedSeatNumber != null ? 20 : 15,
-                        fontWeight: seatScreenData.selectedSeatNumber != null
-                            ? FontWeight.bold
-                            : FontWeight.normal,
-                      ))
-                ],
-              ),
+
+              showSelectedAdress(seatScreenData),
               const Gap(25),
-              SnaccButton(
-                  btncolor: selectedPaymentOption == null
-                      ? Colors.grey[300]
-                      : Colors.amber,
-                  inputText: 'PROCEED',
-                  callBack: () async {
-                    if (widget.user != null) {
-                      log('user :${widget.user?.username}');
-
-                      final String screenAndSeatNumber =
-                          '${seatScreenData.selectedScreenNumber}' +
-                              '${seatScreenData.selectedSeatNumber.toString()}';
-
-                      log(screenAndSeatNumber);
-
-                      if (seatScreenData.selectedScreenNumber == null &&
-                          seatScreenData.selectedScreenNumber != 0 &&
-                          seatScreenData.selectedSeatNumber == null) {
-                        Fluttertoast.showToast(
-                            msg: 'select your screen and seat before placing',
-                            backgroundColor: Colors.blue);
-                      } else {
-                        if (selectedPaymentOption == PaymentOption.cod) {
-                          final bool orderCreated = await createOrder(
-                            widget.user?.userID,
-                            widget.user!.userBag,
-                            flooredAmount!,
-                            selectedPaymentOption!,
-                            screenAndSeatNumber,
-                          );
-
-                          if (orderCreated) {
-                            await pushToPage();
-                          }
-                        } else if (selectedPaymentOption ==
-                                PaymentOption.card ||
-                            selectedPaymentOption == PaymentOption.payPal ||
-                            selectedPaymentOption == PaymentOption.upi) {
-                          Fluttertoast.showToast(
-                              msg:
-                                  'Selected payment method is currently unavailable',
-                              backgroundColor: Colors.blue);
-                        } else {
-                          Fluttertoast.showToast(
-                              msg: 'select a payment method first',
-                              backgroundColor: Colors.blue);
-                        }
-                      }
-                    }
-                  })
+              proceedButton(seatScreenData, flooredAmount)
             ],
           ),
         ),
       ),
+    );
+  }
+
+  // WIDGETS
+
+  SnaccButton proceedButton(
+      SeatScreenData seatScreenData, double? flooredAmount) {
+    return SnaccButton(
+        btncolor:
+            selectedPaymentOption == null ? Colors.grey[300] : Colors.amber,
+        inputText: 'PROCEED',
+        callBack: () async {
+          if (widget.user != null) {
+            log('user :${widget.user?.username}');
+
+            final String screenAndSeatNumber =
+                '${seatScreenData.selectedScreenNumber}' +
+                    '${seatScreenData.selectedSeatNumber.toString()}';
+
+            log(screenAndSeatNumber);
+
+            if (seatScreenData.selectedScreenNumber == null &&
+                seatScreenData.selectedScreenNumber != 0 &&
+                seatScreenData.selectedSeatNumber == null) {
+              // Fluttertoast.showToast(
+              //     msg: 'select your screen and seat before placing',
+              //     backgroundColor: Colors.blue);
+              showSnaccBar(context, 'select your screen and seat before placing', Colors.blue);
+            } else {
+              if (selectedPaymentOption == PaymentOption.cod) {
+                final bool orderCreated = await createOrder(
+                  widget.user?.userID,
+                  widget.user!.userBag,
+                  flooredAmount!,
+                  selectedPaymentOption!,
+                  screenAndSeatNumber,
+                );
+
+                if (orderCreated) {
+                  widget.user!.userBag?.clear();
+                  userBagNotifier.value = widget.user!.userBag ?? [];
+                  userBagNotifier.notifyListeners();
+                  await pushToPage();
+                }
+              } else if (selectedPaymentOption == PaymentOption.card ||
+                  selectedPaymentOption == PaymentOption.payPal ||
+                  selectedPaymentOption == PaymentOption.upi) {
+                // Fluttertoast.showToast(
+                //     msg: 'Selected payment method is currently unavailable',
+                //     backgroundColor: Colors.blue);
+                    showSnaccBar(context, 'Selected payment method is currently unavailable', Colors.blue);
+              } else {
+               
+                showSnaccBar(context, 'select a payment method first', Colors.blue);
+              }
+            }
+          }
+        });
+  }
+
+  Row showSelectedAdress(SeatScreenData seatScreenData) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text('Screen ',
+            style: GoogleFonts.nunitoSans(
+                fontWeight: FontWeight.bold, fontSize: 17)),
+        Text('${seatScreenData.selectedScreenNumber ?? 'not selected'}',
+            style: GoogleFonts.nunitoSans(
+              color: seatScreenData.selectedScreenNumber != null
+                  ? Colors.blue
+                  : Colors.red,
+              fontSize: seatScreenData.selectedScreenNumber != null ? 20 : 15,
+              fontWeight: seatScreenData.selectedScreenNumber != null
+                  ? FontWeight.bold
+                  : FontWeight.normal,
+            )),
+        const Gap(5),
+        Text('Seat',
+            style: GoogleFonts.nunitoSans(
+                fontWeight: FontWeight.bold, fontSize: 17)),
+        Text(' ${seatScreenData.selectedSeatNumber ?? 'not selected'}',
+            style: GoogleFonts.nunitoSans(
+              color: seatScreenData.selectedSeatNumber != null
+                  ? Colors.blue
+                  : Colors.red,
+              fontSize: seatScreenData.selectedSeatNumber != null ? 20 : 15,
+              fontWeight: seatScreenData.selectedSeatNumber != null
+                  ? FontWeight.bold
+                  : FontWeight.normal,
+            ))
+      ],
+    );
+  }
+
+  Widget cashOnDeliveryMethod() {
+    return buildPaymentCard(
+        PaymentOption.cod,
+        'Cash On Delivery',
+        '',
+        const Icon(Icons.currency_rupee, color: Colors.teal, weight: 20),
+        const BorderRadius.vertical(
+            top: Radius.circular(15), bottom: Radius.circular(15)));
+  }
+
+  Row showTotalPayable(double? flooredAmount) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          'Total Payable:',
+          style: GoogleFonts.nunitoSans(
+            fontWeight: FontWeight.bold,
+            fontSize: 23,
+          ),
+        ),
+        Text(
+          '₹$flooredAmount',
+          style: GoogleFonts.nunitoSans(
+            fontWeight: FontWeight.bold,
+            fontSize: 23,
+          ),
+        ),
+      ],
     );
   }
 
@@ -281,7 +300,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
   }
 
   pushToPage() async {
-    Navigator.of(context).push(MaterialPageRoute(
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
         builder: (context) => OrderSuccess(
               userID: widget.user!.userID!,
             )));

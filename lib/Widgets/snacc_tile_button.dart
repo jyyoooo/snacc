@@ -13,11 +13,11 @@ class SnaccTileButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      style: ButtonStyle(),
+      style:const ButtonStyle(),
       onPressed: () {
         onPressed!();
       },
-      child: Card(
+      child: Card(color: Colors.white,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         child: ListTile(

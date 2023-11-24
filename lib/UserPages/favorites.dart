@@ -2,13 +2,11 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:snacc/DataModels/combo_model.dart';
 import 'package:snacc/DataModels/product_model.dart';
 import 'package:snacc/DataModels/user_model.dart';
 import 'package:snacc/Functions/favorites_functions.dart';
 import 'package:snacc/Functions/user_bag_function.dart';
-import 'package:snacc/UserPages/user_navigation.dart';
 import 'package:snacc/Widgets/snacc_button.dart';
 
 class Favorites extends StatefulWidget {
@@ -39,107 +37,134 @@ class _FavoritesState extends State<Favorites> {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        leading: const Icon(
-          Icons.favorite,
-          color: Colors.white,
-        ),
+        leading: const SizedBox.shrink(),
         actions: [
           favoriteListNotifier.value.isNotEmpty
-              ? TextButton(
-                  onPressed: () async {
-                    await removeAllFavoriteShowDialog(context, favList!);
-                    setState(() {
-                      favoriteListNotifier.notifyListeners();
-                    });
-                  },
-                  child: Text(
-                    'Remove All',
-                    style: GoogleFonts.nunitoSans(
-                        color: Colors.red,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400),
-                  ))
-              : TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    'Remove All',
-                    style: GoogleFonts.nunitoSans(
-                        color: Colors.grey,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400),
-                  ))
+              ? removeAllFavoriteButton(context)
+              : const RemoveAllDummyButton()
         ],
-        title: Text(
-          'Favorites',
-          style:
-              GoogleFonts.nunitoSans(fontSize: 23, fontWeight: FontWeight.bold),
-        ),
+        title: favoriteTitle(),
         centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
-        child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: SizedBox(
-              child: ValueListenableBuilder(
-                valueListenable: favoriteListNotifier,
-                builder: (context, favorites, child) =>
-                    favoriteListNotifier.value.isNotEmpty
-                        ? ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              final fav = favorites[index];
 
-                              if (fav is ComboModel) {
-                                return ComboListItem(
-                                  isThisBag: false,
-                                  combo: fav,
-                                  user: widget.user!,
-                                  favlist: favoriteListNotifier,
-                                );
-                              } else if (fav is Product) {
-                                return ProductListItem(
-                                    isThisBag: false,
-                                    product: fav,
-                                    user: widget.user ??
-                                        UserModel(
-                                            username: null,
-                                            userMail: null,
-                                            userPass: null,
-                                            confirmPass: null),
-                                    favlist: favoriteListNotifier);
-                              } else {
-                                return null;
-                              }
-                            },
-                            itemCount: favoriteListNotifier.value.length,
-                          )
-                        : Center(
-                            heightFactor: 9,
-                            child: Column(
-                              children: [
-                                Icon(
-                                  Icons.favorite_rounded,
-                                  size: 50,
-                                  color: Colors.grey[400],
-                                ),
-                                Text(
-                                  'No Favorites',
-                                  style: GoogleFonts.nunitoSans(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.normal,
-                                      color: Colors.grey),
-                                ),
-                              ],
-                            ),
-                          ),
-              ),
-            )),
+        // LIST OF FAVORITES 
+        child: FavoriteItemsList(widget: widget),
       ),
     );
+  }
+
+  Text favoriteTitle() {
+    return Text(
+      'Favorites',
+      style: GoogleFonts.nunitoSans(fontSize: 23, fontWeight: FontWeight.bold),
+    );
+  }
+
+  TextButton removeAllFavoriteButton(BuildContext context) {
+    return TextButton(
+        onPressed: () async {
+          await removeAllFavoriteShowDialog(context, favList!);
+          setState(() {
+            favoriteListNotifier.notifyListeners();
+          });
+        },
+        child: Text(
+          'Remove All',
+          style: GoogleFonts.nunitoSans(
+              color: Colors.red, fontSize: 14, fontWeight: FontWeight.w400),
+        ));
+  }
+}
+
+class FavoriteItemsList extends StatelessWidget {
+  const FavoriteItemsList({
+    super.key,
+    required this.widget,
+  });
+
+  final Favorites widget;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: SizedBox(
+          child: ValueListenableBuilder(
+            valueListenable: favoriteListNotifier,
+            builder: (context, favorites, child) =>
+                favoriteListNotifier.value.isNotEmpty
+                    ? ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          final fav = favorites[index];
+    
+                          if (fav is ComboModel) {
+                            return ComboListItem(
+                              isThisBag: false,
+                              combo: fav,
+                              user: widget.user!,
+                              favlist: favoriteListNotifier,
+                            );
+                          } else if (fav is Product) {
+                            return ProductListItem(
+                                isThisBag: false,
+                                product: fav,
+                                user: widget.user ??
+                                    UserModel(
+                                        username: null,
+                                        userMail: null,
+                                        userPass: null,
+                                        confirmPass: null),
+                                favlist: favoriteListNotifier);
+                          } else {
+                            return null;
+                          }
+                        },
+                        itemCount: favoriteListNotifier.value.length,
+                      )
+                    : Center(
+                        heightFactor: 9,
+                        child: Column(
+                          children: [
+                            Icon(
+                              Icons.favorite_rounded,
+                              size: 50,
+                              color: Colors.grey[400],
+                            ),
+                            Text(
+                              'No Favorites',
+                              style: GoogleFonts.nunitoSans(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.normal,
+                                  color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                      ),
+          ),
+        ));
+  }
+}
+
+class RemoveAllDummyButton extends StatelessWidget {
+  const RemoveAllDummyButton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+        onPressed: () {},
+        child: Text(
+          'Remove All',
+          style: GoogleFonts.nunitoSans(
+              color: Colors.grey, fontSize: 14, fontWeight: FontWeight.w400),
+        ));
   }
 }
 
@@ -166,6 +191,7 @@ class _ComboListItemState extends State<ComboListItem> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: InkWell(
         onTap: () {
@@ -308,6 +334,7 @@ class _ProductListItemState extends State<ProductListItem> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: InkWell(
         onTap: () {

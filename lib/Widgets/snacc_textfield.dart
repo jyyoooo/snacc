@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SnaccTextField extends StatefulWidget {
   final TextEditingController? controller;
@@ -10,16 +11,16 @@ class SnaccTextField extends StatefulWidget {
   final bool? showText;
   final TextCapitalization? textCapitalization;
 
-  const SnaccTextField({
-    Key? key,
-    this.controller,
-    this.validator,
-    this.label = 'no labels given',
-    this.validationMessage,
-    this.obscureText = false,
-    this.showText = true,
-    this.textCapitalization = TextCapitalization.none
-  }) : super(key: key);
+  const SnaccTextField(
+      {Key? key,
+      this.controller,
+      this.validator,
+      this.label = 'no labels given',
+      this.validationMessage,
+      this.obscureText = false,
+      this.showText = true,
+      this.textCapitalization = TextCapitalization.none})
+      : super(key: key);
 
   @override
   _SnaccTextFieldState createState() => _SnaccTextFieldState();
@@ -32,12 +33,14 @@ class _SnaccTextFieldState extends State<SnaccTextField> {
   Widget build(BuildContext context) {
     return Material(
       child: Container(
-        color: Colors.white,
-        padding: const EdgeInsets.symmetric(horizontal: 15),
+        // color: Colors.transparent,
+        padding: const EdgeInsets.symmetric(horizontal: 0),
         child: Column(
           children: [
-            const Gap(13),
-            TextFormField( 
+            // const Gap(13),
+            TextFormField(
+              scrollController: ScrollController(),
+              scrollPhysics: const BouncingScrollPhysics(),
               textCapitalization: widget.textCapitalization!,
               controller: widget.controller,
               obscureText: widget.obscureText && isObscure,
@@ -54,11 +57,11 @@ class _SnaccTextFieldState extends State<SnaccTextField> {
                           });
                         },
                         iconSize: 20,
-                        color: Colors.black26,
+                        color: Colors.blueGrey,
                       )
                     : null,
                 floatingLabelStyle: const TextStyle(
-                  backgroundColor: Colors.white38,
+                  backgroundColor: Colors.transparent,
                   color: Colors.black54,
                   fontWeight: FontWeight.w400,
                   fontSize: 20,
@@ -67,10 +70,26 @@ class _SnaccTextFieldState extends State<SnaccTextField> {
                 contentPadding:
                     const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
                 filled: true,
-                fillColor: Colors.grey[200],
-                border: OutlineInputBorder(
-                  borderSide: BorderSide.none,
-                  borderRadius: BorderRadius.circular(15),
+                fillColor: const Color.fromARGB(255, 228, 228, 228),
+                focusedErrorBorder: OutlineInputBorder(
+                  gapPadding: 3,
+                  borderSide: const BorderSide(width: 2, color: Colors.amber),
+                  borderRadius: BorderRadius.circular(17.5),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  gapPadding: 3,
+                  borderSide: const BorderSide(width: 0, color: Colors.white),
+                  borderRadius: BorderRadius.circular(17.5),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  gapPadding: 3,
+                  borderSide: const BorderSide(width: 2.0, color: Colors.amber),
+                  borderRadius: BorderRadius.circular(17.5),
+                ),
+                errorBorder: OutlineInputBorder( // Add this line
+                  gapPadding: 3,
+                  borderSide: const BorderSide(width: 0, color: Colors.white),
+                  borderRadius: BorderRadius.circular(17.5),
                 ),
                 labelText: widget.label,
               ),

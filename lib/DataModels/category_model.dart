@@ -1,10 +1,10 @@
 import 'dart:developer';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:snacc/DataModels/product_model.dart';
+import '../Widgets/snaccbar.dart';
 part 'category_model.g.dart';
 
 @HiveType(typeId: 0)
@@ -32,12 +32,16 @@ class Category {
 ValueNotifier<List<Category>> categoryListNotifier = ValueNotifier([]);
 
 void addCategory(Category category) async {
+
   // OPEN BOX
   final categoryBox = Hive.box<Category>('category');
-  // GET ID FROM HIVE ON ADD AND ASSIGN IT TI A VARIABLE
+
+  // GET ID FROM HIVE ON ADD AND ASSIGN IT TO A VARIABLE
   final id = await categoryBox.add(category);
+
   // ASSIGN THE ID FROM HIVE TO THE OBJECT'S ID FIELD
   category.categoryID = id;
+  
   // UPDATE THE OBJECT IN THE BOX
   await categoryBox.put(id, category);
 
@@ -48,4 +52,5 @@ void addCategory(Category category) async {
     categoryListNotifier.value.add(category);
     categoryListNotifier.notifyListeners();
   }
+  // SnaccBar(content: 'Snaccbar is working bro!', color: Colors.purple);
 }

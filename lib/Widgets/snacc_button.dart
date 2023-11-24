@@ -15,9 +15,9 @@ class SnaccButton extends StatelessWidget {
   const SnaccButton({
     Key? key,
     this.width = 160.0,
-    this.height = 33.0,
+    this.height = 37.5,
     this.btnRadius = 10.0,
-    this.shadow = 1.0,
+    this.shadow = 1.5,
     required this.inputText,
     required this.callBack,
     this.textColor,
@@ -27,13 +27,14 @@ class SnaccButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final smallScreen = MediaQuery.of(context).size.height<700;
+    final smallScreen = MediaQuery.of(context).size.height < 700;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ConstrainedBox(
         constraints: BoxConstraints.tightFor(width: width, height: height),
         child: ElevatedButton(
-          style: ElevatedButton.styleFrom(elevation: shadow,
+          style: ElevatedButton.styleFrom(
+            elevation: shadow,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(btnRadius),
             ),
@@ -48,7 +49,7 @@ class SnaccButton extends StatelessWidget {
                   inputText,
                   style: GoogleFonts.nunitoSans(
                       color: textColor ?? Colors.black87,
-                      fontSize: smallScreen?12:14,
+                      fontSize: smallScreen ? 12 : 14,
                       fontWeight: FontWeight.bold),
                 ),
               ),
@@ -57,4 +58,3 @@ class SnaccButton extends StatelessWidget {
     );
   }
 }
-

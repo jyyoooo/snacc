@@ -7,6 +7,7 @@ import 'package:snacc/Functions/login_functions.dart';
 import 'package:snacc/Widgets/snacc_button.dart';
 import 'package:snacc/Widgets/snacc_textfield.dart';
 import 'package:snacc/Authentication/login.dart';
+import 'package:snacc/Widgets/snaccbar.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -62,11 +63,13 @@ class _SignUpState extends State<SignUp> {
                           controller: namectrl,
                           validationMessage: 'Enter your Name',
                         ),
+                        const Gap(8),
                         SnaccTextField(
                           label: 'Username',
                           controller: mailctrl,
                           validationMessage: 'Enter your username',
                         ),
+                        const Gap(8),
                         SnaccTextField(
                           obscureText: true,
                           label: 'Password',
@@ -74,6 +77,7 @@ class _SignUpState extends State<SignUp> {
                           validationMessage: 'Enter your password',
                           showText: false,
                         ),
+                        const Gap(8),
                         SnaccTextField(
                           obscureText: true,
                           label: 'Confrim password',
@@ -82,75 +86,17 @@ class _SignUpState extends State<SignUp> {
                           showText: false,
                         ),
                         const Gap(20),
-                        Center(
-                            child: SnaccButton(
-                          btncolor: Colors.amber,
-                          textColor: Colors.black,
-                          inputText: 'REGISTER',
-                          btnRadius: 15,
-                          width: 250,
-                          height: 45,
-                          callBack: () async {
-                            bool userCheck = false;
-                            final String username = namectrl.text.trim();
-                            final String mailid = mailctrl.text.trim();
-                            final String password = passctrl.text;
-                            final String confirm = confirmctrl.text;
-                            if (username.length < 7) {
-                              formKey.currentState?.validate();
-                            }
-        
-                            if (username.isEmpty ||
-                                mailid.isEmpty ||
-                                password.isEmpty ||
-                                confirm.isEmpty) {
-                              formKey.currentState!.validate();
-                              Fluttertoast.showToast(
-                                  msg:
-                                      'Oops, you have to enter all details before doing that',
-                                  backgroundColor: Colors.red);
-                            } else if (mailid.length < 7) {
-                              Fluttertoast.showToast(
-                                  msg: 'Username is too short',
-                                  backgroundColor: Colors.amber,
-                                  textColor: Colors.black);
-                            } else {
-                              userCheck = await addUser(
-                                  username, mailid, password, confirm, context);
-                            }
-        
-                            if (userCheck == true) {
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const Login()));
-                            } else {
-                              log('oops signup failed');
-                            }
-                          },
-                        )),
+                        RegisterButton(
+                          namectrl: namectrl,
+                          mailctrl: mailctrl,
+                          passctrl: passctrl,
+                          confirmctrl: confirmctrl,
+                          formKey: formKey,
+                          scaffoldContext:
+                              context, // Pass the context of the Scaffold
+                        ),
                         const Gap(30),
-                        Row(
-                          children: [
-                            const Gap(15),
-                            Text('Already have an account?',
-                                style: GoogleFonts.nunitoSans(
-                                    fontSize: 14, color: Colors.black54)),
-                            InkWell(
-                              onTap: () {
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => const Login()));
-                              },
-                              child: Text(' Log In',
-                                  style: GoogleFonts.nunitoSans(
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold)),
-                            )
-                          ],
-                        )
+                        const AlreadyUser()
                       ],
                     ),
                   ),
@@ -161,6 +107,112 @@ class _SignUpState extends State<SignUp> {
         ),
       ),
     );
-    // );
+  }
+}
+
+// WIDGETS
+
+class AlreadyUser extends StatelessWidget {
+  const AlreadyUser({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const Gap(15),
+        Text('Already have an account?',
+            style: GoogleFonts.nunitoSans(fontSize: 14, color: Colors.black54)),
+        InkWell(
+          onTap: () {
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => const Login()));
+          },
+          child: Text(' Log In',
+              style: GoogleFonts.nunitoSans(
+                  fontSize: 14,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold)),
+        )
+      ],
+    );
+  }
+}
+
+class RegisterButton extends StatelessWidget {
+  const RegisterButton({
+    super.key,
+    required this.namectrl,
+    required this.mailctrl,
+    required this.passctrl,
+    required this.confirmctrl,
+    required this.formKey,
+    required this.scaffoldContext,
+  });
+
+  final TextEditingController namectrl;
+  final TextEditingController mailctrl;
+  final TextEditingController passctrl;
+  final TextEditingController confirmctrl;
+  final GlobalKey<FormState> formKey;
+  final BuildContext scaffoldContext;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+        child: SnaccButton(
+      btncolor: Colors.amber,
+      textColor: Colors.black,
+      inputText: 'REGISTER',
+      btnRadius: 15,
+      width: 250,
+      height: 45,
+      callBack: () async {
+        bool userCheck = false;
+        final String username = namectrl.text.trim();
+        final String mailid = mailctrl.text.trim();
+        final String password = passctrl.text;
+        final String confirm = confirmctrl.text;
+        if (username.length < 7) {
+          formKey.currentState?.validate();
+        }
+
+        if (username.isEmpty ||
+            mailid.isEmpty ||
+            password.isEmpty ||
+            confirm.isEmpty) {
+          formKey.currentState!.validate();
+         
+              showSnaccBar(scaffoldContext,
+              'Oops, you have to enter all details before doing that', Colors.red);
+        } else if (mailid.length < 7) {
+          showSnaccBar(scaffoldContext,
+              'Username must be atleast 7 characters', Colors.red);
+        }else if(password.length <7){
+          showSnaccBar(scaffoldContext,
+              'Password must be atleast 7 characters', Colors.red);
+        } else {
+          userCheck =
+              await addUser(username, mailid, password, confirm, context);
+        if (userCheck == true) {
+            // If registration is successful, request focus on a specific element
+            FocusScope.of(context).requestFocus(FocusNode());
+
+            // Navigate to login page
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => const Login()));
+          } else {
+            log('Oops, signup failed');
+          }}
+
+        if (userCheck == true) {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => const Login()));
+        } else {
+          log('oops signup failed');
+        }
+      },
+    ));
   }
 }

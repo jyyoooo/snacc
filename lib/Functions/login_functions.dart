@@ -78,7 +78,7 @@ Future<bool> adminLogin(
   }
 }
 
-Future<void> performLogin(context, username, password) async {
+Future<bool> performLogin(context, username, password) async {
   if (username == 'admin' && password == 'admin') {
     Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const AdminNavigation()));
@@ -88,12 +88,14 @@ Future<void> performLogin(context, username, password) async {
   } else {
     final bool isValidUser = await validateUser(username, password);
     if (isValidUser) {
+      
       // Navigate to the user's home page after successful login
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (context) => const UserNavigation(),
           ),
           ModalRoute.withName('/'));
+          return true;
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -102,7 +104,9 @@ Future<void> performLogin(context, username, password) async {
         ),
       );
     }
+    
   }
+  return false;
 }
 
 void logoutUser(context) async {

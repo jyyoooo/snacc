@@ -11,6 +11,7 @@ import 'package:snacc/Widgets/snacc_button.dart';
 import 'package:snacc/Widgets/snacc_textfield.dart';
 
 ValueNotifier<List<Product>> productListNotifier = ValueNotifier([]);
+
 // ADD PRODUCT
 Future<void> addProduct(
   String prodName,
@@ -32,6 +33,7 @@ Future<void> addProduct(
   final productBox = Hive.box<Product>('products');
   await productBox.put(productID, product);
   final updatedProductsList = await getCategoryProducts(categoryID);
+
   productListNotifier.value = updatedProductsList;
   productListNotifier.notifyListeners();
   log('added ${product.prodname} id: ${product.productID}');
@@ -147,7 +149,9 @@ deleteProduct(int? productID, int? categoryID) async {
   log('deleted product: $productID');
   if (category != null) {
     category.productsReference?.remove(productID);
+
     saveCategory(category);
+    
     productListNotifier.value = await getCategoryProducts(categoryID);
     productListNotifier.notifyListeners();
   }

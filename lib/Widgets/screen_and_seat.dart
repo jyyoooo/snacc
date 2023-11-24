@@ -1,13 +1,10 @@
-import 'dart:developer';
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:snacc/UserPages/provider.dart';
 import 'package:snacc/Widgets/seat_selector.dart';
-import 'package:snacc/Widgets/snacc_button.dart';
 
 class ScreenAndSeat extends StatefulWidget {
   const ScreenAndSeat({super.key});
@@ -22,9 +19,9 @@ class _ScreenAndSeatState extends State<ScreenAndSeat> {
     var seatScreenData = Provider.of<SeatScreenData>(context);
 
     return Card(
-      color: Colors.white.withOpacity(.2),
+      color: Colors.red.withOpacity(.1),
       elevation: 0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: InkWell(
         onTap: () {
           showModalBottomSheet(
@@ -58,7 +55,7 @@ class _ScreenAndSeatState extends State<ScreenAndSeat> {
                     style: GoogleFonts.nunitoSans(
                         fontWeight: FontWeight.bold,
                         fontSize: 17,
-                        color: Colors.black87),
+                        color: Colors.white),
                   ),
                   Card(
                     elevation: 3,

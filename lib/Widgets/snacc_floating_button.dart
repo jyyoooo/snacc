@@ -24,39 +24,44 @@ class SnaccFloatingButton extends StatefulWidget {
 class _SnaccFloatingButtonState extends State<SnaccFloatingButton> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 38,
-      width: 170,
-      child: FloatingActionButton.extended(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(13),
-        ),
-        backgroundColor: const Color.fromARGB(255, 84, 203, 88),
-        label: Row(
-          children: [
-            const Icon(
-              Icons.add,
-              color: Colors.white,
-            ),
-            const Gap(5),
-            Text(
-              'NEW PRODUCT',
-              style: GoogleFonts.nunitoSans(
-                fontSize: 13,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10.0),
+      child: SizedBox(
+        height: 45,
+        width: 170,
+        child: FloatingActionButton.extended(
+          splashColor: Colors.amber,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(13),
+          ),
+          // backgroundColor: const Color.fromARGB(255, 84, 203, 88),
+          backgroundColor: Colors.amber,
+          label: Row(
+            children: [
+              const Icon(
+                Icons.add,
+                color: Colors.black,
               ),
-            ),
-          ],
+              const Gap(5),
+              Text(
+                'NEW PRODUCT',
+                style: GoogleFonts.nunitoSans(
+                  fontSize: 13,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          onPressed: () {
+            AddProductModalSheet.show(
+              context,
+              widget.productformkey,
+              widget.widget.categoryID!,
+              widget.productListNotifier,
+            );
+          },
         ),
-        onPressed: () {
-          AddProductModalSheet.show(
-            context,
-            widget.productformkey,
-            widget.widget.categoryID!,
-            widget.productListNotifier,
-          );
-        },
       ),
     );
   }
