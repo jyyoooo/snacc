@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "449874418886",
+    "project_id": "snacc-app-jyo",
+    "storage_bucket": "snacc-app-jyo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:449874418886:android:4d36de770e264648a5cbc7",
+        "android_client_info": {
+          "package_name": "app.jyyoooo.snacc"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBWqntgklbbmqjt02R2OClu4oGwfjdkck"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
