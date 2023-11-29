@@ -1,8 +1,7 @@
 plugins {
+    id "com.android.application"
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
-    id 'com.google.gms.google-services'
-    id 'com.android.application'
 }
 
 def localProperties = new Properties()
@@ -23,13 +22,7 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
-def keystoreProperties = new Properties()
-   def keystorePropertiesFile = rootProject.file('key.properties')
-   if (keystorePropertiesFile.exists()) {
-       keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-   }
-
-   android {
+android {
     namespace "com.example.snacc"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
@@ -49,40 +42,26 @@ def keystoreProperties = new Properties()
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "app.jyyoooo.snacc"
+        applicationId "com.example.snacc"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
-        versionCode 2
+        versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
 
-    signingConfigs {
-       release {
-           keyAlias keystoreProperties['keyAlias']
-           keyPassword keystoreProperties['keyPassword']
-           storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-           storePassword keystoreProperties['storePassword']
-       }
-    }
     buildTypes {
-       release {
-           signingConfig signingConfigs.release
-       }
+        release {
+            // TODO: Add your own signing config for the release build.
+            // Signing with the debug keys for now, so `flutter run --release` works.
+            signingConfig signingConfigs.debug
+        }
     }
-
 }
 
 flutter {
     source '../..'
 }
 
-dependencies {
-     implementation 'com.google.android.material:material:1.5.0'
-     implementation platform('com.google.firebase:firebase-bom:32.6.0')
-     implementation 'com.google.firebase:firebase-analytics'
-
-}
-
-apply plugin:  'dev.flutter.flutter-gradle-plugin'
+dependencies {}
