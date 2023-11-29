@@ -1,10 +1,9 @@
-import 'dart:developer';
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:snacc/DataModels/category_model.dart';
 import 'package:snacc/DataModels/product_model.dart';
 import 'package:snacc/Functions/image_picker.dart';
 import 'package:snacc/Functions/product_functions.dart';

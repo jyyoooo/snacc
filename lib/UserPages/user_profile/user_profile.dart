@@ -3,7 +3,6 @@ import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:snacc/DataModels/user_model.dart';
 import 'package:snacc/Functions/login_functions.dart';
-import 'package:snacc/UserPages/user_profile/edit_profile.dart';
 import 'package:snacc/UserPages/user_profile/purchase_history.dart';
 import 'package:snacc/UserPages/user_profile/track_order.dart';
 import 'package:snacc/Widgets/snacc_button.dart';

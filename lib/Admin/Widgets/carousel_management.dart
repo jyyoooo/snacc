@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -7,13 +6,9 @@ import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:snacc/Admin/Widgets/carousel.dart';
 import 'package:snacc/Functions/image_picker.dart';
 import 'package:snacc/UserPages/provider.dart';
-import 'package:snacc/Widgets/snacc_appbar.dart';
 import 'package:snacc/Widgets/snacc_button.dart';
-import 'package:snacc/Widgets/snacc_textfield.dart';
-import 'package:image_picker/image_picker.dart';
 
 class CarouselManagement extends StatefulWidget {
   const CarouselManagement({Key? key}) : super(key: key);

@@ -5,12 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:snacc/Admin/Widgets/combo_dropdown.dart';
 import 'package:snacc/Admin/Widgets/product_image_row.dart';
-import 'package:snacc/DataModels/combo_model.dart';
 import 'package:snacc/DataModels/product_model.dart';
 import 'package:snacc/Functions/combos_functions.dart';
 import 'package:snacc/Functions/image_picker.dart';
 import 'package:snacc/Widgets/snacc_button.dart';
-import 'package:snacc/Widgets/snacc_appbar.dart';
 import 'package:snacc/Widgets/snacc_textfield.dart';
 
 class PopularCombo extends StatefulWidget {

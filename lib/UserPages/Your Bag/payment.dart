@@ -1,7 +1,6 @@
 import 'dart:developer';
 import 'package:hive/hive.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -119,10 +118,10 @@ class _PaymentsPageState extends State<PaymentsPage> {
         callBack: () async {
           if (widget.user != null) {
             log('user :${widget.user?.username}');
+            final screenNum = seatScreenData.selectedScreenNumber.toString();
+            final seatNum = seatScreenData.selectedSeatNumber.toString();
 
-            final String screenAndSeatNumber =
-                '${seatScreenData.selectedScreenNumber}' +
-                    '${seatScreenData.selectedSeatNumber.toString()}';
+            final String screenAndSeatNumber = screenNum + seatNum;
 
             log(screenAndSeatNumber);
 
@@ -132,7 +131,8 @@ class _PaymentsPageState extends State<PaymentsPage> {
               // Fluttertoast.showToast(
               //     msg: 'select your screen and seat before placing',
               //     backgroundColor: Colors.blue);
-              showSnaccBar(context, 'select your screen and seat before placing', Colors.blue);
+              showSnaccBar(context,
+                  'select your screen and seat before placing', Colors.blue);
             } else {
               if (selectedPaymentOption == PaymentOption.cod) {
                 final bool orderCreated = await createOrder(
@@ -155,10 +155,13 @@ class _PaymentsPageState extends State<PaymentsPage> {
                 // Fluttertoast.showToast(
                 //     msg: 'Selected payment method is currently unavailable',
                 //     backgroundColor: Colors.blue);
-                    showSnaccBar(context, 'Selected payment method is currently unavailable', Colors.blue);
+                showSnaccBar(
+                    context,
+                    'Selected payment method is currently unavailable',
+                    Colors.blue);
               } else {
-               
-                showSnaccBar(context, 'select a payment method first', Colors.blue);
+                showSnaccBar(
+                    context, 'select a payment method first', Colors.blue);
               }
             }
           }

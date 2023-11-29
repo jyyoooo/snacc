@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 
 class SnaccTextField extends StatefulWidget {
   final TextEditingController? controller;
@@ -23,10 +22,10 @@ class SnaccTextField extends StatefulWidget {
       : super(key: key);
 
   @override
-  _SnaccTextFieldState createState() => _SnaccTextFieldState();
+  SnaccTextFieldState createState() => SnaccTextFieldState();
 }
 
-class _SnaccTextFieldState extends State<SnaccTextField> {
+class SnaccTextFieldState extends State<SnaccTextField> {
   bool isObscure = true;
 
   @override

@@ -1,4 +1,4 @@
-package com.example.snacc
+package app.jyyoooo.snacc
 
 import io.flutter.embedding.android.FlutterActivity
 

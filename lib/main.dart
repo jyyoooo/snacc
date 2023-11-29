@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:snacc/Admin/build_popular_combo.dart';
@@ -13,13 +14,12 @@ import 'package:snacc/Authentication/splash_page.dart';
 import 'package:snacc/UserPages/Your%20Bag/payment.dart';
 import 'package:snacc/UserPages/provider.dart';
 import 'package:snacc/UserPages/user_navigation.dart';
-
-
 import 'Functions/populate_initial_data.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
+  await Firebase.initializeApp();
 
   if (!Hive.isAdapterRegistered(CategoryAdapter().typeId) &&
       !Hive.isAdapterRegistered(ProductAdapter().typeId) &&

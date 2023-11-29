@@ -3,8 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:snacc/DataModels/product_model.dart';
-import '../Widgets/snaccbar.dart';
 part 'category_model.g.dart';
 
 @HiveType(typeId: 0)

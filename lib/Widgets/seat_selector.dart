@@ -142,7 +142,7 @@ class TheaterSeatPickerState extends State<TheaterSeatPicker> {
                             )
                                 : SvgPicture.asset(
                               'assets/images/theater_items/selected.svg',
-                              color: const Color.fromARGB(255, 82, 211, 86),
+                              // color: const Color.fromARGB(255, 82, 211, 86),
                               height: screenHeight * 0.06,
                               width: screenHeight * 0.06,
                             ),

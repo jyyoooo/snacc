@@ -5,7 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:snacc/DataModels/combo_model.dart';
-import 'package:snacc/Functions/category_functions.dart';
+
 import 'package:snacc/Functions/combos_functions.dart';
 import 'package:snacc/Functions/image_picker.dart';
 import 'package:snacc/Widgets/snacc_button.dart';

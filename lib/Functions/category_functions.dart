@@ -111,9 +111,9 @@ deleteCategoryDialog(
 
                   Navigator.of(context).pop();
 
-                  print('deleted id = ${category.categoryID}');
+                  log('deleted id = ${category.categoryID}');
                 } else {
-                  print('deletion error');
+                  log('deletion error');
                 }
               },
             )

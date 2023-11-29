@@ -2,13 +2,15 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:snacc/Admin/admin_home.dart';
 import 'package:snacc/Admin/admin_navigation.dart';
 import 'package:snacc/DataModels/user_model.dart';
 import 'package:snacc/Authentication/login.dart';
 import 'package:snacc/Authentication/select_login.dart';
-import 'package:snacc/UserPages/user_profile/user_profile.dart';
 import 'package:snacc/UserPages/user_navigation.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:snacc/Widgets/snaccbar.dart';
 
 // UserModel? loggedUser;
 
@@ -43,7 +45,7 @@ Future<UserModel?> getCurrentUser() async {
 }
 
 splashLoginCheck(context) async {
-  final loggedUserBox =  Hive.box<bool>('loggedUserBox');
+  final loggedUserBox = Hive.box<bool>('loggedUserBox');
   final loggedAdmin = await Hive.openBox<bool>('adminCheck');
 
   final isLoggedIn = loggedUserBox.get('userLoggedIn');
@@ -88,14 +90,13 @@ Future<bool> performLogin(context, username, password) async {
   } else {
     final bool isValidUser = await validateUser(username, password);
     if (isValidUser) {
-      
       // Navigate to the user's home page after successful login
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (context) => const UserNavigation(),
           ),
           ModalRoute.withName('/'));
-          return true;
+      return true;
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -104,7 +105,6 @@ Future<bool> performLogin(context, username, password) async {
         ),
       );
     }
-    
   }
   return false;
 }
@@ -154,13 +154,10 @@ Future<bool> addUser(username, mailid, password, confirm, context) async {
 
   if (!userExist) {
     if (password == confirm) {
-
-
       final id = await userBox.add(user);
       user.userID = id;
       await userBox.put(id, user);
 
-      
       log('${user.username}s ID: ${user.userID}');
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           backgroundColor: Colors.green,
@@ -184,3 +181,60 @@ Future<bool> addUser(username, mailid, password, confirm, context) async {
   }
   return false;
 }
+
+//////////////////////// ++FIREBASE++ /////////////////////////
+///
+///import 'package:firebase_auth/firebase_auth.dart';
+
+// Future<bool> addUserFirebase(
+//     username, mailid, password, confirm, context) async {
+//   // Check if passwords match
+//   if (password != confirm) {
+//     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+//         backgroundColor: Colors.amber[300],
+//         content: const Text('Passwords don\'t match',
+//             style: TextStyle(color: Colors.black87))));
+//     return false;
+//   }
+
+//   try {
+//     // Create user in Firebase Authentication
+//     UserCredential userCredential =
+//         await FirebaseAuth.instance.createUserWithEmailAndPassword(
+//       email: mailid,
+//       password: password,
+//     );
+
+//     final uid = int.tryParse(userCredential.user!.uid);
+
+//     // Create a user object with additional details
+//     final user = UserModel(
+//       userID: uid,
+//       username: username,
+//       userMail: mailid,
+//       userPass: password,
+//       confirmPass: confirm,
+//     );
+
+//     final userBox = await Hive.openBox<UserModel>('userinfo');
+//     final id = await userBox.add(user);
+//     user.userID = id;
+//     await userBox.put(id, user);
+
+//     log('${user.username}s ID: ${user.userID}');
+//     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+//         backgroundColor: Colors.green,
+//         content: Text('You\'re all set! Log in now.')));
+
+//     return true;
+//   } on FirebaseAuthException catch (e) {
+//     showSnaccBar(context, '$e', Colors.red);
+
+//     return false;
+//   } catch (e) {
+//     // Handle other errors
+//     showSnaccBar(context, '$e', Colors.red);
+
+//     return false;
+//   }
+// }
