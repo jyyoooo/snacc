@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:snacc/Admin/build_popular_combo.dart';
+import 'package:snacc/Admin/manage_orders/manage_orders.dart';
 import 'package:snacc/DataModels/combo_model.dart';
 import 'package:snacc/DataModels/order_model.dart';
 import 'package:snacc/DataModels/user_model.dart';
@@ -13,8 +14,10 @@ import 'package:snacc/Authentication/splash_page.dart';
 import 'package:snacc/UserPages/Your%20Bag/payment.dart';
 import 'package:snacc/UserPages/provider.dart';
 import 'package:snacc/UserPages/user_navigation.dart';
-
-
+import 'Admin/Widgets/carousel_management.dart';
+import 'Admin/admin_home.dart';
+import 'Admin/admin_navigation.dart';
+import 'Admin/admin_profile.dart';
 import 'Functions/populate_initial_data.dart';
 
 void main() async {
@@ -73,11 +76,15 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       routes: {
         '/selectLogin': (context) => const SelectLogin(),
-        '/userNavigation': (context) => const UserNavigation(),
         '/login': (context) => const Login(),
+        '/userNavigation': (context) => const UserNavigation(),
         '/popularcombo': (context) => const PopularCombo(),
-        
-
+        '/orders': (context) => const OrdersPage(),
+        '/adminHome': (context) => const AdminHome(),
+        '/adminNavigation': (context) => const AdminNavigation(),
+        '/adminAccount': (context) => const AdminAccount(),
+        '/popularCombo': (context) => const PopularCombo(),
+        '/carouselManagement' : (context) => const CarouselManagement(),
       },
     );
   }

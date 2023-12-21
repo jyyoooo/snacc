@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:snacc/Admin/manage_orders/order_details.dart';
 import 'package:snacc/Functions/order_funtions.dart';
@@ -125,12 +124,20 @@ class ManageOrderList extends StatelessWidget {
                                                     '${getFormattedOrderedTime(order.orderDateTime)}',
                                                     style:
                                                         GoogleFonts.nunitoSans(
-                                                            fontSize: screenHeight>700?15:13)),
+                                                            fontSize:
+                                                                screenHeight >
+                                                                        700
+                                                                    ? 15
+                                                                    : 13)),
                                                 Text(
                                                     '${DateFormat.yMMMEd().format(order.orderDateTime!)} ',
                                                     style:
                                                         GoogleFonts.nunitoSans(
-                                                            fontSize: screenHeight>700?15:13)),
+                                                            fontSize:
+                                                                screenHeight >
+                                                                        700
+                                                                    ? 15
+                                                                    : 13)),
                                                 Row(
                                                   children: [
                                                     Icon(
@@ -138,7 +145,9 @@ class ManageOrderList extends StatelessWidget {
                                                       color:
                                                           getOrderStatusColor(
                                                               order.status!),
-                                                      size: screenHeight>700?15:13,
+                                                      size: screenHeight > 700
+                                                          ? 15
+                                                          : 13,
                                                     ),
                                                     const Gap(3),
                                                     // FIX HERE, theres overflow issue
@@ -148,7 +157,11 @@ class ManageOrderList extends StatelessWidget {
                                                             order.status!),
                                                         style: GoogleFonts
                                                             .nunitoSans(
-                                                                fontSize: screenHeight>700?15:13,
+                                                                fontSize:
+                                                                    screenHeight >
+                                                                            700
+                                                                        ? 15
+                                                                        : 13,
                                                                 color:
                                                                     Colors.blue,
                                                                 fontWeight:

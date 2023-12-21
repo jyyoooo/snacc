@@ -1,14 +1,13 @@
-import 'dart:developer';
 import 'dart:ui';
-
+import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:snacc/DataModels/user_model.dart';
 import 'package:snacc/Functions/user_bag_function.dart';
 import 'package:snacc/UserPages/Your%20Bag/payment.dart';
 import 'package:snacc/Widgets/snacc_button.dart';
+import 'package:snacc/Widgets/snaccbar.dart';
 
 class AmountCard extends StatefulWidget {
   final UserModel user;
@@ -157,7 +156,7 @@ class _AmountCardState extends State<AmountCard> {
   SnaccButton paymentButton(
       double grandTotal, BuildContext context, double addedTotal) {
     return SnaccButton(
-        width: 120,
+        width: 130,
         textColor: Colors.black,
         btncolor: Colors.amber,
         inputText: "PAYMENT",
@@ -169,9 +168,7 @@ class _AmountCardState extends State<AmountCard> {
                       amountPayable: addedTotal,
                     )));
           } else {
-            Fluttertoast.showToast(
-                msg: 'No Snaccs to checkout',
-                backgroundColor: Colors.lightBlue);
+            showSnaccBar(context, 'No Snaccs to checkout', Colors.blue);
           }
         });
   }

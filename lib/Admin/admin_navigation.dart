@@ -32,7 +32,7 @@ class _AdminNavigationState extends State<AdminNavigation> {
       extendBody: true,
       body: routes[selectedIndex],
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+        padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(30),
           child: BackdropFilter(

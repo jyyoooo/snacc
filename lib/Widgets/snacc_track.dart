@@ -3,7 +3,6 @@ import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:snacc/Admin/manage_orders/item_tiles.dart';
-import 'package:snacc/Admin/manage_orders/order_details.dart';
 import 'package:snacc/DataModels/combo_model.dart';
 import 'package:snacc/DataModels/order_model.dart';
 import 'package:snacc/DataModels/product_model.dart';
@@ -46,9 +45,7 @@ class TrackSnaccState extends State<TrackSnacc> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             !widget.isHistory
-                ? SizedBox(
-                    child: OrderTrackingProgress(sliderValue: _sliderValue),
-                  )
+                ? TrackingBar(sliderValue: _sliderValue)
                 : const SizedBox.shrink(),
             Gap(!widget.isHistory ? 20 : 0),
             Text(
@@ -57,33 +54,66 @@ class TrackSnaccState extends State<TrackSnacc> {
                   fontSize: 20, fontWeight: FontWeight.bold),
               textAlign: TextAlign.left,
             ),
-            Expanded(
-              child: ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                itemCount: widget.order.orderItems?.length ?? 0,
-                itemBuilder: (context, index) {
-                  final orderItem = widget.order.orderItems![index];
-                  if (orderItem is ComboModel) {
-                    return ComboTile(
-                      combo: orderItem,
-                      isHistory: widget.isHistory,
-                    );
-                  } else if (orderItem is Product) {
-                    return ProductTIle(
-                      product: orderItem,
-                      isHistory: widget.isHistory,
-                    );
-                  }
-                  return const Center(
-                      child: Text(
-                          'Oops no items, thats some error on the ordering part'));
-                },
-              ),
-            ),
+            ListOrderItems(widget: widget),
           ],
         ),
       ),
     );
+  }
+}
+
+
+// WIDGETS
+
+class ListOrderItems extends StatelessWidget {
+  const ListOrderItems({
+    super.key,
+    required this.widget,
+  });
+
+  final TrackSnacc widget;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: ListView.builder(
+        physics: const BouncingScrollPhysics(),
+        itemCount: widget.order.orderItems?.length ?? 0,
+        itemBuilder: (context, index) {
+          final orderItem = widget.order.orderItems![index];
+          if (orderItem is ComboModel) {
+            return ComboTile(
+              combo: orderItem,
+              isHistory: widget.isHistory,
+            );
+          } else if (orderItem is Product) {
+            return ProductTIle(
+              product: orderItem,
+              isHistory: widget.isHistory,
+            );
+          }
+          return const Center(
+              child: Text(
+                  'Oops no items, thats some error on the ordering part'));
+        },
+      ),
+    );
+  }
+}
+
+class TrackingBar extends StatelessWidget {
+  const TrackingBar({
+    super.key,
+    required double sliderValue,
+  }) : _sliderValue = sliderValue;
+
+  final double _sliderValue;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+        child: OrderTrackingProgress(sliderValue: _sliderValue),
+      );
   }
 }
 

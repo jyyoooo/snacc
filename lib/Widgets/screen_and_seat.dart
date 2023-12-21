@@ -19,7 +19,7 @@ class _ScreenAndSeatState extends State<ScreenAndSeat> {
     var seatScreenData = Provider.of<SeatScreenData>(context);
 
     return Card(
-      color: Colors.red.withOpacity(.1),
+      color: Colors.red.withOpacity(.5),
       elevation: 0,
       // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: InkWell(

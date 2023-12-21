@@ -2,14 +2,11 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:snacc/Admin/admin_home.dart';
 import 'package:snacc/Admin/admin_navigation.dart';
 import 'package:snacc/DataModels/user_model.dart';
 import 'package:snacc/Authentication/login.dart';
 import 'package:snacc/Authentication/select_login.dart';
-import 'package:snacc/UserPages/user_profile/user_profile.dart';
 import 'package:snacc/UserPages/user_navigation.dart';
-
 // UserModel? loggedUser;
 
 // void fireExample(){
@@ -58,8 +55,9 @@ splashLoginCheck(context) async {
         MaterialPageRoute(builder: (context) => const AdminNavigation()));
     log('admin found');
   } else {
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const SelectLogin()));
+    Navigator.of(context).pushNamed('/selectLogin');
+    // Navigator.of(context).pushReplacement(
+    //     MaterialPageRoute(builder: (context) => const SelectLogin()));
     log(' no user found');
   }
 }

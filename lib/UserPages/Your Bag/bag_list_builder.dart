@@ -16,13 +16,6 @@ class BagListBuilder extends StatefulWidget {
 }
 
 class _BagListBuilderState extends State<BagListBuilder> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   if (widget.user!.userBag != null) {
-  //     userBagNotifier.value = widget.user!.userBag!;
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {

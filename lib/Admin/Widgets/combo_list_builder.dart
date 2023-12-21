@@ -66,87 +66,102 @@ class _ComboListBuilderState extends State<ComboListBuilder> {
                                   combo: combo,
                                 )));
                       },
-                      child: Container(
-                        width: double.maxFinite,
-                        height: 400,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(25),
+                      child: Hero(
+                        placeholderBuilder: (context, size, widget) =>
+                            const SizedBox(
+                          width: 50,
+                          height: 50,
                         ),
-                        child: Column(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(50),
-                              child: combo.comboImgUrl == null
-                                  ? Container(
-                                      width: 120,
-                                      height: 120,
-                                      color: Colors.transparent,
-                                      child: Image.asset(
-                                        'assets/images/no-image-available.png',
-                                        height: 40,
-                                      ),
-                                    )
-                                  : combo.comboImgUrl!.contains('assets/')
-                                      ? Container(
-                                          width: 120,
-                                          height: 120,
-                                          color: Colors.transparent,
-                                          child:
-                                              Image.asset(combo.comboImgUrl!),
-                                        )
-                                      : Container(
-                                          width: 120,
-                                          height: 120,
-                                          color: Colors.transparent,
-                                          child: Image.file(
-                                              File(combo.comboImgUrl!)),
+                        transitionOnUserGestures: true,
+                        tag: '${combo.comboID}',
+                        child: Container(
+                          width: double.maxFinite,
+                          height: 400,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          child: Column(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(50),
+                                child: combo.comboImgUrl == null
+                                    ? Container(
+                                        width: 120,
+                                        height: 120,
+                                        color: Colors.transparent,
+                                        child: Image.asset(
+                                          'assets/images/no-image-available.png',
+                                          height: 40,
                                         ),
-                            ),
-                            Padding(
-                              padding:  EdgeInsets.fromLTRB(screenHeight>700? 10:5, 0, screenHeight>700? 10:5, 0),
-                              child: Text(
-                                combo.comboName!,
-                                style: GoogleFonts.nunitoSans(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.normal),
-                                textAlign: TextAlign.center,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
+                                      )
+                                    : combo.comboImgUrl!.contains('assets/')
+                                        ? Container(
+                                            width: 120,
+                                            height: 120,
+                                            color: Colors.transparent,
+                                            child:
+                                                Image.asset(combo.comboImgUrl!),
+                                          )
+                                        : Container(
+                                            width: 120,
+                                            height: 120,
+                                            color: Colors.transparent,
+                                            child: Image.file(
+                                                File(combo.comboImgUrl!)),
+                                          ),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              child: widget.isAdmin == false
-                                  ? Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Text(
-                                          '₹${combo.comboPrice}',
-                                          style: GoogleFonts.nunitoSans(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        SnaccButton(
-                                            btncolor: Colors.amber[400],
-                                            width: 85,
-                                            inputText: 'ADD',
-                                            callBack: () {
-                                              addComboToBag(combo);
-                                            })
-                                      ],
-                                    )
-                                  : Padding(
-                                      padding: const EdgeInsets.only(top: 10.0),
-                                      child: Center(
-                                        child: Text('₹${combo.comboPrice}',
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(
+                                    screenHeight > 700 ? 10 : 5,
+                                    0,
+                                    screenHeight > 700 ? 10 : 5,
+                                    0),
+                                child: Text(
+                                  combo.comboName!,
+                                  style: GoogleFonts.nunitoSans(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.normal),
+                                  textAlign: TextAlign.center,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                child: widget.isAdmin == false
+                                    ? Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Text(
+                                            '₹${combo.comboPrice}',
                                             style: GoogleFonts.nunitoSans(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold)),
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          SnaccButton(
+                                              btncolor: Colors.amber[400],
+                                              width: 85,
+                                              inputText: 'ADD',
+                                              callBack: () {
+                                                addComboToBag(combo);
+                                              })
+                                        ],
+                                      )
+                                    : Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 10.0),
+                                        child: Center(
+                                          child: Text('₹${combo.comboPrice}',
+                                              style: GoogleFonts.nunitoSans(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold)),
+                                        ),
                                       ),
-                                    ),
-                            )
-                          ],
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     );

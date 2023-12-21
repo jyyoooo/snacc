@@ -7,7 +7,7 @@ import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:snacc/Admin/Widgets/add_category.dart';
 import 'package:snacc/Admin/Widgets/carousel.dart';
-import 'package:snacc/Admin/Widgets/carousel_management.dart';
+// import 'package:snacc/Admin/Widgets/carousel_management.dart';
 import 'package:snacc/Admin/Widgets/combo_list_builder.dart';
 import 'package:snacc/DataModels/category_model.dart';
 import 'package:snacc/UserPages/provider.dart';
@@ -44,11 +44,7 @@ class _AdminHomeState extends State<AdminHome> {
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: .4,
-        title: Text(
-          'Welcome back Admin',
-          style: GoogleFonts.nunitoSans(
-              fontSize: 20, color: Colors.black87, fontWeight: FontWeight.bold),
-        ),
+        title: title(),
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
@@ -58,6 +54,7 @@ class _AdminHomeState extends State<AdminHome> {
           child: SizedBox(
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              // SHOW CATEGORIES
               CategoryCard(formKey: _formKey),
               const Gap(5),
 
@@ -66,64 +63,13 @@ class _AdminHomeState extends State<AdminHome> {
                   width: MediaQuery.of(context).size.width,
                   child: CategoriesList()),
 
-              // const Gap(8),
-
-              Card(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('    Add Offers',
-                        style: GoogleFonts.nunitoSans(
-                            fontSize: 20, fontWeight: FontWeight.bold)),
-                    IconButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const CarouselManagement()));
-                        },
-                        icon: const Icon(
-                            size: 30, color: Colors.blue, Icons.add_rounded)),
-                  ],
-                ),
-              ),
-
               // CAROUSEL
-
-              Consumer<CarouselNotifier>(
-                builder: (context, carouselNotifier, child) {
-                  return SnaccCarousel(
-                    carouselImages:
-                        Hive.box<String>('carousel').values.toList(),
-                  );
-                },
-              ),
-
-              Card(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('    Create Combos',
-                        style: GoogleFonts.nunitoSans(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey[800])),
-                    IconButton(
-                        onPressed: () {
-                          Navigator.of(context).pushNamed('/popularcombo');
-                        },
-                        icon: const Icon(
-                            size: 30, color: Colors.blue, Icons.add_rounded))
-                  ],
-                ),
-              ),
+              addOffersPage(context),
+              showCarousel(),
+              
+              // COMBO
+              createCombo(context),
               const Gap(10),
-
               const ComboListBuilder(
                 isAdmin: true,
               )
@@ -132,6 +78,77 @@ class _AdminHomeState extends State<AdminHome> {
         ),
       ),
     );
+  }
+
+
+
+  // WIDGETS
+  Card createCombo(BuildContext context) {
+    return Card(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('    Create Combos',
+                      style: GoogleFonts.nunitoSans(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey[800])),
+                  IconButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed('/popularcombo');
+                      },
+                      icon: const Icon(
+                          size: 30, color: Colors.blue, Icons.add_rounded))
+                ],
+              ),
+            );
+  }
+
+  Consumer<CarouselNotifier> showCarousel() {
+    return Consumer<CarouselNotifier>(
+              builder: (context, carouselNotifier, child) {
+                return SnaccCarousel(
+                  carouselImages:
+                      Hive.box<String>('carousel').values.toList(),
+                );
+              },
+            );
+  }
+
+  Card addOffersPage(BuildContext context) {
+    return Card(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('    Add Offers',
+                      style: GoogleFonts.nunitoSans(
+                          fontSize: 20, fontWeight: FontWeight.bold)),
+                  IconButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed('/carouselManagement');
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) =>
+                        //             const CarouselManagement()));
+                      },
+                      icon: const Icon(
+                          size: 30, color: Colors.blue, Icons.add_rounded)),
+                ],
+              ),
+            );
+  }
+
+  Text title() {
+    return Text(
+        'Welcome back Admin',
+        style: GoogleFonts.nunitoSans(
+            fontSize: 20, color: Colors.black87, fontWeight: FontWeight.bold),
+      );
   }
 }
 
